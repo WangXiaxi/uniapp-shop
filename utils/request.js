@@ -1,4 +1,4 @@
-import { url_base as baseUrl } from '/common/config'
+import { url_base as baseUrl } from '../common/config'
 
 /**
  * Request 0.0.7
@@ -42,11 +42,11 @@ export default class Request {
     }
   }
 
-  static requestBeforeFun (config) {
+  requestBeforeFun (config) {
     return config
   }
 
-  static requestComFun (response) {
+  requestComFun (response) {
     return response
   }
 
