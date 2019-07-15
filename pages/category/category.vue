@@ -38,7 +38,9 @@
 		},
 		methods: {
 			async loadData(){
-				let list = await categoryModel.getcategory();
+				let list = await categoryModel.getcategoryFirst({ ydui: true });
+				let list2 = await categoryModel.getcategorySecond({ ydui: true });
+				let list3 = await categoryModel.getcategoryThird({ ydui: true });
 				list.forEach(item=>{
 					if(!item.pid){
 						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
