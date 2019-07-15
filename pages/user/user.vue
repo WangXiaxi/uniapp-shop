@@ -99,7 +99,7 @@
 <script>  
 	import listCell from '@/components/mix-list-cell';
     import {  
-        mapState 
+        mapGetters 
     } from 'vuex';  
 	let startY = 0, moveY = 0, pageAtTop = true;
     export default {
@@ -136,7 +136,7 @@
 		},
 		// #endif
         computed: {
-			...mapState(['hasLogin','userInfo'])
+			...mapGetters(['hasLogin','userInfo'])
 		},
         methods: {
 

@@ -1,6 +1,7 @@
 import {
-	url_base as baseUrl,
-	url_key
+	url_base,
+	url_key,
+	url_sign
 } from '../common/config'
 import store from '../store'
 import md5 from '../common/SDK/md5.min.js'
@@ -15,7 +16,7 @@ import md5 from '../common/SDK/md5.min.js'
  * **/
 export default class Request {
 	config = {
-		baseUrl,
+		baseUrl: url_base,
 		header: {
 			'GET': {
 				'Content-Type': 'application/json;charset=UTF-8'
@@ -63,15 +64,23 @@ export default class Request {
 
 	request(options = {}) {
 		// 签名 时间戳 随机数
-		const test = md5('23445')
-		console.log(test)
 		options.baseUrl = options.baseUrl || this.config.baseUrl
 		options.dataType = options.dataType || this.config.dataType
 		options.url = Request.posUrl(options.url) ? options.url : (options.baseUrl + options.url)
 		options.data = options.data || {}
 		options.method = options.method || this.config.method
-		console.log(options.method)
 		options.header = options.header || this.config.header[options.method]
+		const userToken = store.getters.token
+		if (userToken) Object.assign(options.header, {
+			userToken
+		})
+		const time = new Date().getTime()
+		const sign = `${time}${options.url.split('/service/')[1]}${url_key}`
+		console.log(sign)
+		Object.assign(options.data, {
+			time,
+			sign: md5(sign)
+		})
 		return new Promise((resolve, reject) => {
 			let next = true
 			let _config = null

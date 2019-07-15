@@ -235,6 +235,7 @@
 
 <script>
 	import commonModel from '../../api/common/index.js'
+
 	export default {
 
 		data() {

@@ -81,7 +81,7 @@
 
 <script>
 	import {
-		mapState
+		mapGetters
 	} from 'vuex';
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	export default {
@@ -109,7 +109,7 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin'])
+			...mapGetters(['hasLogin'])
 		},
 		methods: {
 			//请求数据

@@ -20,6 +20,8 @@
 </template>
 
 <script>
+	import categoryModel from '../../api/category/index.js'
+
 	export default {
 		data() {
 			return {
@@ -36,7 +38,7 @@
 		},
 		methods: {
 			async loadData(){
-				let list = await this.$api.json('cateList');
+				let list = await categoryModel.getcategory();
 				list.forEach(item=>{
 					if(!item.pid){
 						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
@@ -52,7 +54,6 @@
 				if(!this.sizeCalcState){
 					this.calcSize();
 				}
-				
 				this.currentId = item.id;
 				let index = this.slist.findIndex(sitem=>sitem.pid === item.id);
 				this.tabScrollTop = this.slist[index].top;
