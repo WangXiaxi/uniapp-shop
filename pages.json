@@ -181,14 +181,12 @@
         ,{
             "path" : "pages/public/forword",
             "style" : {
-            	"enablePullDownRefresh": true,
             	"navigationBarTitleText": "忘记密码"
             }
         }
 		,{
 		    "path" : "pages/public/register",
 		    "style" : {
-		    	"enablePullDownRefresh": true,
 		    	"navigationBarTitleText": "立即注册"
 		    }
 		}

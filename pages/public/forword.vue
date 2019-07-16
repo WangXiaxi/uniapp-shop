@@ -11,7 +11,7 @@
 		<view class="row b-b">
 			<text class="tit">验证码</text>
 			<input class="input" type="number" v-model="formData.code" placeholder="请输入验证码" placeholder-class="placeholder" />
-			<button type="primary" plain="true" size="mini" class="code" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
+			<button class="code-btn" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
 		</view>
 
 		<button class="add-btn" @click="confirm">提交</button>
@@ -40,7 +40,23 @@
 			},
 			// 发送验证码
 			sendCode() {
-				
+				this.timeAction()
+			},
+			// 倒计时
+			timeAction() {
+				let t = 60
+				const fun = () => {
+					t--
+					this.sendMessage = `${t}s重新获取`
+					if (t <= 0) {
+						this.sendMessage = '发送验证码'
+						this.sending = false
+						clearInterval(inter)
+					}
+				}
+				this.sending = true
+				this.sendMessage = `${t}s重新获取`
+				let inter = setInterval(fun, 1000)
 			}
 		}
 	}
@@ -48,11 +64,23 @@
 
 
 <style lang="scss">
-	uni-button.code {
+	.code-btn {
 		height: 64upx;
-		border-color: $base-color;
+		line-height: 60upx;
+		border: 1px solid $base-color;
+		background-color: #fff;
 		color: $base-color;
+		font-size: $font-base;
+
+		&::after {
+			border: none;
+		}
+
+		&[disabled] {
+			border-color: rgba(0, 0, 0, .3);
+		}
 	}
+
 	page {
 		background: $page-color-base;
 		padding-top: 16upx;
