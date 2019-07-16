@@ -13,6 +13,14 @@ class LoginModel extends Request {
 	login(params) {
 		return this.post('/service/userToken', params)
 	}
+	// 获取验证码
+	getMobileCode(params) {
+		return this.post('/service/getMobileCode', params)
+	}
+	// 手机号找回密码提交
+	findPassWordByMobile(params) {
+		return this.post('/service/findPassWordByMobile', params)
+	}
 	/**
 	 * 验证表单
 	 */

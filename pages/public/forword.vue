@@ -18,19 +18,22 @@
 		</view>
 		<view class="content" v-else>
 			<view class="row b-b">
-				<text class="tit">手机号</text>
-				<input class="input" type="number" v-model="formData.password" placeholder="请输入手机号" placeholder-class="placeholder" />
+				<text class="tit spec">请输入新密码</text>
+				<input class="input" type="password" v-model="formData.password" placeholder="请输入6-32位密码" placeholder-class="placeholder" />
 			</view>
 			<view class="row b-b">
-				<text class="tit">手机号</text>
-				<input class="input" type="number" v-model="formData.repassword" placeholder="请输入手机号" placeholder-class="placeholder" />
+				<text class="tit spec">请确认密码</text>
+				<input class="input" type="password" v-model="formData.repassword" placeholder="请再次输入密码" placeholder-class="placeholder" />
 			</view>
+			<button class="add-btn spec" @click="goFirst">上一步</button>
 			<button class="add-btn" @click="confirmLast">提交</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	import loginModel from '../../api/login/index.js'
+
 	const formFields = {
 		username: '',
 		mobile: '',
@@ -46,52 +49,121 @@
 				sending: false,
 				formData: JSON.parse(JSON.stringify(formFields)),
 				rulesFirst: {
-					loginInfo: {
+					username: {
 						required: true
 					},
-					password: {
-						required: true,
-						minlength: 6
-					}
-				},
-				rulesSecond: {
-					loginInfo: {
+					mobile: {
 						required: true
 					},
-					password: {
-						required: true,
-						minlength: 6
+					mobile_code: {
+						required: true
 					}
 				},
 				messagesFirst: {
-					loginInfo: {
+					username: {
 						required: '请输入用户名！'
 					},
-					password: {
-						required: '请输入密码！',
-						minlength: '密码不能低于6位！'
+					mobile: {
+						required: '请输入密码！'
+					},
+					mobile_code: {
+						required: '请输入验证码！'
 					}
 				},
-				messagesSecond: {
-					loginInfo: {
-						required: '请输入用户名！'
-					},
+				rulesSecond: {
 					password: {
-						required: '请输入密码！',
-						minlength: '密码不能低于6位！'
+						required: true
+					},
+					repassword: {
+						required: true
+					}
+				},
+
+				messagesSecond: {
+					password: {
+						required: '请输入密码！'
+					},
+					repassword: {
+						required: '请确认密码！'
 					}
 				}
 			}
 		},
 		onLoad(option) {},
 		methods: {
-			//提交
-			confirm() {
-
+			// 上一步
+			goFirst() {
+				this.isCheck = true
+			},
+			// 
+			// 下一步
+			async confirmLast() {
+				const {
+					formData: {
+						username,
+						mobile,
+						mobile_code,
+						password,
+						repassword
+					},
+					rulesFirst,
+					messagesFirst,
+					rulesSecond,
+					messagesSecond
+				} = this
+				const sendData = {
+					username,
+					mobile,
+					mobile_code,
+					password,
+					repassword
+				}
+				if (password !== repassword) return this.$api.msg('两次密码输入不一致！')
+				loginModel.initValidate(Object.assign(rulesFirst, rulesSecond), Object.assign(messagesFirst, messagesSecond))
+				if (!loginModel.WxValidate.checkForm(sendData)) return
+				const res = await loginModel.findPassWordByMobile(sendData)
+				this.$api.msg('密码修改成功！', 1500, false, 'success')
+				setTimeout(() => {
+					uni.navigateBack()
+				}, 1500)
+			},
+			confirmFirst() {
+				const {
+					formData: {
+						username,
+						mobile,
+						mobile_code
+					},
+					rulesFirst,
+					messagesFirst
+				} = this
+				const sendData = {
+					username,
+					mobile,
+					mobile_code
+				}
+				loginModel.initValidate(rulesFirst, messagesFirst)
+				if (!loginModel.WxValidate.checkForm(sendData)) return
+				this.isCheck = false
 			},
 			// 发送验证码
 			sendCode() {
-				this.timeAction()
+				const {
+					formData: {
+						username,
+						mobile
+					}
+				} = this
+				const sendData = {
+					username,
+					mobile
+				}
+				this.sending = true
+				loginModel.getMobileCode(sendData).then(res => {
+					this.timeAction()
+				}).catch(() => {
+					this.sending = false
+				})
 			},
 			// 倒计时
 			timeAction() {
@@ -105,7 +177,6 @@
 						clearInterval(inter)
 					}
 				}
-				this.sending = true
 				this.sendMessage = `${t}s重新获取`
 				let inter = setInterval(fun, 1000)
 			}
@@ -150,6 +221,10 @@
 			width: 120upx;
 			font-size: 30upx;
 			color: $font-color-dark;
+
+			&.spec {
+				width: 200upx;
+			}
 		}
 
 		.input {
@@ -182,11 +257,18 @@
 		justify-content: center;
 		width: 690upx;
 		height: 80upx;
-		margin: 60upx auto;
+		margin: 30upx auto;
 		font-size: $font-lg;
 		color: #fff;
 		background-color: $base-color;
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+
+		&.spec {
+			border: 1px solid $base-color;
+			background-color: #fff;
+			color: $base-color;
+			box-shadow: none;
+		}
 	}
 </style>

@@ -101,6 +101,7 @@ export default class Request {
 								mask: false,
 								icon: 'none'
 							})
+							reject(response)
 							break
 						case 'token30401':
 							// 清空数据并跳转至登陆页
@@ -114,6 +115,7 @@ export default class Request {
 							uni.redirectTo({
 								url: '/pages/public/login'
 							})
+							reject(response)
 							break
 					}
 				} else {
@@ -136,8 +138,6 @@ export default class Request {
 			}
 			if (!next) return
 			uni.request(_config)
-		}).catch(res => {
-			Promise.reject(res)
 		})
 	}
 
