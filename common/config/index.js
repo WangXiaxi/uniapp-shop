@@ -15,3 +15,4 @@ if (process.env.NODE_ENV === 'development') {
 
 export const url_base = url_config
 export const url_key = 'd9777f3ee4f9c8cba60a4536258fec14'
+export const url_image = 'https://www.ehanone.com'

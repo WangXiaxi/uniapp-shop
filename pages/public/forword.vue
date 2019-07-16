@@ -1,35 +1,86 @@
 <template>
-	<view class="content">
-		<view class="row b-b">
-			<text class="tit">用户名</text>
-			<input class="input" type="text" v-model="formData.name" placeholder="请输入用户名" placeholder-class="placeholder" />
+	<view>
+		<view class="content" v-if="isCheck">
+			<view class="row b-b">
+				<text class="tit">用户名</text>
+				<input class="input" type="text" v-model="formData.username" placeholder="请输入用户名" placeholder-class="placeholder" />
+			</view>
+			<view class="row b-b">
+				<text class="tit">手机号</text>
+				<input class="input" type="number" v-model="formData.mobile" placeholder="请输入手机号" placeholder-class="placeholder" />
+			</view>
+			<view class="row b-b">
+				<text class="tit">验证码</text>
+				<input class="input" type="number" v-model="formData.mobile_code" placeholder="请输入验证码" placeholder-class="placeholder" />
+				<button class="code-btn" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
+			</view>
+			<button class="add-btn" @click="confirmFirst">下一步</button>
 		</view>
-		<view class="row b-b">
-			<text class="tit">手机号</text>
-			<input class="input" type="number" v-model="formData.mobile" placeholder="请输入手机号" placeholder-class="placeholder" />
+		<view class="content" v-else>
+			<view class="row b-b">
+				<text class="tit">手机号</text>
+				<input class="input" type="number" v-model="formData.password" placeholder="请输入手机号" placeholder-class="placeholder" />
+			</view>
+			<view class="row b-b">
+				<text class="tit">手机号</text>
+				<input class="input" type="number" v-model="formData.repassword" placeholder="请输入手机号" placeholder-class="placeholder" />
+			</view>
+			<button class="add-btn" @click="confirmLast">提交</button>
 		</view>
-		<view class="row b-b">
-			<text class="tit">验证码</text>
-			<input class="input" type="number" v-model="formData.code" placeholder="请输入验证码" placeholder-class="placeholder" />
-			<button class="code-btn" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
-		</view>
-
-		<button class="add-btn" @click="confirm">提交</button>
 	</view>
 </template>
 
 <script>
 	const formFields = {
-		name: '',
+		username: '',
 		mobile: '',
-		code: ''
+		mobile_code: '',
+		password: '',
+		repassword: ''
 	}
 	export default {
 		data() {
 			return {
+				isCheck: true, // 是否输入验证码等
 				sendMessage: '发送验证码',
 				sending: false,
-				formData: JSON.parse(JSON.stringify(formFields))
+				formData: JSON.parse(JSON.stringify(formFields)),
+				rulesFirst: {
+					loginInfo: {
+						required: true
+					},
+					password: {
+						required: true,
+						minlength: 6
+					}
+				},
+				rulesSecond: {
+					loginInfo: {
+						required: true
+					},
+					password: {
+						required: true,
+						minlength: 6
+					}
+				},
+				messagesFirst: {
+					loginInfo: {
+						required: '请输入用户名！'
+					},
+					password: {
+						required: '请输入密码！',
+						minlength: '密码不能低于6位！'
+					}
+				},
+				messagesSecond: {
+					loginInfo: {
+						required: '请输入用户名！'
+					},
+					password: {
+						required: '请输入密码！',
+						minlength: '密码不能低于6位！'
+					}
+				}
 			}
 		},
 		onLoad(option) {},
@@ -44,7 +95,7 @@
 			},
 			// 倒计时
 			timeAction() {
-				let t = 60
+				let t = 120
 				const fun = () => {
 					t--
 					this.sendMessage = `${t}s重新获取`

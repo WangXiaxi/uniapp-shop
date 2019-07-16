@@ -9,8 +9,9 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(item.id, titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
-						<image :src="titem.picture"></image>
+					<view @click="navToList(titem.id)" v-if="titem.parent_id === item.id" class="t-item" v-for="titem in tlist"
+					 :key="titem.id">
+						<image :src="titem.cat_pic" @error="onImageError(titem)"></image>
 						<text>{{titem.name}}</text>
 					</view>
 				</view>
@@ -21,7 +22,9 @@
 
 <script>
 	import categoryModel from '../../api/category/index.js'
-
+	import {
+		url_image
+	} from '../../common/config/index.js'
 	export default {
 		data() {
 			return {
@@ -33,48 +36,57 @@
 				tlist: [],
 			}
 		},
-		onLoad(){
+		onLoad() {
 			this.loadData();
 		},
 		methods: {
-			async loadData(){
-				let list = await categoryModel.getcategoryFirst({ ydui: true });
-				let list2 = await categoryModel.getcategorySecond({ ydui: true });
-				let list3 = await categoryModel.getcategoryThird({ ydui: true });
-				list.forEach(item=>{
-					if(!item.pid){
-						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
-					}else if(!item.picture){
-						this.slist.push(item); //没有图的是2级分类
-					}else{
-						this.tlist.push(item); //3级分类
+			//监听image加载失败
+			onImageError(key, index) {
+				this.$set(key, 'cat_pic', '/static/errorImage.jpg')
+			},
+			async loadData() {
+				let listObj = await categoryModel.getAllCategoryList({
+					ydui: true
+				});
+				const list = listObj.data.map(c => {
+					const cur = c
+					this.flist.push(JSON.parse(JSON.stringify(cur))) //parent_id为父级id, 没有parent_id或者parent_id=0是一级分类
+					const sCur = JSON.parse(JSON.stringify(cur))
+					sCur.parent_id = cur.id
+					this.slist.push(sCur) //parent_id为父级id, 没有parent_id或者parent_id=0是一级分类
+					if (cur.childrens) {
+						this.tlist.push(...cur.childrens.map(c => {
+							c.cat_pic = `${url_image}/${c.cat_pic}`
+							return c
+						}))
 					}
-				}) 
+					return cur
+				})
 			},
 			//一级分类点击
-			tabtap(item){
-				if(!this.sizeCalcState){
+			tabtap(item) {
+				if (!this.sizeCalcState) {
 					this.calcSize();
 				}
 				this.currentId = item.id;
-				let index = this.slist.findIndex(sitem=>sitem.pid === item.id);
+				let index = this.slist.findIndex(sitem => sitem.parent_id === item.id);
 				this.tabScrollTop = this.slist[index].top;
 			},
 			//右侧栏滚动
-			asideScroll(e){
-				if(!this.sizeCalcState){
+			asideScroll(e) {
+				if (!this.sizeCalcState) {
 					this.calcSize();
 				}
 				let scrollTop = e.detail.scrollTop;
-				let tabs = this.slist.filter(item=>item.top <= scrollTop).reverse();
-				if(tabs.length > 0){
-					this.currentId = tabs[0].pid;
+				let tabs = this.slist.filter(item => item.top <= scrollTop).reverse();
+				if (tabs.length > 0) {
+					this.currentId = tabs[0].parent_id;
 				}
 			},
 			//计算右侧栏每个tab的高度等信息
-			calcSize(){
+			calcSize() {
 				let h = 0;
-				this.slist.forEach(item=>{
+				this.slist.forEach(item => {
 					let view = uni.createSelectorQuery().select("#main-" + item.id);
 					view.fields({
 						size: true
@@ -86,9 +98,9 @@
 				})
 				this.sizeCalcState = true;
 			},
-			navToList(sid, tid){
+			navToList(id) {
 				uni.navigateTo({
-					url: `/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`
+					url: `/pages/product/list?id=${id}`
 				})
 			}
 		}
@@ -105,12 +117,14 @@
 	.content {
 		display: flex;
 	}
+
 	.left-aside {
 		flex-shrink: 0;
 		width: 200upx;
 		height: 100%;
 		background-color: #fff;
 	}
+
 	.f-item {
 		display: flex;
 		align-items: center;
@@ -120,10 +134,12 @@
 		font-size: 28upx;
 		color: $font-color-base;
 		position: relative;
-		&.active{
+
+		&.active {
 			color: $base-color;
 			background: #f8f8f8;
-			&:before{
+
+			&:before {
 				content: '';
 				position: absolute;
 				left: 0;
@@ -138,12 +154,13 @@
 		}
 	}
 
-	.right-aside{
+	.right-aside {
 		flex: 1;
 		overflow: hidden;
 		padding-left: 20upx;
 	}
-	.s-item{
+
+	.s-item {
 		display: flex;
 		align-items: center;
 		height: 70upx;
@@ -151,19 +168,22 @@
 		font-size: 28upx;
 		color: $font-color-dark;
 	}
-	.t-list{
+
+	.t-list {
 		display: flex;
 		flex-wrap: wrap;
 		width: 100%;
 		background: #fff;
 		padding-top: 12upx;
-		&:after{
+
+		&:after {
 			content: '';
 			flex: 99;
 			height: 0;
 		}
 	}
-	.t-item{
+
+	.t-item {
 		flex-shrink: 0;
 		display: flex;
 		justify-content: center;
@@ -173,8 +193,8 @@
 		font-size: 26upx;
 		color: #666;
 		padding-bottom: 20upx;
-		
-		image{
+
+		image {
 			width: 140upx;
 			height: 140upx;
 		}

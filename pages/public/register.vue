@@ -1,22 +1,141 @@
 <template>
-	<view>
-		
+	<view class="content">
+		<view class="row b-b">
+			<text class="tit">用户名</text>
+			<input class="input" type="text" v-model="formData.name" placeholder="请输入用户名" placeholder-class="placeholder" />
+		</view>
+		<view class="row b-b">
+			<text class="tit">手机号</text>
+			<input class="input" type="number" v-model="formData.mobile" placeholder="请输入手机号" placeholder-class="placeholder" />
+		</view>
+		<view class="row b-b">
+			<text class="tit">验证码</text>
+			<input class="input" type="number" v-model="formData.code" placeholder="请输入验证码" placeholder-class="placeholder" />
+			<button class="code-btn" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
+		</view>
+
+		<button class="add-btn" @click="confirm">提交</button>
 	</view>
 </template>
 
 <script>
+	const formFields = {
+		name: '',
+		mobile: '',
+		code: ''
+	}
 	export default {
 		data() {
 			return {
-				
+				sendMessage: '发送验证码',
+				sending: false,
+				formData: JSON.parse(JSON.stringify(formFields))
 			}
 		},
+		onLoad(option) {},
 		methods: {
-			
+			//提交
+			confirm() {
+
+			},
+			// 发送验证码
+			sendCode() {
+				this.timeAction()
+			},
+			// 倒计时
+			timeAction() {
+				let t = 60
+				const fun = () => {
+					t--
+					this.sendMessage = `${t}s重新获取`
+					if (t <= 0) {
+						this.sendMessage = '发送验证码'
+						this.sending = false
+						clearInterval(inter)
+					}
+				}
+				this.sending = true
+				this.sendMessage = `${t}s重新获取`
+				let inter = setInterval(fun, 1000)
+			}
 		}
 	}
 </script>
 
-<style>
 
+<style lang="scss">
+	.code-btn {
+		height: 64upx;
+		line-height: 60upx;
+		border: 1px solid $base-color;
+		background-color: #fff;
+		color: $base-color;
+		font-size: $font-base;
+
+		&::after {
+			border: none;
+		}
+
+		&[disabled] {
+			border-color: rgba(0, 0, 0, .3);
+		}
+	}
+
+	page {
+		background: $page-color-base;
+		padding-top: 16upx;
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		position: relative;
+		padding: 0 30upx;
+		height: 110upx;
+		background: #fff;
+
+		.tit {
+			flex-shrink: 0;
+			width: 120upx;
+			font-size: 30upx;
+			color: $font-color-dark;
+		}
+
+		.input {
+			flex: 1;
+			font-size: 30upx;
+			color: $font-color-dark;
+		}
+
+		.icon-shouhuodizhi {
+			font-size: 36upx;
+			color: $font-color-light;
+		}
+	}
+
+	.default-row {
+		margin-top: 16upx;
+
+		.tit {
+			flex: 1;
+		}
+
+		switch {
+			transform: translateX(16upx) scale(.9);
+		}
+	}
+
+	.add-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 690upx;
+		height: 80upx;
+		margin: 60upx auto;
+		font-size: $font-lg;
+		color: #fff;
+		background-color: $base-color;
+		border-radius: 10upx;
+		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+	}
 </style>
