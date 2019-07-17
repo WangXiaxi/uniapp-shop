@@ -12,6 +12,10 @@ class ProductModel extends Request {
 	getProductList(params) {
 		return this.get('/service/getProductList', params)
 	}
+	// 获取商品详情
+	bothProducts(params) {
+		return this.get('/service/bothProducts', params)
+	}
 }
 
 const productModel = new ProductModel()

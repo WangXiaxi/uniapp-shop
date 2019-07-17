@@ -23,7 +23,7 @@
 				<text class="title">{{item.name}}</text>
 				<view class="price-box">
 					<text class="price">{{item.sell_price}}</text>
-					<text class="price old" v-if="!(item.sell_price === item.market_price || item.market_price === '0.00')">{{item.market_price}}</text>
+					<text class="price old" v-if="!(Number(item.sell_price) >= Number(item.market_price))">{{item.market_price}}</text>
 					<text class="sell">库存 {{item.store_nums}}</text>
 				</view>
 			</view>
