@@ -152,12 +152,22 @@
 					formData: {
 						username,
 						mobile
+					},
+					rulesFirst: {
+						username: usernameRule,
+						mobile: mobileRule
+					},
+					messagesFirst: {
+						username: usernameMessage,
+						mobile: mobileMessage
 					}
 				} = this
 				const sendData = {
 					username,
 					mobile
 				}
+				loginModel.initValidate({ username: usernameRule, mobile: mobileRule }, { username: usernameMessage, mobile: mobileMessage })
+				if (!loginModel.WxValidate.checkForm(sendData)) return
 				this.sending = true
 				loginModel.getMobileCode(sendData).then(res => {
 					this.timeAction()

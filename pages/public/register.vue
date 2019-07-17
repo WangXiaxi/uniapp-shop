@@ -2,16 +2,25 @@
 	<view class="content">
 		<view class="row b-b">
 			<text class="tit">用户名</text>
-			<input class="input" type="text" v-model="formData.name" placeholder="请输入用户名" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="formData.username" placeholder="请输入用户名" placeholder-class="placeholder" />
+		</view>
+			
+		<view class="row b-b">
+			<text class="tit spec">请输入密码</text>
+			<input class="input" type="password" v-model="formData.password" placeholder="请输入6-32位密码" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
-			<text class="tit">手机号</text>
-			<input class="input" type="number" v-model="formData.mobile" placeholder="请输入手机号" placeholder-class="placeholder" />
+			<text class="tit spec">请确认密码</text>
+			<input class="input" type="password" v-model="formData.repassword" placeholder="请再次输入密码" placeholder-class="placeholder" />
+		</view>
+		
+		<view class="row b-b">
+			<text class="tit">图形验证码</text>
+			<input class="input" type="number" v-model="formData.captcha" placeholder="请输入图形验证码" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
-			<text class="tit">验证码</text>
-			<input class="input" type="number" v-model="formData.code" placeholder="请输入验证码" placeholder-class="placeholder" />
-			<button class="code-btn" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
+			<text class="tit">邀请人</text>
+			<input class="input" type="number" v-model="formData.parent_name" placeholder="请输入邀请人用户名" placeholder-class="placeholder" />
 		</view>
 
 		<button class="add-btn" @click="confirm">提交</button>
@@ -20,9 +29,12 @@
 
 <script>
 	const formFields = {
-		name: '',
+		username: '',
+		password: '',
+		repassword: '',
 		mobile: '',
-		code: ''
+		captcha: '',
+		parent_name: ''
 	}
 	export default {
 		data() {
@@ -37,26 +49,6 @@
 			//提交
 			confirm() {
 
-			},
-			// 发送验证码
-			sendCode() {
-				this.timeAction()
-			},
-			// 倒计时
-			timeAction() {
-				let t = 60
-				const fun = () => {
-					t--
-					this.sendMessage = `${t}s重新获取`
-					if (t <= 0) {
-						this.sendMessage = '发送验证码'
-						this.sending = false
-						clearInterval(inter)
-					}
-				}
-				this.sending = true
-				this.sendMessage = `${t}s重新获取`
-				let inter = setInterval(fun, 1000)
 			}
 		}
 	}
@@ -96,7 +88,7 @@
 
 		.tit {
 			flex-shrink: 0;
-			width: 120upx;
+			width: 160upx;
 			font-size: 30upx;
 			color: $font-color-dark;
 		}
