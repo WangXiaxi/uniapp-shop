@@ -20,7 +20,7 @@
 			</view>
 			<view class="bot-row">
 				<text>销量: {{detail.sale}}</text>
-				<text>库存:  {{detail.store_nums}}</text>
+				<text>库存: {{detail.store_nums}}</text>
 				<text>浏览量: {{detail.visit}}</text>
 			</view>
 		</view>
@@ -67,8 +67,8 @@
 			<view class="c-row b-b">
 				<text class="tit">服务</text>
 				<view class="bz-list con">
-					<text>7天无理由退换货 ·</text>
-					<text>假一赔十 ·</text>
+					<text>· 7天无理由退换货</text>
+					<text>· 假一赔十 </text>
 				</view>
 			</view>
 		</view>
@@ -141,15 +141,22 @@
 						</view>
 					</view>
 				</view>
-				<view v-for="(item,index) in specArray" :key="index" class="attr-list">
-					<text>{{item.name}}</text>
-					<view class="item-list">
-						<text v-for="(childItem, childIndex) in item.values" :key="childIndex" class="tit"
-						 :class="{selected: childItem.selected}" @click="selectSpec(childItem, item.values)">
-							{{childItem.name}}
-						</text>
+				<scroll-view scroll-with-animation scroll-y class="attr-list-box">
+					<view v-for="(item,index) in specArray" :key="index" class="attr-list">
+						<text>{{item.name}}</text>
+						<view class="item-list">
+							<text v-for="(childItem, childIndex) in item.values" :key="childIndex" class="tit" :class="{selected: childItem.selected}"
+							 @click="selectSpec(childItem, item.values)">
+								{{childItem.name}}
+							</text>
+						</view>
 					</view>
-				</view>
+					<view class="attr-num">
+						<text>数量</text>
+						<uni-number-box class="step" :min="1" :max="Number(detail.store_nums)" :value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
+						 :isMax="goods_num>=Number(detail.store_nums)?true:false" :isMin="goods_num===1" @eventChange="numberChange"></uni-number-box>
+					</view>
+				</scroll-view>
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
@@ -165,15 +172,20 @@
 <script>
 	// import share from '@/components/share';
 	import productModel from '../../api/product/index.js'
+	import uniNumberBox from '@/components/uni-number-box.vue'
 	import {
 		url_image
 	} from '../../common/config/index.js'
 	export default {
 		components: {
-			// share
+			// share,
+			uniNumberBox
 		},
 		data() {
 			return {
+				isCheck: true, // 默认商品允许提交
+				type: 'goods', // 类型
+				goods_num: 1, // 数量
 				goodsId: '', // id
 				detail: {}, // 基础
 				specArray: [], // 属性列表
@@ -209,6 +221,10 @@
 			this.shareList = await this.$api.json('shareList');
 		},
 		methods: {
+			//数量
+			numberChange(data) {
+				this.goods_num = data.number
+			},
 			// 获取商品明细
 			getDetail() {
 				productModel.bothProducts({
@@ -224,14 +240,21 @@
 					this.detail = res.data
 					// 图片赋值
 					this.imgList = photo.map(c => {
-						return { src: `${url_image}/${c.img}` }
+						return {
+							src: `${url_image}/${c.img}`
+						}
 					})
 					// 规格种类
 					if (spec_array) { // 存在说明有规格
+						this.type = 'products' // 有规格说明是商品
+						this.isCheck = false
 						const specObj = JSON.parse(spec_array)
 						this.specArray = Object.keys(specObj).map(c => {
 							specObj[c].values = specObj[c].value.split(',').map(j => {
-								return { selected: false, name: j }
+								return {
+									selected: false,
+									name: j
+								}
 							})
 							return specObj[c]
 						})
@@ -241,7 +264,7 @@
 							return c
 						})
 					}
-				
+
 				}).catch(() => {})
 			},
 			//规格弹窗开关
@@ -258,25 +281,34 @@
 			//选择规格
 			selectSpec(cur, parent) {
 				// 设置选中
-				parent.forEach(c => { c.selected = c.name === cur.name })
+				parent.forEach(c => {
+					c.selected = c.name === cur.name
+				})
 				// 查出selected
 				const selectedList = []
 				this.specArray.forEach(c => {
 					const cur = c.values.find(c => c.selected)
-					if (cur) selectedList.push({ id: c.id, name: cur.name })
+					if (cur) selectedList.push({
+						id: c.id,
+						name: cur.name
+					})
 				})
 				this.specSelected = selectedList
 				// 计算出使用哪一个 skus
 				if (this.specSelected.length !== this.specArray.length) return // 规格全选中在进行匹配
+				this.isCheck = true // 选择后 不允许取消 所以就是可以提交状态
 				const spS = this.specSelected
 				const lenS = spS.length
-				console.log(spS)
-				const curGoods = this.skus.find(c => {
+				const {
+					sell_price,
+					market_price,
+					store_nums,
+					id
+				} = this.skus.find(c => {
 					const csp = c.spec_array
 					const len = csp.length
-					for (let i = 0; i< len; i++) {
-						for (let j = 0; j< lenS; i++) {
-							console.log(spS[j], csp[i])
+					for (let i = 0; i < len; i++) {
+						for (let j = 0; j < lenS; j++) {
 							if (spS[j].id === csp[i].id) {
 								if (spS[j].name !== csp[i].value) {
 									return false // 只要id 相同 值不同说明匹配不上 直接 结束
@@ -286,20 +318,32 @@
 					}
 					return true
 				})
-				console.log(curGoods)
+				Object.assign(this.detail, {
+					sell_price,
+					market_price,
+					store_nums,
+					id
+				})
 			},
 			//分享
-			share() {
-				this.$refs.share.toggleMask();
-			},
+			// share() {
+			// 	this.$refs.share.toggleMask();
+			// },
 			//收藏
 			toFavorite() {
 				this.favorite = !this.favorite;
 			},
 			buy() {
-				uni.navigateTo({
-					url: `/pages/order/createOrder`
-				})
+				const {
+					detail: {
+						id
+					},
+					type,
+					goods_num
+				} = this
+				// uni.navigateTo({
+				// 	url: `/pages/order/createOrder`
+				// })
 			},
 			stopPrevent() {}
 		},
@@ -467,6 +511,11 @@
 			margin-left: 4upx;
 			color: $uni-color-primary;
 		}
+	}
+
+	.attr-list-box {
+		overflow: hidden;
+		max-height: 60vh;
 	}
 
 	.c-list {
@@ -662,7 +711,18 @@
 			padding-top: 30upx;
 			padding-left: 10upx;
 		}
-
+		.attr-num {
+			display: flex;
+			font-size: $font-base + 2upx;
+			color: $font-color-base;
+			padding-top: 30upx;
+			padding-left: 10upx;
+			align-items: center;
+			.uni-numbox {
+				left: 0;
+				position: relative;
+			}
+		}
 		.item-list {
 			padding: 20upx 0 0;
 			display: flex;
