@@ -4,7 +4,7 @@
 			<text class="tit">用户名</text>
 			<input class="input" type="text" v-model="formData.username" placeholder="请输入用户名" placeholder-class="placeholder" />
 		</view>
-			
+
 		<view class="row b-b">
 			<text class="tit spec">请输入密码</text>
 			<input class="input" type="password" v-model="formData.password" placeholder="请输入6-32位密码" placeholder-class="placeholder" />
@@ -13,21 +13,27 @@
 			<text class="tit spec">请确认密码</text>
 			<input class="input" type="password" v-model="formData.repassword" placeholder="请再次输入密码" placeholder-class="placeholder" />
 		</view>
-		
+		<view class="row b-b">
+			<text class="tit">手机号</text>
+			<input class="input" type="number" v-model="formData.mobile" placeholder="请输入手机号" placeholder-class="placeholder" />
+		</view>
 		<view class="row b-b">
 			<text class="tit">图形验证码</text>
-			<input class="input" type="number" v-model="formData.captcha" placeholder="请输入图形验证码" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="formData.captcha" placeholder="请输入图形验证码" placeholder-class="placeholder" />
+			<image class="code-image" :src="codeImage" @click="getCaptcha"></image>
 		</view>
 		<view class="row b-b">
 			<text class="tit">邀请人</text>
-			<input class="input" type="number" v-model="formData.parent_name" placeholder="请输入邀请人用户名" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="formData.parent_name" placeholder="请输入邀请人用户名" placeholder-class="placeholder" />
 		</view>
 
-		<button class="add-btn" @click="confirm">提交</button>
+		<button class="add-btn" :loading="loading" :disabled="loading" @click="confirm">提交</button>
 	</view>
 </template>
 
 <script>
+	import loginModel from '../../api/login/index.js'
+
 	const formFields = {
 		username: '',
 		password: '',
@@ -39,16 +45,80 @@
 	export default {
 		data() {
 			return {
-				sendMessage: '发送验证码',
-				sending: false,
-				formData: JSON.parse(JSON.stringify(formFields))
+				codeImage: loginModel.getCaptcha(),
+				loading: false,
+				formData: JSON.parse(JSON.stringify(formFields)),
+				rules: {
+					username: {
+						required: true
+					},
+					password: {
+						required: true
+					},
+					repassword: {
+						required: true
+					},
+					mobile: {
+						required: true,
+						tel: true
+					},
+					captcha: {
+						required: true
+					},
+					parent_name: {
+						required: true
+					}
+				},
+				messages: {
+					username: {
+						required: '请输入用户名！'
+					},
+					password: {
+						required: '请输入密码！'
+					},
+					repassword: {
+						required: '请确认密码！'
+					},
+					mobile: {
+						required: '请输入手机号！'
+					},
+					captcha: {
+						required: '请输入图形验证码！'
+					},
+					parent_name: {
+						required: '请输入邀请人用户名！'
+					}
+				}
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+		},
 		methods: {
-			//提交
+			// 获取图形验证
+			getCaptcha() {
+				this.codeImage = loginModel.getCaptcha()
+			},
+			// 提交
 			confirm() {
-
+				const {
+					formData,
+					rules,
+					messages
+				} = this
+				if (formData.password !== formData.repassword) return this.$api.msg('两次密码输入不一致！')
+				loginModel.initValidate(rules, messages)
+				if (!loginModel.WxValidate.checkForm(formData)) return
+				this.loading = true
+				loginModel.register(formData).then(res => {
+					this.loading = false
+					this.formData = JSON.parse(JSON.stringify(formFields))
+					this.$api.msg('注册成功！', 1500, false, 'success')
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1500)
+				}).catch(() => {
+					this.loading = false
+				})
 			}
 		}
 	}
@@ -129,5 +199,9 @@
 		background-color: $base-color;
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+	}
+	.code-image {
+		width: 260upx;
+		height: 90upx;
 	}
 </style>

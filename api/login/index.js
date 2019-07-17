@@ -1,5 +1,6 @@
 import Request from '../../utils/request'
 import WxValidate from '../../utils/validate'
+import { getCaptcha } from '../../utils/getCaptcha'
 
 /**
  * @name    LoginModel封装
@@ -20,6 +21,14 @@ class LoginModel extends Request {
 	// 手机号找回密码提交
 	findPassWordByMobile(params) {
 		return this.post('/service/findPassWordByMobile', params)
+	}
+	// 注册
+	register(params) {
+		return this.post('/service/register', params)
+	}
+	// 获取图形码
+	getCaptcha() {
+		return getCaptcha('getCaptcha')
 	}
 	/**
 	 * 验证表单

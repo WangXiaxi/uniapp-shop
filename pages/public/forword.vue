@@ -26,14 +26,13 @@
 				<input class="input" type="password" v-model="formData.repassword" placeholder="请再次输入密码" placeholder-class="placeholder" />
 			</view>
 			<button class="add-btn spec" @click="goFirst">上一步</button>
-			<button class="add-btn" @click="confirmLast">提交</button>
+			<button class="add-btn" :loading="loading" :disabled="loading" @click="confirmLast">提交</button>
 		</view>
 	</view>
 </template>
 
 <script>
 	import loginModel from '../../api/login/index.js'
-
 	const formFields = {
 		username: '',
 		mobile: '',
@@ -44,6 +43,7 @@
 	export default {
 		data() {
 			return {
+				loading: false,
 				isCheck: true, // 是否输入验证码等
 				sendMessage: '发送验证码',
 				sending: false,
@@ -53,7 +53,8 @@
 						required: true
 					},
 					mobile: {
-						required: true
+						required: true,
+						tel: true
 					},
 					mobile_code: {
 						required: true
@@ -64,10 +65,10 @@
 						required: '请输入用户名！'
 					},
 					mobile: {
-						required: '请输入密码！'
+						required: '请输入手机号！'
 					},
 					mobile_code: {
-						required: '请输入验证码！'
+						required: '请输入短信验证码！'
 					}
 				},
 				rulesSecond: {
@@ -97,7 +98,7 @@
 			},
 			// 
 			// 下一步
-			async confirmLast() {
+			confirmLast() {
 				const {
 					formData: {
 						username,
@@ -121,11 +122,17 @@
 				if (password !== repassword) return this.$api.msg('两次密码输入不一致！')
 				loginModel.initValidate(Object.assign(rulesFirst, rulesSecond), Object.assign(messagesFirst, messagesSecond))
 				if (!loginModel.WxValidate.checkForm(sendData)) return
-				const res = await loginModel.findPassWordByMobile(sendData)
-				this.$api.msg('密码修改成功！', 1500, false, 'success')
-				setTimeout(() => {
-					uni.navigateBack()
-				}, 1500)
+				this.loading = true
+				loginModel.findPassWordByMobile(sendData).then(() => {
+					this.loading = false
+					this.$api.msg('密码修改成功！', 1500, false, 'success')
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1500)
+				}).catch(() => {
+					this.loading = false
+				})
+
 			},
 			confirmFirst() {
 				const {
@@ -166,7 +173,13 @@
 					username,
 					mobile
 				}
-				loginModel.initValidate({ username: usernameRule, mobile: mobileRule }, { username: usernameMessage, mobile: mobileMessage })
+				loginModel.initValidate({
+					username: usernameRule,
+					mobile: mobileRule
+				}, {
+					username: usernameMessage,
+					mobile: mobileMessage
+				})
 				if (!loginModel.WxValidate.checkForm(sendData)) return
 				this.sending = true
 				loginModel.getMobileCode(sendData).then(res => {

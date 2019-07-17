@@ -76,7 +76,6 @@ export default class Request {
 		})
 		const time = new Date().getTime()
 		const sign = `${time}${options.url.split('/service/')[1]}${url_key}`
-		console.log(sign)
 		Object.assign(options.data, {
 			time,
 			sign: md5(sign)

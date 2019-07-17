@@ -12,15 +12,15 @@
 			<view class="input-content">
 				<view class="input-item">
 					<text class="tit">用户名</text>
-					<input type="number" v-model="loginInfo" placeholder="请输入用户名" maxlength="11" />
+					<input type="text" v-model="loginInfo" placeholder="请输入用户名" />
 				</view>
 				<view class="input-item">
 					<text class="tit">密码</text>
-					<input type="mobile" v-model="password" placeholder="6位以上不含特殊字符的数字、字母组合" placeholder-class="input-empty" maxlength="20"
+					<input type="password" v-model="password" placeholder="6位以上不含特殊字符的数字、字母组合" placeholder-class="input-empty"
 					 password @confirm="toLogin" />
 				</view>
 			</view>
-			<button class="confirm-btn" @click="toLogin">登录</button>
+			<button class="confirm-btn" :loading="loading" :disabled="loading" @click="toLogin">登录</button>
 			<view class="forget-section" @click="toRegist('/pages/public/forword')">
 				忘记密码?
 			</view>
@@ -41,6 +41,7 @@
 	export default {
 		data() {
 			return {
+				loading: false,
 				loginInfo: '',
 				password: '',
 				rules: {
@@ -75,14 +76,35 @@
 					url
 				})
 			},
-			async toLogin() {
-				const { loginInfo, password, rules, messages } = this
-				const sendData = { loginInfo, password }
+			toLogin() {
+				const {
+					loginInfo,
+					password,
+					rules,
+					messages
+				} = this
+				const sendData = {
+					loginInfo,
+					password
+				}
 				loginModel.initValidate(rules, messages)
 				if (!loginModel.WxValidate.checkForm(sendData)) return
-				const result = await loginModel.login(sendData)
-				this.login(result.data.userToken)
-				uni.navigateBack()
+				this.loading = true
+				loginModel.login(sendData).then(result => {
+					this.loading = false
+					this.loginInfo = ''
+					this.password = ''
+					this.login(result.data.userToken)
+					if (this.$api.prePage()) {
+						uni.navigateBack()
+					} else {
+						uni.switchTab({
+							url: '../user/user'
+						})
+					}
+				}).catch(() => {
+					this.loading = false
+				})
 			}
 		}
 	}
@@ -209,6 +231,9 @@
 	}
 
 	.confirm-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		width: 630upx;
 		height: 76upx;
 		line-height: 76upx;

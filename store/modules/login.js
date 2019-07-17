@@ -13,7 +13,7 @@ console.log(tokenStorage, userInfoStorage, hasLoginStorage)
 
 const login = {
 	state: {
-		hasLogin: hasLoginStorage,
+		hasLogin: hasLoginStorage, // 判断是否是登陆状态
 		token: tokenStorage ? tokenStorage : '',
 		userInfo: userInfoStorage ? userInfoStorage : {}
 	},
