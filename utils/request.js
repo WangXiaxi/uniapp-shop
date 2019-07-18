@@ -105,13 +105,7 @@ export default class Request {
 						case 'token30401':
 							// 清空数据并跳转至登陆页
 							store.commit('logout')
-							uni.showToast({
-								title: data.error,
-								duration: 1500,
-								mask: false,
-								icon: 'none'
-							})
-							uni.redirectTo({
+							uni.navigateTo({
 								url: '/pages/public/login'
 							})
 							reject(response)

@@ -16,6 +16,10 @@ class ProductModel extends Request {
 	bothProducts(params) {
 		return this.get('/service/bothProducts', params)
 	}
+	// 加入购物车的
+	joinCart(params) {
+		return this.post('/service/joinCart', params)
+	}
 }
 
 const productModel = new ProductModel()

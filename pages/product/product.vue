@@ -41,7 +41,7 @@
 		</view> -->
 
 		<view class="c-list">
-			<view class="c-row b-b" @click="toggleSpec">
+			<view class="c-row b-b" @click="toggleSpec(0)" v-if="specArray.length">
 				<text class="tit">购买类型</text>
 				<view class="con">
 					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -98,7 +98,7 @@
 			<view class="d-header">
 				<text>图文详情</text>
 			</view>
-			<rich-text :nodes="desc"></rich-text>
+			<rich-text :nodes="desc" class="img-text"></rich-text>
 		</view>
 
 		<!-- 底部操作菜单 -->
@@ -117,8 +117,8 @@
 			</view>
 
 			<view class="action-btn-group">
-				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
+				<button type="primary" class=" action-btn no-border buy-now-btn" @click="toggleSpec(1)">立即购买</button>
+				<button type="primary" class=" action-btn no-border add-cart-btn" @click="toggleSpec(2)">加入购物车</button>
 			</view>
 		</view>
 
@@ -129,11 +129,11 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
+					<image :src="detail.img"></image>
 					<view class="right">
 						<text class="price">¥{{detail.sell_price}}</text>
 						<text class="stock">库存：{{detail.store_nums}}</text>
-						<view class="selected">
+						<view class="selected" v-if="specArray.length">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 								{{sItem.name}}
@@ -152,12 +152,15 @@
 						</view>
 					</view>
 					<view class="attr-num">
-						<text>数量</text>
+						<text class="num-tit">数量</text>
 						<uni-number-box class="step" :min="1" :max="Number(detail.store_nums)" :value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
 						 :isMax="goods_num>=Number(detail.store_nums)?true:false" :isMin="goods_num===1" @eventChange="numberChange"></uni-number-box>
 					</view>
 				</scroll-view>
-				<button class="btn" @click="toggleSpec">完成</button>
+				<view class="action-btn-group" :class="{ spec: !!showBtn }">
+					<button v-if="showBtn !== 2" :disabled="btnLoading" :loading="btnLoading" class="action-btn no-border buy-now-btn spec" @click="buy(2)">立即购买</button>
+					<button v-if="showBtn !== 1" :disabled="btnLoading" :loading="btnLoading" class="action-btn no-border add-cart-btn spec" @click="buy(1)">加入购物车</button>
+				</view>
 			</view>
 		</view>
 		<!-- 分享 -->
@@ -183,6 +186,8 @@
 		},
 		data() {
 			return {
+				btnLoading: false, // 按钮点击
+				showBtn: 0, // 点击显示购物车还是立即购买或是都显示 0 全部 1 立即购买 2 加入购物车
 				isCheck: true, // 默认商品允许提交
 				type: 'goods', // 类型
 				goods_num: 1, // 数量
@@ -193,32 +198,15 @@
 				specClass: 'none', // 属性下拉显示
 				specSelected: [], // 选中属性列表
 				favorite: true,
-				shareList: [],
-				imgList: [{
-						src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/TB1RPFPPFXXXXcNXpXXXXXXXXXX_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd2.alicdn.com/imgextra/i2/38832490/O1CN01IYq7gu1UGShvbEFnd_!!38832490.jpg_400x400.jpg'
-					}
-				],
-				desc: `
-					<div style="width:100%">
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i4/479184430/O1CN01nCpuLc1iaz4bcSN17_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd2.alicdn.com/imgextra/i2/479184430/O1CN01gwbN931iaz4TzqzmG_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i3/479184430/O1CN018wVjQh1iaz4aupv1A_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd4.alicdn.com/imgextra/i4/479184430/O1CN01tWg4Us1iaz4auqelt_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg" />
-					</div>
-				`
+				// shareList: [],
+				imgList: [],
+				desc: ''
 			}
 		},
 		async onLoad(options) {
 			this.goodsId = options.id
 			this.getDetail()
-			this.shareList = await this.$api.json('shareList');
+			// this.shareList = await this.$api.json('shareList');
 		},
 		methods: {
 			//数量
@@ -244,6 +232,9 @@
 							src: `${url_image}/${c.img}`
 						}
 					})
+					this.detail.img = `${url_image}/${this.detail.img}`
+					this.desc = this.detail.content.replace(new RegExp('src="/upload/', 'g'),
+						`width="100%" src="${url_image}/upload/`).replace(/style="(\S*)"/g, '')
 					// 规格种类
 					if (spec_array) { // 存在说明有规格
 						this.type = 'products' // 有规格说明是商品
@@ -264,20 +255,53 @@
 							return c
 						})
 					}
-
 				}).catch(() => {})
 			},
 			//规格弹窗开关
-			toggleSpec() {
+			toggleSpec(type) {
 				if (this.specClass === 'show') {
-					this.specClass = 'hide';
+					this.specClass = 'hide'
 					setTimeout(() => {
-						this.specClass = 'none';
-					}, 250);
+						this.specClass = 'none'
+					}, 250)
 				} else if (this.specClass === 'none') {
-					this.specClass = 'show';
+					this.specClass = 'show'
+					this.showBtn = type
 				}
 			},
+
+			// 立即购买 or 加入购物车
+			buy(typeAct) {
+				if (this.specSelected.length !== this.specArray.length) return this.$api.msg('请选择规格！')
+				const {
+					detail: {
+						id: goods_id
+					},
+					goods_num,
+					type
+				} = this
+				const sendData = {
+					goods_id,
+					goods_num,
+					type
+				}
+				this.btnLoading = true
+				switch (typeAct) {
+					case 1: // 加入购物车
+						productModel.joinCart(sendData).then(() => {
+							this.$api.msg('加入购物车成功！', 1500, false, 'success')
+						}).catch(() => {
+							this.btnLoading = false
+						})
+						break
+					case 2: // 立即购买
+						uni.navigateTo({
+							url: `/pages/order/createOrder`
+						})
+						break
+				}
+			},
+
 			//选择规格
 			selectSpec(cur, parent) {
 				// 设置选中
@@ -333,18 +357,6 @@
 			toFavorite() {
 				this.favorite = !this.favorite;
 			},
-			buy() {
-				const {
-					detail: {
-						id
-					},
-					type,
-					goods_num
-				} = this
-				// uni.navigateTo({
-				// 	url: `/pages/order/createOrder`
-				// })
-			},
 			stopPrevent() {}
 		},
 
@@ -352,6 +364,10 @@
 </script>
 
 <style lang='scss'>
+	.img-text {
+		font-size: 0;
+	}
+
 	page {
 		background: $page-color-base;
 		padding-bottom: 160upx;
@@ -516,6 +532,7 @@
 	.attr-list-box {
 		overflow: hidden;
 		max-height: 60vh;
+		min-height: 23vh;
 	}
 
 	.c-list {
@@ -711,6 +728,7 @@
 			padding-top: 30upx;
 			padding-left: 10upx;
 		}
+
 		.attr-num {
 			display: flex;
 			font-size: $font-base + 2upx;
@@ -718,11 +736,17 @@
 			padding-top: 30upx;
 			padding-left: 10upx;
 			align-items: center;
+
 			.uni-numbox {
 				left: 0;
 				position: relative;
 			}
+
+			.num-tit {
+				flex: 1;
+			}
 		}
+
 		.item-list {
 			padding: 20upx 0 0;
 			display: flex;
@@ -810,6 +834,10 @@
 				background: $uni-color-primary;
 				font-size: $font-base + 2upx;
 				color: #fff;
+				margin: 30upx auto 20upx;
+			}
+
+			.action-btn-group {
 				margin: 30upx auto 20upx;
 			}
 		}
@@ -901,39 +929,50 @@
 			}
 		}
 
-		.action-btn-group {
+
+	}
+
+	.action-btn-group {
+		display: flex;
+		height: 76upx;
+		border-radius: 100px;
+		overflow: hidden;
+		box-shadow: 0 20upx 40upx -16upx #fa436a;
+		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+		background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
+		margin-left: 20upx;
+		position: relative;
+		&:after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			right: 50%;
+			transform: translateY(-50%);
+			height: 28upx;
+			width: 0;
+			border-right: 1px solid rgba(255, 255, 255, .5);
+		}
+		&.spec:after {
+			display: none;
+		}
+		.action-btn {
 			display: flex;
-			height: 76upx;
-			border-radius: 100px;
-			overflow: hidden;
-			box-shadow: 0 20upx 40upx -16upx #fa436a;
-			box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-			background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
-			margin-left: 20upx;
-			position: relative;
-
-			&:after {
-				content: '';
-				position: absolute;
-				top: 50%;
-				right: 50%;
-				transform: translateY(-50%);
-				height: 28upx;
-				width: 0;
-				border-right: 1px solid rgba(255, 255, 255, .5);
-			}
-
-			.action-btn {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 180upx;
-				height: 100%;
-				font-size: $font-base;
-				padding: 0;
-				border-radius: 0;
+			align-items: center;
+			justify-content: center;
+			width: 180upx;
+			height: 100%;
+			font-size: $font-base;
+			padding: 0;
+			border-radius: 0;
+			background: transparent;
+			color: #fff;
+			&[disabled] {
 				background: transparent;
+				color: #fff;
 			}
+		}
+		.spec {
+			flex: 1;
 		}
 	}
 </style>
