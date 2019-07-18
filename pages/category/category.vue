@@ -9,25 +9,30 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(titem.id)" v-if="titem.parent_id === item.id" class="t-item" v-for="titem in tlist"
-					 :key="titem.id">
+					<view @click="navToList(titem.id)" v-if="titem.parent_id === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
 						<image :src="titem.cat_pic" @error="onImageError(titem)"></image>
 						<text>{{titem.name}}</text>
 					</view>
 				</view>
 			</view>
 		</scroll-view>
+		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
 <script>
+	import mixLoading from '../../components/mix-loading/mix-loading.vue'
 	import categoryModel from '../../api/category/index.js'
 	import {
 		url_image
 	} from '../../common/config/index.js'
 	export default {
+		components: {
+			mixLoading
+		},
 		data() {
 			return {
+				pageLoading: false,
 				sizeCalcState: false,
 				tabScrollTop: 0,
 				currentId: 1,
@@ -44,24 +49,30 @@
 			onImageError(key, index) {
 				this.$set(key, 'cat_pic', '/static/errorImage.jpg')
 			},
-			async loadData() {
-				let listObj = await categoryModel.getAllCategoryList({
+			loadData() {
+				this.pageLoading = true
+				categoryModel.getAllCategoryList({
 					ydui: true
-				});
-				const list = listObj.data.map(c => {
-					const cur = c
-					this.flist.push(JSON.parse(JSON.stringify(cur))) //parent_id为父级id, 没有parent_id或者parent_id=0是一级分类
-					const sCur = JSON.parse(JSON.stringify(cur))
-					sCur.parent_id = cur.id
-					this.slist.push(sCur) //parent_id为父级id, 没有parent_id或者parent_id=0是一级分类
-					if (cur.childrens) {
-						this.tlist.push(...cur.childrens.map(c => {
-							c.cat_pic = `${url_image}/${c.cat_pic}`
-							return c
-						}))
-					}
-					return cur
+				}).then(res => {
+					const list = res.data.map(c => {
+						const cur = c
+						this.flist.push(JSON.parse(JSON.stringify(cur))) //parent_id为父级id, 没有parent_id或者parent_id=0是一级分类
+						const sCur = JSON.parse(JSON.stringify(cur))
+						sCur.parent_id = cur.id
+						this.slist.push(sCur) //parent_id为父级id, 没有parent_id或者parent_id=0是一级分类
+						if (cur.childrens) {
+							this.tlist.push(...cur.childrens.map(c => {
+								c.cat_pic = `${url_image}/${c.cat_pic}`
+								return c
+							}))
+						}
+						return cur
+					})
+					this.pageLoading = false
+				}).catch(() => {
+					this.pageLoading = false
 				})
+				
 			},
 			//一级分类点击
 			tabtap(item) {

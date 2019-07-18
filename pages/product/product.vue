@@ -11,17 +11,17 @@
 		</view>
 
 		<view class="introduce-section">
-			<text class="title">{{detail.name}}</text>
+			<text class="title">{{detail.name | fill}}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
-				<text class="price">{{detail.sell_price}}</text>
-				<text class="m-price" v-if="!(Number(detail.sell_price) >= Number(detail.market_price))">¥{{detail.market_price}}</text>
+				<text class="price">{{detail.sell_price | fill}}</text>
+				<text class="m-price" v-if="!(Number(detail.sell_price) >= Number(detail.market_price))">¥{{detail.market_price | fill}}</text>
 				<!-- <text class="coupon-tip">7折</text> -->
 			</view>
 			<view class="bot-row">
-				<text>销量: {{detail.sale}}</text>
-				<text>库存: {{detail.store_nums}}</text>
-				<text>浏览量: {{detail.visit}}</text>
+				<text>销量: {{detail.sale | fill}}</text>
+				<text>库存: {{detail.store_nums | fill}}</text>
+				<text>浏览量: {{detail.visit | fill}}</text>
 			</view>
 		</view>
 
@@ -131,8 +131,8 @@
 				<view class="a-t">
 					<image :src="detail.img"></image>
 					<view class="right">
-						<text class="price">¥{{detail.sell_price}}</text>
-						<text class="stock">库存：{{detail.store_nums}}</text>
+						<text class="price">¥{{detail.sell_price | fill}}</text>
+						<text class="stock">库存：{{detail.store_nums | fill}}</text>
 						<view class="selected" v-if="specArray.length">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -153,8 +153,14 @@
 					</view>
 					<view class="attr-num">
 						<text class="num-tit">数量</text>
-						<uni-number-box class="step" :min="1" :max="Number(detail.store_nums)" :value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
-						 :isMax="goods_num>=Number(detail.store_nums)?true:false" :isMin="goods_num===1" @eventChange="numberChange"></uni-number-box>
+						<uni-number-box
+							class="step"
+							:min="1"
+							:max="Number(detail.store_nums)"
+							:value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
+							:isMax="goods_num>=Number(detail.store_nums)?true:false"
+							:isMin="goods_num===1"
+							@eventChange="numberChange"></uni-number-box>
 					</view>
 				</scroll-view>
 				<view class="action-btn-group" :class="{ spec: !!showBtn }">
@@ -169,6 +175,7 @@
 			:contentHeight="580"
 			:shareList="shareList"
 		></share> -->
+		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
@@ -176,23 +183,29 @@
 	// import share from '@/components/share';
 	import productModel from '../../api/product/index.js'
 	import uniNumberBox from '@/components/uni-number-box.vue'
+	import mixLoading from '../../components/mix-loading/mix-loading.vue'
+
 	import {
 		url_image
 	} from '../../common/config/index.js'
 	export default {
 		components: {
 			// share,
-			uniNumberBox
+			uniNumberBox,
+			mixLoading
 		},
 		data() {
 			return {
+				pageLoading: false,
 				btnLoading: false, // 按钮点击
 				showBtn: 0, // 点击显示购物车还是立即购买或是都显示 0 全部 1 立即购买 2 加入购物车
 				isCheck: true, // 默认商品允许提交
 				type: 'goods', // 类型
 				goods_num: 1, // 数量
 				goodsId: '', // id
-				detail: {}, // 基础
+				detail: {
+					store_nums: 1
+				}, // 基础
 				specArray: [], // 属性列表
 				skus: [], // 属性匹配
 				specClass: 'none', // 属性下拉显示
@@ -215,6 +228,7 @@
 			},
 			// 获取商品明细
 			getDetail() {
+				this.pageLoading = true
 				productModel.bothProducts({
 					ydui: true,
 					id: this.goodsId
@@ -255,7 +269,10 @@
 							return c
 						})
 					}
-				}).catch(() => {})
+					this.pageLoading = false
+				}).catch(() => {
+					this.pageLoading = false
+				})
 			},
 			//规格弹窗开关
 			toggleSpec(type) {
@@ -289,6 +306,7 @@
 				switch (typeAct) {
 					case 1: // 加入购物车
 						productModel.joinCart(sendData).then(() => {
+							this.btnLoading = false
 							this.$api.msg('加入购物车成功！', 1500, false, 'success')
 						}).catch(() => {
 							this.btnLoading = false
@@ -320,6 +338,7 @@
 				this.specSelected = selectedList
 				// 计算出使用哪一个 skus
 				if (this.specSelected.length !== this.specArray.length) return // 规格全选中在进行匹配
+				this.goods_num = 1
 				this.isCheck = true // 选择后 不允许取消 所以就是可以提交状态
 				const spS = this.specSelected
 				const lenS = spS.length

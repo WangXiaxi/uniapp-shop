@@ -8,9 +8,8 @@
 		<input 
 			class="uni-numbox-value" 
 			type="number" 
-			:disabled="disabled"
+			:disabled="true"
 			:value="inputValue" 
-			
 			@blur="_onBlur"
 		>
 		<view 
@@ -66,19 +65,26 @@
 			}
 		},
 		created(){
-			this.maxDisabled = this.isMax;
-			this.minDisabled = this.isMin;
 		},
 		computed: {
 
 		},
 		watch: {
+			isMax(v) {
+				this.maxDisabled = v
+			},
+			isMin(v) {
+				this.minDisabled = v
+			},
 			inputValue(number) {
 				const data = {
 					number: number,
 					index: this.index
 				}
 				this.$emit('eventChange', data);
+			},
+			value(v) {
+				this.inputValue = v
 			}
 		},
 		methods: {
@@ -123,26 +129,11 @@
 					scale = Math.pow(10, (this.step + '').split('.')[1].length);
 				}
 				return scale;
-			},
-			_onBlur(event) {
-				let value = event.detail.value;
-				if (!value) {
-					this.inputValue = 0;
-					return
-				}
-				value = +value;
-				if (value > this.max) {
-					value = this.max;
-				} else if (value < this.min) {
-					value = this.min
-				}
-
-				this.inputValue = value
 			}
 		}
 	}
 </script>
-<style>
+<style lang="scss">
 	.uni-numbox {
 		position:absolute;
 		left: 30upx;

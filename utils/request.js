@@ -70,9 +70,9 @@ export default class Request {
 		options.data = options.data || {}
 		options.method = options.method || this.config.method
 		options.header = options.header || this.config.header[options.method]
-		const userToken = store.getters.token
-		if (userToken) Object.assign(options.header, {
-			userToken
+		const token = store.getters.token
+		if (token) Object.assign(options.header, {
+			token
 		})
 		const time = new Date().getTime()
 		const sign = `${time}${options.url.split('/service/')[1]}${url_key}`

@@ -42,6 +42,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: transparent;
+		z-index: 1000;
 	}
 	.mix-loading-wrapper{
 		display: flex;

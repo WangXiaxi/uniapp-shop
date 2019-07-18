@@ -20,11 +20,11 @@
 				<view class="image-wrapper">
 					<image :src="item.img" mode="aspectFill"></image>
 				</view>
-				<text class="title">{{item.name}}</text>
+				<text class="title">{{item.name | fill}}</text>
 				<view class="price-box">
-					<text class="price">{{item.sell_price}}</text>
+					<text class="price">{{item.sell_price | fill}}</text>
 					<text class="price old" v-if="!(Number(item.sell_price) >= Number(item.market_price))">{{item.market_price}}</text>
-					<text class="sell">库存 {{item.store_nums}}</text>
+					<text class="sell">库存 {{item.store_nums | fill}}</text>
 				</view>
 			</view>
 		</view>
@@ -35,12 +35,13 @@
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 	import productModel from '../../api/product/index.js'
+
 	import {
 		url_image
 	} from '../../common/config/index.js'
 	export default {
 		components: {
-			uniLoadMore
+			uniLoadMore,
 		},
 		data() {
 			return {
@@ -81,7 +82,7 @@
 		},
 		methods: {
 			//加载商品 ，带下拉刷新和上滑加载
-			async loadData(type = 'add', loading) {
+			loadData(type = 'add', loading) {
 				//没有更多直接返回
 				if (type === 'add') {
 					if (this.loadingType === 'nomore') {
@@ -90,7 +91,7 @@
 					this.page = this.page + 1;
 					this.loadingType = 'loading';
 				} else {
-					this.loadingType = 'more'
+					this.loadingType = 'loading';
 				}
 
 				if (type === 'refresh') {
@@ -118,33 +119,33 @@
 						by = 'asc'
 					}
 				}
-				let result = await productModel.getProductList({
+				productModel.getProductList({
 					page: this.page,
 					ydui: true,
 					cat_id: this.cateId,
 					order,
 					by
-				});
-				const {
-					goods,
-					totalPage,
-					curPage
-				} = result.data;
-				this.pages = totalPage;
-				this.page = curPage;
-				this.goodsList = this.goodsList.concat(goods.map(c => {
-					c.img = `${url_image}/${c.img}`
-					return c
-				}));
-				//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
-				this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
-				if (type === 'refresh') {
-					if (loading == 1) {
-						uni.hideLoading();
-					} else {
-						uni.stopPullDownRefresh();
+				}).then(res => {
+					const {
+						goods,
+						totalPage,
+						curPage
+					} = res.data;
+					this.pages = totalPage;
+					this.page = curPage;
+					this.goodsList = this.goodsList.concat(goods.map(c => {
+						c.img = `${url_image}/${c.img}`
+						return c
+					}));
+					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
+					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
+					if (type === 'refresh') {
+						if (loading != 1) {
+							uni.stopPullDownRefresh();
+						}
 					}
-				}
+				}).catch(() => {
+				})
 			},
 			//筛选点击
 			tabClick(index) {
@@ -157,14 +158,7 @@
 				} else {
 					this.priceOrder = 0;
 				}
-				uni.pageScrollTo({
-					duration: 300,
-					scrollTop: 0
-				})
 				this.loadData('refresh', 1);
-				uni.showLoading({
-					title: '正在加载'
-				})
 			},
 			//详情
 			navToDetailPage(item) {
@@ -393,17 +387,20 @@
 				font-size: 26upx;
 			}
 		}
+
 		.price.old {
 			font-size: $font-sm;
 			color: $uni-color-warning;
 			line-height: 1;
 			text-decoration: line-through;
 			margin-top: 2upx;
+
 			&:before {
 				content: '￥';
 				font-size: 20upx;
 			}
 		}
+
 		.sell {
 			flex: 1;
 			text-align: right;
