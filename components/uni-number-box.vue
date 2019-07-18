@@ -5,6 +5,7 @@
 		>
 			<text class="yticon icon--jianhao" :class="minDisabled?'uni-numbox-disabled': ''" ></text>
 		</view>
+		<!-- app 手输操作容易出现误触 体验不好 淘宝也是没有 -->
 		<input 
 			class="uni-numbox-value" 
 			type="number" 

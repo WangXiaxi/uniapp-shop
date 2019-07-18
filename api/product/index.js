@@ -24,6 +24,14 @@ class ProductModel extends Request {
 	getCartList(params) {
 		return this.post('/service/getCartList', params)
 	}
+	// 购物车移除
+	removeCart(params) {
+		return this.post('/service/removeCart', params)
+	}
+	// 购物车取消选中
+	exceptCartGoods(params) {
+		return this.post('/service/exceptCartGoods', params)
+	}
 }
 
 const productModel = new ProductModel()
