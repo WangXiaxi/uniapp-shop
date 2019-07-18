@@ -1,5 +1,4 @@
 import Request from '../../utils/request'
-
 /**
  * @name    ProductModel封装
  * @authors wangxiaoxing (995107408@qq.com)
@@ -30,7 +29,7 @@ class ProductModel extends Request {
 	}
 	// 购物车取消选中
 	exceptCartGoods(params) {
-		return this.post('/service/exceptCartGoods', params)
+		return this.post('/service/exceptCartGoods', params, { qs: true })
 	}
 }
 

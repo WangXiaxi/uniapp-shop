@@ -1,14 +1,14 @@
 <template>
 	<view class="container">
 		<!-- 空白页 -->
-		<view v-if="!hasLogin || empty===true" class="empty">
+		<view v-if="!hasLogin || empty" class="empty">
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view v-if="hasLogin" class="empty-tips">
 				空空如也
 				<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator>
 			</view>
 			<view v-else class="empty-tips">
-				空空如也
+				请登陆后查看购物车
 				<view class="navigator" @click="navToLogin">去登陆></view>
 			</view>
 		</view>
@@ -19,7 +19,7 @@
 					<view class="cart-item" :class="{'b-b': index!==cartList.length-1}">
 						<view class="image-wrapper">
 							<image :src="item.img" class="loaded" mode="aspectFill"></image>
-							<view class="yticon icon-xuanzhong2 checkbox" :class="{checked: item.isCheck}" @click="check('item', index)"></view>
+							<view class="yticon icon-xuanzhong2 checkbox" :class="{checked: item.isCheck}" @click="check('item', item)"></view>
 						</view>
 						<view class="item-right">
 							<text class="clamp title">{{item.name}}</text>
@@ -78,13 +78,15 @@
 		},
 		onShow() {
 			this.mixLoading = true
-			this.getCartInfo()
+			this.getData()
 		},
 		watch: {
 			// 监听赋值
 			cart_list(e) {
+				const len = e.length
 				this.cartList = JSON.parse(JSON.stringify(e))
-				this.allChecked = e.length !== 0 && e.findIndex(c => !c.isCheck) === -1
+				this.allChecked = len !== 0 && e.findIndex(c => !c.isCheck) === -1
+				this.empty = !len
 			}
 		},
 		computed: {
@@ -106,25 +108,49 @@
 				})
 			},
 			//选中状态处理
-			check(type, index) {
+			check(type, item) {
+				this.pageLoading = true
+				const sendData = {}
+				const list = this.cartList
 				if (type === 'item') {
-					this.cartList[index].isCheck = !this.cartList[index].isCheck
-				} else {
+					item.isCheck = !item.isCheck
+					const {
+						goods_id,
+						product_id
+					} = item
+					sendData.data = list.filter(c=> !c.isCheck).map(c => `${goods_id}_${product_id}`)
+				} else { // 全选 or 全不选
 					const checked = !this.allChecked
-					const list = this.cartList;
-					list.forEach(item => {
-						item.isCheck = checked;
+					this.allChecked = checked
+					sendData.data = list.map(c => {
+						c.isCheck = checked
+						const {
+							goods_id,
+							product_id
+						} = c
+						return `${goods_id}_${product_id}`
 					})
-					this.allChecked = checked;
+					if (checked) {
+						sendData.data = []
+					}
 				}
+				this.exceptCartGoods(sendData).then(this.getData).catch(() => {
+					this.pageLoading = false
+				})
 			},
 			//数量
-			numberChange(data) {
-			},
+			numberChange(data) {},
 			//删除
 			deleteCartItem(data) {
-				const { spec_array, product_id, goods_id } = data
-				const sendData = { type: 'goods', goods_id }
+				const {
+					spec_array,
+					product_id,
+					goods_id
+				} = data
+				const sendData = {
+					type: 'goods',
+					goods_id
+				}
 				if (spec_array) {
 					Object.assign(sendData, {
 						type: 'products',

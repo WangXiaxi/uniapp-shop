@@ -5,6 +5,7 @@ import {
 } from '../common/config'
 import store from '../store'
 import md5 from '../common/SDK/md5.min.js'
+import qs from 'qs'
 
 /**
  * Request 0.0.7
@@ -80,6 +81,7 @@ export default class Request {
 			time,
 			sign: md5(sign)
 		})
+		if (options.qs) options.data = qs.stringify(options.data)
 		return new Promise((resolve, reject) => {
 			let next = true
 			let _config = null
