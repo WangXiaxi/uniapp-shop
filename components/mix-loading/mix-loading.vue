@@ -1,6 +1,6 @@
 <template>
 	<!-- loading 加载 -->
-	<view class="mix-loading-content">
+	<view class="mix-loading-content" @touchmove.stop.prevent="stopPrevent">
 		<view class="mix-loading-wrapper">
 			<image 
 				class="mix-loading-icon" 
@@ -26,7 +26,7 @@
 			};
 		},
 		methods: {
-			
+			stopPrevent() {}
 		}
 	}
 </script>
@@ -36,7 +36,7 @@
 		display:flex;
 		justify-content: center;
 		align-items: center;
-		position: absolute;
+		position: fixed;
 		left: 0;
 		top: 0;
 		width: 100%;
