@@ -32,12 +32,16 @@ class ProductModel extends Request {
 		return this.post('/service/exceptCartGoods', params, { qs: true })
 	}
 	// 收藏
-	goodsFavoriteEdit() {
+	goodsFavoriteEdit(params) {
 		return this.post('/service/goodsFavoriteEdit', params)
 	}
 	// 清空购物车
 	clearCart(params) {
 		return this.post('/service/clearCart', params)
+	}
+	// 收藏list
+	getGoodsFavoriteIds() {
+		return this.get('/service/getGoodsFavoriteIds', { noredirect: true })
 	}
 }
 

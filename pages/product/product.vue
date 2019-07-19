@@ -111,7 +111,7 @@
 				<text class="yticon icon-gouwuche"></text>
 				<text>购物车</text>
 			</navigator>
-			<view class="p-b-btn" :class="{active: favorite}" @click="toFavorite">
+			<view class="p-b-btn" :class="{active: favoriteBoolean}" @click="toFavorite">
 				<text class="yticon icon-shoucang"></text>
 				<text>收藏</text>
 			</view>
@@ -180,7 +180,10 @@
 	import productModel from '../../api/product/index.js'
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
-
+	import {
+		mapGetters,
+		mapActions
+	} from 'vuex'
 	import {
 		url_image
 	} from '../../common/config/index.js'
@@ -198,7 +201,7 @@
 				isCheck: true, // 默认商品允许提交
 				type: 'goods', // 类型
 				goods_num: 1, // 数量
-				goodsId: '', // id
+				goodsId: this.$route.query.id, // id
 				detail: {
 					store_nums: 1
 				}, // 基础
@@ -206,18 +209,21 @@
 				skus: [], // 属性匹配
 				specClass: 'none', // 属性下拉显示
 				specSelected: [], // 选中属性列表
-				favorite: true,
+				favoriteBoolean: false,
 				// shareList: [],
 				imgList: [],
 				desc: ''
 			}
 		},
 		async onLoad(options) {
-			this.goodsId = options.id
 			this.getDetail()
 			// this.shareList = await this.$api.json('shareList');
 		},
+		computed: {
+			...mapGetters(['hasLogin', 'favorite'])
+		},
 		methods: {
+			...mapActions(['goodsFavoriteEdit', 'goLogin']),
 			//数量
 			numberChange(data) {
 				this.goods_num = data.number
@@ -373,11 +379,21 @@
 			// },
 			//收藏
 			toFavorite() {
-				this.favorite = !this.favorite;
+				this.goLogin(() => {
+					this.favoriteBoolean = !this.favoriteBoolean
+					this.goodsFavoriteEdit({ goods_id: this.goodsId })
+				})
 			},
 			stopPrevent() {}
 		},
-
+		watch: {
+			favorite: {
+				handler(v) {
+					if (v) this.favoriteBoolean = v.findIndex(c => c === this.goodsId) > -1
+				},
+				immediate: true
+			}
+		},
 	}
 </script>
 

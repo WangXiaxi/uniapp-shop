@@ -9,7 +9,7 @@
 			</view>
 			<view v-else class="empty-tips">
 				请登陆后查看购物车
-				<view class="navigator" @click="navToLogin">去登陆></view>
+				<view class="navigator" @click="goLogin">去登陆></view>
 			</view>
 		</view>
 		<view v-else>
@@ -101,18 +101,13 @@
 			...mapGetters(['hasLogin', 'cart_list', 'final_sum', 'cart_count'])
 		},
 		methods: {
-			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods', 'addNumCart', 'clearCart']),
+			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods', 'addNumCart', 'clearCart', 'goLogin']),
 			getData() { // 获取数据
 				this.pageLoading = true
 				this.getCartInfo().then(() => {
 					this.pageLoading = false
 				}).catch(() => {
 					this.pageLoading = false
-				})
-			},
-			navToLogin() { // 去登录
-				uni.navigateTo({
-					url: '/pages/public/login'
 				})
 			},
 			//选中状态处理

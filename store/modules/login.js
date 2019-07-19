@@ -29,6 +29,7 @@ const login = {
 			uni.setStorageSync('token', token) // 缓存用户登陆状态
 		},
 		logout(state) {
+			console.log(state)
 			state.hasLogin = false
 			state.token = ''
 			state.userInfo = {}
@@ -37,6 +38,15 @@ const login = {
 		}
 	},
 	actions: {
+		goLogin({ state }, callback = () => {}) { // 判断是否登录 也可直接
+			if (!state.hasLogin) {
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
+			} else {
+				callback()
+			}
+		}
 	}
 }
 

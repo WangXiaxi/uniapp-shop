@@ -107,6 +107,7 @@ export default class Request {
 						case 'token30401':
 							// 清空数据并跳转至登陆页
 							store.commit('logout')
+							store.commit('logout')
 							if (!options.noredirect) uni.navigateTo({
 								url: '/pages/public/login'
 							})

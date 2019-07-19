@@ -35,7 +35,8 @@
 <script>
 	import loginModel from '../../api/login/index.js'
 	import {
-		mapMutations
+		mapMutations,
+		mapActions
 	} from 'vuex';
 
 	export default {
@@ -68,6 +69,7 @@
 		computed: {},
 		methods: {
 			...mapMutations(['login']),
+			...mapActions(['getGoodsFavoriteIds']),
 			navBack() {
 				uni.navigateBack()
 			},
@@ -95,6 +97,7 @@
 					this.loginInfo = ''
 					this.password = ''
 					this.login(result.data.userToken)
+					this.getGoodsFavoriteIds()
 					if (this.$api.prePage()) {
 						uni.navigateBack()
 					} else {

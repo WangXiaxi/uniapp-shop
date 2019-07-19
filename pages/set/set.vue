@@ -47,7 +47,7 @@
 			};
 		},
 		methods:{
-			...mapMutations(['logout']),
+			...mapMutations(['logout', 'clearOut']),
 
 			navTo(url){
 				this.$api.msg(`跳转到${url}`);
@@ -59,6 +59,7 @@
 				    success: (e)=>{
 				    	if(e.confirm){
 				    		this.logout();
+							this.clearOut();
 				    		setTimeout(()=>{
 				    			uni.navigateBack();
 				    		}, 200)
