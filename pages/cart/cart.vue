@@ -118,7 +118,7 @@
 						goods_id,
 						product_id
 					} = item
-					sendData.data = list.filter(c=> !c.isCheck).map(c => `${goods_id}_${product_id}`)
+					sendData.data = list.filter(c=> !c.isCheck).map(c => `${c.goods_id}_${c.product_id}`)
 				} else { // 全选 or 全不选
 					const checked = !this.allChecked
 					this.allChecked = checked
@@ -134,7 +134,9 @@
 						sendData.data = []
 					}
 				}
-				this.exceptCartGoods(sendData).then(this.getData).catch(() => {
+				this.exceptCartGoods(sendData).then(() => {
+					this.pageLoading = false					
+				}).catch(() => {
 					this.pageLoading = false
 				})
 			},

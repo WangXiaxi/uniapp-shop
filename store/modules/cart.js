@@ -50,7 +50,10 @@ const cart = {
 			return productModel.removeCart(params)
 		},
 		exceptCartGoods({ commit }, params ) { // 取消选中
-			return productModel.exceptCartGoods(params)
+			return productModel.exceptCartGoods(params).then(res => {
+				commit('setCart', res.data)
+				return res
+			})
 		}
 	}
 }
