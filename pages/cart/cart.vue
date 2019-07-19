@@ -28,8 +28,8 @@
 							<view>
 								<uni-number-box class="step" :min="1" :max="Number(item.store_nums)" :value="item.count>Number(item.store_nums)?Number(item.store_nums):item.count"
 								 :isMax="item.count>=Number(item.store_nums)?true:false" :isMin="item.count===1" :index="index" @eventChange="numberChange"></uni-number-box>
-								 <text class="store">库存: {{item.store_nums}}</text>
-							 </view>
+								<text class="store">库存: {{item.store_nums}}</text>
+							</view>
 						</view>
 						<text class="del-btn yticon icon-fork" @click="deleteCartItem(item)"></text>
 					</view>
@@ -39,7 +39,7 @@
 			<view class="action-section">
 				<view class="checkbox">
 					<image :src="allChecked?'/static/selected.png':'/static/select.png'" mode="aspectFit" @click="check('all')"></image>
-					<view class="clear-btn" :class="{show: allChecked}" @click="clearCart">
+					<view class="clear-btn" :class="{show: allChecked}" @click="clearCartAct">
 						清空
 					</view>
 				</view>
@@ -101,7 +101,7 @@
 			...mapGetters(['hasLogin', 'cart_list', 'final_sum', 'cart_count'])
 		},
 		methods: {
-			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods', 'addNumCart']),
+			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods', 'addNumCart', 'clearCart']),
 			getData() { // 获取数据
 				this.pageLoading = true
 				this.getCartInfo().then(() => {
@@ -126,7 +126,7 @@
 						goods_id,
 						product_id
 					} = item
-					sendData.data = list.filter(c=> !c.isCheck).map(c => `${c.goods_id}_${c.product_id}`)
+					sendData.data = list.filter(c => !c.isCheck).map(c => `${c.goods_id}_${c.product_id}`)
 				} else { // 全选 or 全不选
 					const checked = !this.allChecked
 					this.allChecked = checked
@@ -143,19 +143,30 @@
 					}
 				}
 				this.exceptCartGoods(sendData).then(() => {
-					this.pageLoading = false					
+					this.pageLoading = false
 				}).catch(() => {
 					this.pageLoading = false
 				})
 			},
 			//数量
-			numberChange({ index, number }) {
+			numberChange({
+				index,
+				number
+			}) {
 				const cur = this.cartList[index]
-				const { spec_array, id, count } = cur
+				const {
+					spec_array,
+					id,
+					count
+				} = cur
 				if (count !== number) {
 					this.pageLoading = true
 					cur.count = number
-					const sendData = { goods_id: id, type: (spec_array ? 'products' : 'goods'), goods_num: (number - count) }
+					const sendData = {
+						goods_id: id,
+						type: (spec_array ? 'products' : 'goods'),
+						goods_num: (number - count)
+					}
 					this.addNumCart(sendData).then(this.getData).catch(() => {
 						this.pageLoading = false
 					})
@@ -184,13 +195,11 @@
 				})
 			},
 			//清空
-			clearCart() {
+			clearCartAct() {
 				uni.showModal({
 					content: '清空购物车？',
 					success: (e) => {
-						if (e.confirm) {
-							this.cartList = [];
-						}
+						if (e.confirm) this.clearCart()
 					}
 				})
 			},
@@ -301,6 +310,7 @@
 				height: 50upx;
 				line-height: 50upx;
 			}
+
 			.store {
 				position: absolute;
 				left: 276upx;

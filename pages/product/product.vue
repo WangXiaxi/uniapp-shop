@@ -243,7 +243,7 @@
 						}
 					})
 					this.detail.img = `${url_image}/${this.detail.img}`
-					this.desc = this.detail.content.replace(/'src="\/upload\/'/g,
+					this.desc = this.detail.content.replace(/src="\/upload/g,
 						`src="${url_image}/upload/`).replace(/style\s*?=\s*?([‘"])[\s\S]*?\1/g, '').replace(/<img/g,
 						'<img width="100%"')
 					// 规格种类
@@ -305,11 +305,13 @@
 						productModel.joinCart(sendData).then(() => {
 							this.btnLoading = false
 							this.$api.msg('加入购物车成功！', 1500, false, 'success')
+							this.toggleSpec()
 						}).catch(() => {
 							this.btnLoading = false
 						})
 						break
 					case 2: // 立即购买
+						this.toggleSpec()
 						uni.navigateTo({
 							url: `/pages/order/createOrder`
 						})

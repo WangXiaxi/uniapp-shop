@@ -31,6 +31,14 @@ class ProductModel extends Request {
 	exceptCartGoods(params) {
 		return this.post('/service/exceptCartGoods', params, { qs: true })
 	}
+	// 收藏
+	goodsFavoriteEdit() {
+		return this.post('/service/goodsFavoriteEdit', params)
+	}
+	// 清空购物车
+	clearCart(params) {
+		return this.post('/service/clearCart', params)
+	}
 }
 
 const productModel = new ProductModel()

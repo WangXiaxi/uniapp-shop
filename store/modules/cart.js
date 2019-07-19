@@ -57,6 +57,10 @@ const cart = {
 		},
 		addNumCart({ commit }, params) { // 购物车数量添加
 			return productModel.joinCart(params)
+		},
+		clearCart({ commit }, params) {
+			commit('setCart', { goodsList: [], final_sum: 0, count: 0 })
+			return productModel.clearCart(params)
 		}
 	}
 }
