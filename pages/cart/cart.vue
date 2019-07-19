@@ -5,7 +5,7 @@
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view v-if="hasLogin" class="empty-tips">
 				空空如也
-				<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator>
+				<navigator class="navigator" url="../index/index" open-type="switchTab">随便逛逛></navigator>
 			</view>
 			<view v-else class="empty-tips">
 				请登陆后查看购物车
@@ -23,10 +23,13 @@
 						</view>
 						<view class="item-right">
 							<text class="clamp title">{{item.name}}</text>
-							<text class="attr">{{item.attr_val}}</text>
+							<text class="clamp attr">{{item.attr_val}}</text>
 							<text class="price">¥{{item.sell_price}}</text>
-							<uni-number-box class="step" :min="1" :max="Number(item.store_nums)" :value="item.count>Number(item.store_nums)?Number(item.store_nums):item.count"
-							 :isMax="item.count>=Number(item.store_nums)?true:false" :isMin="item.count===1" :index="index" @eventChange="numberChange"></uni-number-box>
+							<view>
+								<uni-number-box class="step" :min="1" :max="Number(item.store_nums)" :value="item.count>Number(item.store_nums)?Number(item.store_nums):item.count"
+								 :isMax="item.count>=Number(item.store_nums)?true:false" :isMin="item.count===1" :index="index" @eventChange="numberChange"></uni-number-box>
+								 <text class="store">库存: {{item.store_nums}}</text>
+							 </view>
 						</view>
 						<text class="del-btn yticon icon-fork" @click="deleteCartItem(item)"></text>
 					</view>
@@ -84,7 +87,12 @@
 			// 监听赋值
 			cart_list(e) {
 				const len = e.length
-				this.cartList = JSON.parse(JSON.stringify(e))
+				this.cartList = JSON.parse(JSON.stringify(e)).map(c => {
+					if (c.spec_array) {
+						c.attr_val = JSON.parse(c.spec_array).map(j => `${j.name}: ${j.value}`).join(', ')
+					}
+					return c
+				})
 				this.allChecked = len !== 0 && e.findIndex(c => !c.isCheck) === -1
 				this.empty = !len
 			}
@@ -93,7 +101,7 @@
 			...mapGetters(['hasLogin', 'cart_list', 'final_sum', 'cart_count'])
 		},
 		methods: {
-			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods']),
+			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods', 'addNumCart']),
 			getData() { // 获取数据
 				this.pageLoading = true
 				this.getCartInfo().then(() => {
@@ -102,7 +110,7 @@
 					this.pageLoading = false
 				})
 			},
-			navToLogin() {
+			navToLogin() { // 去登录
 				uni.navigateTo({
 					url: '/pages/public/login'
 				})
@@ -141,7 +149,18 @@
 				})
 			},
 			//数量
-			numberChange(data) {},
+			numberChange({ index, number }) {
+				const cur = this.cartList[index]
+				const { spec_array, id, count } = cur
+				if (count !== number) {
+					this.pageLoading = true
+					cur.count = number
+					const sendData = { goods_id: id, type: (spec_array ? 'products' : 'goods'), goods_num: (number - count) }
+					this.addNumCart(sendData).then(this.getData).catch(() => {
+						this.pageLoading = false
+					})
+				}
+			},
 			//删除
 			deleteCartItem(data) {
 				const {
@@ -175,8 +194,6 @@
 					}
 				})
 			},
-			//计算总价
-			calcTotal() {},
 			//创建订单
 			createOrder() {
 				uni.navigateTo({
@@ -283,6 +300,14 @@
 			.price {
 				height: 50upx;
 				line-height: 50upx;
+			}
+			.store {
+				position: absolute;
+				left: 276upx;
+				bottom: 4upx;
+				font-size: $font-sm + 2upx;
+				color: $font-color-light;
+				width: 200upx;
 			}
 		}
 

@@ -54,6 +54,9 @@ const cart = {
 				commit('setCart', res.data)
 				return res
 			})
+		},
+		addNumCart({ commit }, params) { // 购物车数量添加
+			return productModel.joinCart(params)
 		}
 	}
 }

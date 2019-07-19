@@ -153,19 +153,15 @@
 					</view>
 					<view class="attr-num">
 						<text class="num-tit">数量</text>
-						<uni-number-box
-							class="step"
-							:min="1"
-							:max="Number(detail.store_nums)"
-							:value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
-							:isMax="goods_num>=Number(detail.store_nums)?true:false"
-							:isMin="goods_num===1"
-							@eventChange="numberChange"></uni-number-box>
+						<uni-number-box class="step" :min="1" :max="Number(detail.store_nums)" :value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
+						 :isMax="goods_num>=Number(detail.store_nums)?true:false" :isMin="goods_num===1" @eventChange="numberChange"></uni-number-box>
 					</view>
 				</scroll-view>
 				<view class="action-btn-group" :class="{ spec: !!showBtn }">
-					<button v-if="showBtn !== 2" :disabled="btnLoading" :loading="btnLoading" class="action-btn no-border buy-now-btn spec" @click="buy(2)">立即购买</button>
-					<button v-if="showBtn !== 1" :disabled="btnLoading" :loading="btnLoading" class="action-btn no-border add-cart-btn spec" @click="buy(1)">加入购物车</button>
+					<button v-if="showBtn !== 2" :disabled="btnLoading" :loading="btnLoading" class="action-btn no-border buy-now-btn spec"
+					 @click="buy(2)">立即购买</button>
+					<button v-if="showBtn !== 1" :disabled="btnLoading" :loading="btnLoading" class="action-btn no-border add-cart-btn spec"
+					 @click="buy(1)">加入购物车</button>
 				</view>
 			</view>
 		</view>
@@ -247,8 +243,9 @@
 						}
 					})
 					this.detail.img = `${url_image}/${this.detail.img}`
-					this.desc = this.detail.content.replace(new RegExp('src="/upload/', 'g'),
-						`width="100%" src="${url_image}/upload/`).replace(/style="(\S*)"/g, '')
+					this.desc = this.detail.content.replace(/'src="\/upload\/'/g,
+						`src="${url_image}/upload/`).replace(/style\s*?=\s*?([‘"])[\s\S]*?\1/g, '').replace(/<img/g,
+						'<img width="100%"')
 					// 规格种类
 					if (spec_array) { // 存在说明有规格
 						this.type = 'products' // 有规格说明是商品
@@ -961,6 +958,7 @@
 		background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
 		margin-left: 20upx;
 		position: relative;
+
 		&:after {
 			content: '';
 			position: absolute;
@@ -971,9 +969,11 @@
 			width: 0;
 			border-right: 1px solid rgba(255, 255, 255, .5);
 		}
+
 		&.spec:after {
 			display: none;
 		}
+
 		.action-btn {
 			display: flex;
 			align-items: center;
@@ -985,11 +985,13 @@
 			border-radius: 0;
 			background: transparent;
 			color: #fff;
+
 			&[disabled] {
 				background: transparent;
 				color: #fff;
 			}
 		}
+
 		.spec {
 			flex: 1;
 		}

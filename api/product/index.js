@@ -21,7 +21,7 @@ class ProductModel extends Request {
 	}
 	// 获取购物车
 	getCartList(params) {
-		return this.post('/service/getCartList', params)
+		return this.post('/service/getCartList', params, { noredirect: true })
 	}
 	// 购物车移除
 	removeCart(params) {
@@ -29,7 +29,7 @@ class ProductModel extends Request {
 	}
 	// 购物车取消选中
 	exceptCartGoods(params) {
-		return this.post('/service/exceptCartGoods', params, { qs: true, noredirect: true })
+		return this.post('/service/exceptCartGoods', params, { qs: true })
 	}
 }
 
