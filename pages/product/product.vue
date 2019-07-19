@@ -310,7 +310,7 @@
 					case 1: // 加入购物车
 						productModel.joinCart(sendData).then(() => {
 							this.btnLoading = false
-							this.$api.msg('加入购物车成功！', 1500, false, 'success')
+							this.$api.msg('加入购物车成功！')
 							this.toggleSpec()
 						}).catch(() => {
 							this.btnLoading = false

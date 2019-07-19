@@ -81,7 +81,7 @@
 		},
 		onShow() {
 			this.mixLoading = true
-			this.getData()
+			if (this.hasLogin) this.getData()
 		},
 		watch: {
 			// 监听赋值
