@@ -9,8 +9,6 @@ const tokenStorage  = uni.getStorageSync('token')
 const userInfoStorage  = uni.getStorageSync('userInfo')
 const hasLoginStorage = !!tokenStorage
 
-console.log(tokenStorage, userInfoStorage, hasLoginStorage)
-
 const login = {
 	state: {
 		hasLogin: hasLoginStorage, // 判断是否是登陆状态

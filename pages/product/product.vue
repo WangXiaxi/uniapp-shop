@@ -180,9 +180,12 @@
 	import productModel from '../../api/product/index.js'
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
+	import orderModel from '../../api/order/index.js'
+
 	import {
 		mapGetters,
-		mapActions
+		mapActions,
+		mapMutations
 	} from 'vuex'
 	import {
 		url_image
@@ -225,6 +228,7 @@
 		},
 		methods: {
 			...mapActions(['goodsFavoriteEdit', 'goLogin']),
+			...mapMutations(['setParams']),
 			//数量
 			numberChange(data) {
 				this.goods_num = data.number
@@ -306,6 +310,7 @@
 					goods_num,
 					type
 				}
+				if (!goods_num) return this.$api.msg('购买数量必须大于0！') 
 				this.btnLoading = true
 				switch (typeAct) {
 					case 1: // 加入购物车
@@ -318,11 +323,15 @@
 						})
 						break
 					case 2: // 立即购买
-						this.btnLoading = false
-						this.toggleSpec()
-						const urlStr = qs.stringify(sendData)
-						uni.navigateTo({
-							url: `/pages/order/createOrder?${urlStr}`
+						orderModel.shopping(sendData).then(res => {
+							this.btnLoading = false
+							this.toggleSpec()
+							this.setParams(res.data)
+							uni.navigateTo({
+								url: `/pages/order/createOrder`
+							})
+						}).catch(() => {
+							this.btnLoading = false
 						})
 						break
 				}
