@@ -187,6 +187,7 @@
 	import {
 		url_image
 	} from '../../common/config/index.js'
+	import qs from 'qs'
 	export default {
 		components: {
 			// share,
@@ -317,9 +318,11 @@
 						})
 						break
 					case 2: // 立即购买
+						this.btnLoading = false
 						this.toggleSpec()
+						const urlStr = qs.stringify(sendData)
 						uni.navigateTo({
-							url: `/pages/order/createOrder`
+							url: `/pages/order/createOrder?${urlStr}`
 						})
 						break
 				}
