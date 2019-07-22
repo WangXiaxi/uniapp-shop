@@ -9,7 +9,7 @@
 						<text class="name">{{detail.defaultAddress.accept_name}}</text>
 						<text class="mobile">{{detail.defaultAddress.mobile}}</text>
 					</view>
-					<text class="address">{{detail.defaultAddress.province_str}}-{{detail.defaultAddress.city_str}}-{{detail.defaultAddress.area_str}} {{detail.defaultAddress.address}}</text>
+					<text class="address">{{detail.defaultAddress.province_str}}-{{detail.defaultAddress.city_str}}-{{detail.defaultAddress.area_str}}&nbsp;{{detail.defaultAddress.address}}</text>
 				</view>
 				<view class="cen" v-else>
 					<view class="no-address">添加收货地址</view>
@@ -62,23 +62,49 @@
 		<!-- 金额明细 -->
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">商品金额</text>
-				<text class="cell-tip">￥179.88</text>
+				<text class="cell-tit clamp">配送信息</text>
+				<view class="cell-tip" style="color: #909399;">
+					<picker :value="index" :range="logistics" @change="bindPickerChange">
+						<view class="picker">
+							{{logistics[index]}}
+						</view>
+					</picker>
+				</view>
+				<text class="yticon icon-you" style="margin-right: -6upx;color: #909399;"></text>
 			</view>
 			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">优惠金额</text>
+				<text class="cell-tit clamp">物流金额</text>
 				<text class="cell-tip red">-￥35</text>
 			</view>
+			
 			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip">免运费</text>
+				<text class="cell-tit clamp">商品总金额</text>
+				<text class="cell-tip red">-￥35</text>
 			</view>
+			
+			<view class="yt-list-cell b-b">
+				<text class="cell-tit clamp">实付金额</text>
+				<text class="cell-tip red">-￥35</text>
+			</view>
+
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit clamp">备注</text>
 				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
 			</view>
 		</view>
-
+		
+		<view class="yt-list">
+<view class="yt-list-cell b-b">
+				<text class="cell-tit clamp">可用金额</text>
+				<text class="cell-tip red">-￥35</text>
+			</view>
+			
+			<view class="yt-list-cell desc-cell">
+				<text class="cell-tit clamp">实付金额</text>
+				<input class="desc" type="text" v-model="desc" placeholder="请填写实付金额" placeholder-class="placeholder" />
+			</view>
+</view>
+		
 		<!-- 底部 -->
 		<view class="footer">
 			<view class="price-content">
@@ -86,7 +112,7 @@
 				<text class="price-tip">￥</text>
 				<text class="price">475</text>
 			</view>
-			<text class="submit" @click="submit">提交订单</text>
+			<text class="submit" @click="submit">确认订单</text>
 		</view>
 
 		<!-- 优惠券面板 -->
@@ -119,17 +145,22 @@
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
 	import orderModel from '../../api/order/index.js'
 	import {
-		mapGetters
+		mapGetters,
+		mapMutations
 	} from 'vuex'
+	import {
+		url_image
+	} from '../../common/config/index.js'
 	export default {
 		components: {
 			mixLoading
 		},
 		data() {
 			return {
+				index: 0,
 				pageLoading: false, // 加载按钮
 				detail: {}, // 详情承载对象
-
+				logistics: ['德邦物流', '自提'], // 物流
 				maskState: 0, //优惠券面板显示状态
 				desc: '', //备注
 				payType: 1, //1微信 2支付宝
@@ -163,9 +194,20 @@
 			...mapGetters(['params'])
 		},
 		methods: {
+			...mapMutations(['setParams']),
+			bindPickerChange(e) { // 物流修改
+				console.log(e)
+			},
 			getDetail() { // 获取新订单信息
 				this.detail = JSON.parse(JSON.stringify(this.params))
-				console.log(this.detail)
+				this.detail.goodsList.forEach(c => {
+					c.img = `${url_image}/${c.img}`
+					if (c.spec_array) {
+						c.attr_val = JSON.parse(c.spec_array).map(j => {
+							return `${j.name}:${j.value}`
+						}).join(',')
+					}
+				})
 			},
 			//显示优惠券面板
 			toggleMask(type) {
@@ -183,6 +225,7 @@
 				this.payType = type;
 			},
 			submit() {
+				this.setParams(this.detail)
 				uni.redirectTo({
 					url: '/pages/money/pay'
 				})
@@ -201,6 +244,7 @@
 		height: 48upx;
 		line-height: 48upx;
 	}
+
 	.address-section {
 		padding: 30upx 0;
 		background: #fff;
@@ -308,6 +352,8 @@
 			.spec {
 				font-size: 26upx;
 				color: $font-color-light;
+				height: 34upx;
+				display: block;
 			}
 
 			.price-box {
@@ -409,7 +455,7 @@
 
 		&.desc-cell {
 			.cell-tit {
-				max-width: 90upx;
+				max-width: 110upx;
 			}
 		}
 
@@ -417,6 +463,7 @@
 			flex: 1;
 			font-size: $font-base;
 			color: $font-color-dark;
+			text-align: right;
 		}
 	}
 
