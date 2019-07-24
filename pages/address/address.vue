@@ -12,11 +12,8 @@
 				</view>
 			</view>
 			<text class="yticon icon-bianji" @click.stop="addAddress('edit', item)"></text>
+			<text class="yticon icon-iconfontshanchu1" @click.stop="dele(item)"></text>
 		</view>
-		<text style="display:block;padding: 16upx 30upx 10upx;lihe-height: 1.6;color: #fa436a;font-size: 24upx;">
-			重要：添加和修改地址回调仅增加了一条数据做演示，实际开发中将回调改为请求后端接口刷新一下列表即可
-		</text>
-		
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>
 	</view>
 </template>
@@ -50,11 +47,14 @@
 			this.source = option.source;
 		},
 		methods: {
+			dele(item) { // 删除操作
+				
+			},
 			//选择地址
 			checkAddress(item){
 				if(this.source == 1){
 					//this.$api.prePage()获取上一页实例，在App.vue定义
-					this.$api.prePage().addressData = item;
+					this.$api.prePage().setAddress(item)
 					uni.navigateBack()
 				}
 			},
@@ -119,7 +119,7 @@
 			margin-right: 30upx;
 		}
 	}
-	.icon-bianji{
+	.yticon{
 		display: flex;
 		align-items: center;
 		height: 80upx;

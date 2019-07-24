@@ -196,6 +196,9 @@
 		},
 		methods: {
 			...mapMutations(['setParams']),
+			setAddress(item) { // 修改地址
+				this.detail.defaultAddress = JSON.parse(JSON.stringify(item))
+			},
 			bindPickerChange(e) { // 物流修改
 				console.log(e)
 			},
