@@ -155,48 +155,71 @@
 			"style": {
 				"navigationBarTitleText": "支付成功"
 			}
-		}
-	    ,{
-            "path" : "pages/notice/notice",
-            "style" : {
+		}, {
+			"path": "pages/notice/notice",
+			"style": {
 				"navigationBarTitleText": "通知"
 			}
-        }
-        ,{
-            "path" : "pages/category/category",
-            "style" : {
+		}, {
+			"path": "pages/category/category",
+			"style": {
 				"navigationBarTitleText": "分类",
 				"app-plus": {
 					"bounce": "none"
 				}
 			}
-        }
-        ,{
-            "path" : "pages/product/list",
-            "style" : {
+		}, {
+			"path": "pages/product/list",
+			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "商品列表"
 			}
-        }
-        ,{
-            "path" : "pages/public/forword",
-            "style" : {
-            	"navigationBarTitleText": "忘记密码"
-            }
-        }
-		,{
-		    "path" : "pages/public/register",
-		    "style" : {
-		    	"navigationBarTitleText": "立即注册"
-		    }
-		}
-        ,{
-            "path" : "pages/collect/index",
-            "style" : {
+		}, {
+			"path": "pages/public/forword",
+			"style": {
+				"navigationBarTitleText": "忘记密码"
+			}
+		}, {
+			"path": "pages/public/register",
+			"style": {
+				"navigationBarTitleText": "立即注册"
+			}
+		}, {
+			"path": "pages/collect/index",
+			"style": {
 				"navigationBarTitleText": "我的收藏"
 			}
-        }
-    ],
+		}, {
+			"path": "pages/search/search",
+			"style": {
+				"app-plus": {
+					"scrollIndicator": "none",
+					"titleNView": {
+						"titleColor": "#999",
+						"searchInput": {
+							"backgroundColor": "rgba(231, 231, 231,.7)",
+							"borderRadius": "16px",
+							"placeholder": "请输入关键字",
+							"disabled": false,
+							"placeholderColor": "#606266",
+							"autoFocus": true
+						},
+						"buttons": [{
+							"text": " 搜索 ",
+							"fontSize": "15",
+							"color": "#999"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/search/searchList",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "搜索结果"
+			}
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

@@ -10,7 +10,7 @@ const paramsStorage  = uni.getStorageSync('params')
 
 const params = {
 	state: {
-		params: paramsStorage // 参数
+		params: paramsStorage ? paramsStorage : '' // 参数
 	},
 	getters: {
 		params: state => state.params

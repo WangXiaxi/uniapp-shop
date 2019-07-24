@@ -448,4 +448,8 @@
 	.placeholder {
 		color: #999999;
 	}
+	
+	.uni-input-wrapper {
+		display: flex;
+	}
 </style>

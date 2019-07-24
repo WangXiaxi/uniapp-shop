@@ -76,12 +76,12 @@
 				<text class="cell-tit clamp">物流金额</text>
 				<text class="cell-tip red">-￥35</text>
 			</view>
-			
+
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">商品总金额</text>
 				<text class="cell-tip red">-￥35</text>
 			</view>
-			
+
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">实付金额</text>
 				<text class="cell-tip red">-￥35</text>
@@ -92,19 +92,19 @@
 				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
 			</view>
 		</view>
-		
+
 		<view class="yt-list">
-<view class="yt-list-cell b-b">
+			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">可用金额</text>
 				<text class="cell-tip red">-￥35</text>
 			</view>
-			
+
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit clamp">实付金额</text>
 				<input class="desc" type="text" v-model="desc" placeholder="请填写实付金额" placeholder-class="placeholder" />
 			</view>
-</view>
-		
+		</view>
+
 		<!-- 底部 -->
 		<view class="footer">
 			<view class="price-content">
@@ -200,6 +200,7 @@
 			},
 			getDetail() { // 获取新订单信息
 				this.detail = JSON.parse(JSON.stringify(this.params))
+				console.log(this.detail)
 				this.detail.goodsList.forEach(c => {
 					c.img = `${url_image}/${c.img}`
 					if (c.spec_array) {
@@ -240,6 +241,7 @@
 		background: $page-color-base;
 		padding-bottom: 100upx;
 	}
+
 	.no-address {
 		height: 48upx;
 		line-height: 48upx;

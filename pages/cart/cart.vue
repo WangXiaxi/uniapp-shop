@@ -51,7 +51,7 @@
 						元
 					</text> -->
 				</view>
-				<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
+				<button type="primary" class="no-border confirm-btn" @click="createOrder" :loading="btnLoading" :disabled="btnLoading">去结算</button>
 			</view>
 		</view>
 		<mix-loading v-if="pageLoading"></mix-loading>
@@ -61,11 +61,12 @@
 <script>
 	import {
 		mapGetters,
-		mapActions
+		mapActions,
+		mapMutations
 	} from 'vuex'
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
-
+	import orderModel from '../../api/order/index.js'
 	export default {
 		components: {
 			uniNumberBox,
@@ -73,6 +74,7 @@
 		},
 		data() {
 			return {
+				btnLoading: false,
 				pageLoading: false,
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
@@ -102,6 +104,7 @@
 		},
 		methods: {
 			...mapActions(['getCartInfo', 'removeCart', 'exceptCartGoods', 'addNumCart', 'clearCart', 'goLogin']),
+			...mapMutations(['setParams']),
 			getData() { // 获取数据
 				this.pageLoading = true
 				this.getCartInfo().then(() => {
@@ -200,12 +203,17 @@
 			},
 			//创建订单
 			createOrder() {
-				uni.navigateTo({
-					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
-					})}`
+				if (this.cartList.findIndex(c => c.isCheck) === -1) return this.$api.msg('请选中结算商品！')
+				this.btnLoading = true
+				orderModel.shopping({}).then(res => {
+					this.btnLoading = false
+					this.setParams(res.data)
+					uni.navigateTo({
+						url: `/pages/order/createOrder`
+					})
+				}).catch(() => {
+					this.btnLoading = false
 				})
-				this.$api.msg('跳转下一页 sendData');
 			}
 		}
 	}
@@ -403,10 +411,16 @@
 			margin: 0;
 			border-radius: 100px;
 			height: 76upx;
-			line-height: 76upx;
 			font-size: $font-base + 2upx;
 			background: $uni-color-primary;
-			box-shadow: 1px 2px 5px rgba(217, 60, 93, 0.72)
+			box-shadow: 1px 2px 5px rgba(217, 60, 93, 0.72);
+			display: flex;
+			justify-content: middle;
+			align-items: center;
+			&[disabled] {
+				background: $uni-color-primary;
+				color: #fff;
+			}
 		}
 	}
 

@@ -205,7 +205,7 @@
 				isCheck: true, // 默认商品允许提交
 				type: 'goods', // 类型
 				goods_num: 1, // 数量
-				goodsId: this.$route.query.id, // id
+				goodsId: null, // id
 				detail: {
 					store_nums: 1
 				}, // 基础
@@ -220,8 +220,9 @@
 			}
 		},
 		async onLoad(options) {
+			this.goodsId = options.id
+			this.judFavorite(this.favorite)
 			this.getDetail()
-			// this.shareList = await this.$api.json('shareList');
 		},
 		computed: {
 			...mapGetters(['hasLogin', 'favorite'])
@@ -396,14 +397,16 @@
 					this.goodsFavoriteEdit({ goods_id: this.goodsId })
 				})
 			},
+			judFavorite(v) {
+				if (v) this.favoriteBoolean = v.findIndex(c => c === this.goodsId) > -1
+			},
 			stopPrevent() {}
 		},
 		watch: {
 			favorite: {
 				handler(v) {
-					if (v) this.favoriteBoolean = v.findIndex(c => c === this.goodsId) > -1
-				},
-				immediate: true
+					this.judFavorite(v)
+				}
 			}
 		},
 	}
