@@ -83,7 +83,7 @@
 			</view>
 
 			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">实付金额</text>
+				<text class="cell-tit clamp">应付金额</text>
 				<text class="cell-tip red">-￥35</text>
 			</view>
 
@@ -116,9 +116,10 @@
 		</view>
 
 		<!-- 优惠券面板 -->
-		<view class="mask" :class="maskState===0 ? 'none' : maskState===1 ? 'show' : ''" @click="toggleMask">
+		<!-- 优惠券页面，仿mt -->
+		<!-- <view class="mask" :class="maskState===0 ? 'none' : maskState===1 ? 'show' : ''" @click="toggleMask">
 			<view class="mask-content" @click.stop.prevent="stopPrevent">
-				<!-- 优惠券页面，仿mt -->
+				
 				<view class="coupon-item" v-for="(item,index) in couponList" :key="index">
 					<view class="con">
 						<view class="left">
@@ -136,7 +137,7 @@
 					<text class="tips">限新用户使用</text>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
@@ -211,14 +212,14 @@
 				})
 			},
 			//显示优惠券面板
-			toggleMask(type) {
-				let timer = type === 'show' ? 10 : 300;
-				let state = type === 'show' ? 1 : 0;
-				this.maskState = 2;
-				setTimeout(() => {
-					this.maskState = state;
-				}, timer)
-			},
+			// toggleMask(type) {
+			// 	let timer = type === 'show' ? 10 : 300;
+			// 	let state = type === 'show' ? 1 : 0;
+			// 	this.maskState = 2;
+			// 	setTimeout(() => {
+			// 		this.maskState = state;
+			// 	}, timer)
+			// },
 			numberChange(data) {
 				this.number = data.number;
 			},
