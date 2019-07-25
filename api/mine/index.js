@@ -14,7 +14,7 @@ class MineModel extends Request {
 	}
 	// 地址接口
 	addressEdit(params) {
-		return this.POST('/service/addressEdit', params)
+		return this.post('/service/addressEdit', params)
 	}
 	/**
 	 * 验证表单

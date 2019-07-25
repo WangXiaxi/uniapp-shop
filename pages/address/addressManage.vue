@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="row b-b">
 			<text class="tit">姓名</text>
-			<input class="input" type="text" v-model="addressData.name" placeholder="收货人姓名" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="addressData.accept_name" placeholder="收货人姓名" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
 			<text class="tit">手机号</text>
@@ -32,7 +32,8 @@
 
 <script>
 	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
-
+	import mineModel from '../../api/mine/index.js'
+	
 	export default {
 		components: {
 			mpvueCityPicker
@@ -40,7 +41,7 @@
 		data() {
 			return {
 				addressData: {
-					name: '',
+					accept_name: '',
 					mobile: '',
 					address: '', // 详细地址
 					is_default: false
@@ -51,6 +52,49 @@
 					label: '请点击选择地址',
 					value: [],
 					code: []
+				},
+				rules: {
+					accept_name: {
+						required: true
+					},
+					mobile: {
+						required: true,
+						tel: true
+					},
+
+					address: {
+						required: true
+					},
+					province: {
+						required: true
+					},
+					city: {
+						required: true
+					},
+					area: {
+						required: true
+					}
+				},
+				messages: {
+					accept_name: {
+						required: '请输入用户名！'
+					},
+					mobile: {
+						required: '请输入正确格式手机号码！'
+					},
+					address: {
+						required: '请填写详细地址！'
+					},
+					province: {
+						required: '请选择省市区！'
+					},
+					
+					city: {
+						required: '请选择省市区！'
+					},
+					area: {
+						required: '请选择省市区！'
+					}
 				}
 			}
 		},
@@ -60,8 +104,21 @@
 			this.manageType = option.type;
 			if (option.type === 'edit') {
 				title = '编辑收货地址'
-				const  { name, mobile, address, is_default, city, area, province } = JSON.parse(option.data)
-				this.addressData = { name, mobile, address, is_default }
+				const {
+					name,
+					mobile,
+					address,
+					is_default,
+					city,
+					area,
+					province
+				} = JSON.parse(option.data)
+				this.addressData = {
+					name,
+					mobile,
+					address,
+					is_default
+				}
 				const code = [province, city, area]
 				this.cityPickerValue = this.$refs.mpvueCityPicker.codeSwitch(code)
 				this.region = {
@@ -89,10 +146,9 @@
 			chooseCity() {
 				this.$refs.mpvueCityPicker.show()
 			},
-			onCancel(e) {
-			},
+			onCancel(e) {},
 			switchChange(e) {
-				this.addressData.is_default = e.detail;
+				this.addressData.is_default = e.detail.value;
 			},
 			onConfirm(e) {
 				this.region = e;
@@ -100,29 +156,35 @@
 			},
 			//提交
 			confirm() {
-				let data = this.addressData;
-				if (!data.name) {
-					this.$api.msg('请填写收货人姓名');
-					return;
+				const { rules, messages } = this
+				const {
+					id,
+					accept_name,
+					mobile,
+					is_default,
+					address
+				} = this.addressData;
+				const [province, city, area] = this.region.code
+				const sendData = {
+					id,
+					accept_name,
+					mobile,
+					is_default,
+					address,
+					province,
+					city,
+					area
 				}
-				if (!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.mobile)) {
-					this.$api.msg('请输入正确的手机号码');
-					return;
-				}
-				if (!data.address) {
-					this.$api.msg('请在地图选择所在位置');
-					return;
-				}
-				if (!data.area) {
-					this.$api.msg('请填写门牌号信息');
-					return;
-				}
-
-				this.$api.prePage().refreshList();
-				this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-				setTimeout(() => {
-					uni.navigateBack()
-				}, 800)
+				mineModel.initValidate(rules, messages)
+				if (!mineModel.WxValidate.checkForm(sendData)) return
+				console.log(sendData)
+				mineModel.addressEdit(sendData).then(res => {
+					this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
+				}).catch(() =>{})
+				// this.$api.prePage().refreshList();
+				// setTimeout(() => {
+				// 	uni.navigateBack()
+				// }, 800)
 			},
 		}
 	}
