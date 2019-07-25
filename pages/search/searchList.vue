@@ -49,7 +49,7 @@
 				headerTop: "0px",
 				loadingType: 'more', //加载更多状态
 				filterIndex: 0,
-				cateId: 0, //已选分类id
+				search: '', //已选分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				goodsList: [],
 				page: 0,
@@ -61,7 +61,7 @@
 			// #ifdef H5
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight + 'px';
 			// #endif
-			this.cateId = options.id;
+			this.search = options.search;
 			this.loadData();
 		},
 		onPageScroll(e) {
@@ -122,10 +122,17 @@
 				productModel.getProductList({
 					page: this.page,
 					ydui: true,
-					cat_id: 104,
+					search: this.search,
 					order,
 					by
 				}).then(res => {
+					if (!res.data) {
+						res.data = {
+							goods: [],
+							totalPage: 0,
+							curPage: 0
+						}
+					}
 					const {
 						goods,
 						totalPage,
@@ -144,8 +151,7 @@
 							uni.stopPullDownRefresh();
 						}
 					}
-				}).catch(() => {
-				})
+				}).catch(() => {})
 			},
 			//筛选点击
 			tabClick(index) {

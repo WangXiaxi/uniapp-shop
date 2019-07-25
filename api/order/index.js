@@ -11,6 +11,10 @@ class OrderModel extends Request {
 	shopping(params) {
 		return this.post('/service/shopping', { ...params, origin: 'Ydui' })
 	}
+	// 订单信息收集
+	getOrderDelivery(params) {
+		return this.post('/service/getOrderDelivery', { ...params, origin: 'Ydui' })
+	}
 }
 
 const orderModel = new OrderModel()

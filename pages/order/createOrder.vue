@@ -144,7 +144,6 @@
 
 <script>
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
-	import orderModel from '../../api/order/index.js'
 	import {
 		mapGetters,
 		mapMutations
