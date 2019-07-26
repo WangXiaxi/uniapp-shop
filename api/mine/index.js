@@ -16,6 +16,10 @@ class MineModel extends Request {
 	addressEdit(params) {
 		return this.post('/service/addressEdit', params)
 	}
+	// 地址删除
+	addressDel(params) {
+		return this.post('/service/addressDel', params)
+	}
 	/**
 	 * 验证表单
 	 */

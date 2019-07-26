@@ -1,18 +1,26 @@
 <template>
 	<view class="content b-t">
-		<view class="list b-b" v-for="(item, index) in addressList" :key="index" @click="checkAddress(item)">
-			<view class="wrapper">
-				<view class="address-box">
-					<text v-if="item.is_default" class="tag">默认</text>
-					<text class="address">{{item.province_str}}-{{item.city_str}}-{{item.area_str}} {{item.address}}</text>
-				</view>
-				<view class="u-box">
-					<text class="name">{{item.accept_name}}</text>
-					<text class="mobile">{{item.mobile}}</text>
-				</view>
+		<view class="empty" v-if="!addressList.length">
+			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
+			<view class="empty-tips">
+				还没有添加收货地址
 			</view>
-			<text class="yticon icon-bianji" @click.stop="addAddress('edit', item)"></text>
-			<text class="yticon icon-iconfontshanchu1" @click.stop="dele(item)"></text>
+		</view>
+		<view v-else>
+			<view class="list b-b" v-for="(item, index) in addressList" :key="index" @click="checkAddress(item)">
+				<view class="wrapper">
+					<view class="address-box">
+						<text v-if="Number(item.is_default)" class="tag">默认</text>
+						<text class="address">{{item.province_str}}-{{item.city_str}}-{{item.area_str}} {{item.address}}</text>
+					</view>
+					<view class="u-box">
+						<text class="name">{{item.accept_name}}</text>
+						<text class="mobile">{{item.mobile}}</text>
+					</view>
+				</view>
+				<text class="yticon icon-bianji" @click.stop="addAddress('edit', item)"></text>
+				<text class="yticon icon-iconfontshanchu1" @click.stop="dele(item)"></text>
+			</view>
 		</view>
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>
 		<mix-loading v-if="pageLoading"></mix-loading>
@@ -39,7 +47,18 @@
 			this.source = option.source;
 		},
 		methods: {
-			dele(item) { // 删除操作
+			dele({ id }) { // 删除操作
+				uni.showModal({
+					title: '删除地址',
+					content: '确定删除地址吗？',
+					success: () => {
+						mineModel.addressDel({ id }).then(res => {
+							this.$api.msg(`地址删除成功`);
+							this.refreshList()
+						})
+					}
+				})
+				
 			},
 			//选择地址
 			checkAddress(item){

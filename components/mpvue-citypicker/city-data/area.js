@@ -10001,28 +10001,22 @@ var areaData = [
 		}]
 	],
 	[
-		[
-			{
-				"label": "",
-				"value": ""
-			}
-		]
+		[{
+			"label": "",
+			"value": ""
+		}]
 	],
 	[
-		[
-			{
-				"label": "",
-				"value": ""
-			}
-		]
+		[{
+			"label": "",
+			"value": ""
+		}]
 	],
 	[
-		[
-			{
-				"label": "",
-				"value": ""
-			}
-		]
+		[{
+			"label": "",
+			"value": ""
+		}]
 	]
 ]
 export default areaData;

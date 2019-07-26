@@ -24,7 +24,7 @@
 			<text class="tit">设为默认</text>
 			<switch :checked="addressData.is_default" color="#fa436a" @change="switchChange" />
 		</view>
-		<button class="add-btn" @click="confirm">提交</button>
+		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
 		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" :pickerValueDefault="cityPickerValue" @onCancel="onCancel"
 		 @onConfirm="onConfirm"></mpvue-city-picker>
 	</view>
@@ -40,6 +40,7 @@
 		},
 		data() {
 			return {
+				btnLoading: false,
 				addressData: {
 					accept_name: '',
 					mobile: '',
@@ -67,12 +68,6 @@
 					},
 					province: {
 						required: true
-					},
-					city: {
-						required: true
-					},
-					area: {
-						required: true
 					}
 				},
 				messages: {
@@ -87,13 +82,6 @@
 					},
 					province: {
 						required: '请选择省市区！'
-					},
-					
-					city: {
-						required: '请选择省市区！'
-					},
-					area: {
-						required: '请选择省市区！'
 					}
 				}
 			}
@@ -105,27 +93,35 @@
 			if (option.type === 'edit') {
 				title = '编辑收货地址'
 				const {
-					name,
+					id,
+					accept_name,
 					mobile,
 					address,
 					is_default,
 					city,
 					area,
-					province
+					province,
+					city_str,
+					area_str,
+					province_str
 				} = JSON.parse(option.data)
+				console.log(JSON.parse(option.data))
 				this.addressData = {
-					name,
+					id,
+					accept_name,
 					mobile,
 					address,
-					is_default
+					is_default: !!Number(is_default)
 				}
 				const code = [province, city, area]
-				this.cityPickerValue = this.$refs.mpvueCityPicker.codeSwitch(code)
-				this.region = {
-					label: '请点击选择地址',
-					value: this.cityPickerValue,
-					code
-				}
+				this.$nextTick(() => {
+					this.cityPickerValue = this.$refs.mpvueCityPicker.codeSwitch(code)
+					this.region = {
+						label: `${province_str}-${city_str}-${area_str}`,
+						value: this.cityPickerValue,
+						code
+					}	
+				})
 			}
 			uni.setNavigationBarTitle({
 				title
@@ -169,7 +165,7 @@
 					id,
 					accept_name,
 					mobile,
-					is_default,
+					is_default: Number(is_default),
 					address,
 					province,
 					city,
@@ -177,14 +173,17 @@
 				}
 				mineModel.initValidate(rules, messages)
 				if (!mineModel.WxValidate.checkForm(sendData)) return
-				console.log(sendData)
+				this.btnLoading = true
 				mineModel.addressEdit(sendData).then(res => {
 					this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-				}).catch(() =>{})
-				// this.$api.prePage().refreshList();
-				// setTimeout(() => {
-				// 	uni.navigateBack()
-				// }, 800)
+					this.$api.prePage().refreshList();
+					setTimeout(() => {
+						this.btnLoading = false
+						uni.navigateBack()
+					}, 800)
+				}).catch(() =>{
+					this.btnLoading = false
+				})
 			},
 		}
 	}

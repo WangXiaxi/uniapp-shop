@@ -92,14 +92,17 @@ var provinceData = [{
 }, {
 	"label": "新疆维吾尔自治区",
 	"value": "650000"
-}, {
-	"label": "台湾省",
-	"value": "710000"
-}, {
-	"label": "香港特别行政区",
-	"value": "810000"
-}, {
-	"label": "澳门特别行政区",
-	"value": "820000"
-}]
+}
+// ,
+// {
+// 	"label": "台湾省",
+// 	"value": "710000"
+// }, {
+// 	"label": "香港特别行政区",
+// 	"value": "810000"
+// }, {
+// 	"label": "澳门特别行政区",
+// 	"value": "820000"
+// },
+]
 export default provinceData;
