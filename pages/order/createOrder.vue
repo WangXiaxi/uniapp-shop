@@ -76,9 +76,9 @@
 				<text class="cell-tip">￥{{Number(detail.revisit)}}</text>
 			</view>
 
-			<view class="yt-list-cell">
-				<text class="cell-tit clamp">vip积分抵扣</text>
-				<input class="desc" type="number" v-model="detail.pay_revisit" @input="contorlPoint" placeholder="请填写实付金额" placeholder-class="placeholder" />
+			<view class="yt-list-cell desc-cell">
+				<text class="cell-tit">vip积分抵扣</text>
+				<input class="desc" type="number" v-model="detail.pay_revisit" @blur="contorlPoint" placeholder="请填写实付金额" placeholder-class="placeholder" />
 			</view>
 		</view>
 
@@ -114,8 +114,10 @@
 			return {
 				pageLoading: false, // 加载按钮
 				detail: {
+					goodsList: [],
 					remark: '', // 备注
 					pay_revisit: '', // 实付积分
+					final_sum: '',
 					logisticsPrice: 0 ,// 物流价格
 					logisticsId: '' // 物流id
 				}, // 详情承载对象
@@ -152,6 +154,7 @@
 			contorlPoint(event) { // 控制积分
 				const value = event.target.value
 				if (Number(value) > Number(this.detail.revisit)) {
+					this.$api.msg('vip积分不能大于可用数额')
 					this.detail.pay_revisit = Number(this.detail.revisit)
 				}
 			},
@@ -230,7 +233,9 @@
 				this.payType = type;
 			},
 			submit() {
+				this.detail.finalLastSum = this.finalLastSum
 				this.setParams(this.detail)
+				console.log(this.detail)
 				uni.redirectTo({
 					url: '/pages/money/pay'
 				})
@@ -461,7 +466,7 @@
 
 		&.desc-cell {
 			.cell-tit {
-				max-width: 110upx;
+				max-width: 150upx;
 			}
 		}
 
@@ -469,7 +474,7 @@
 			flex: 1;
 			font-size: $font-base;
 			color: $font-color-dark;
-			text-align: right;
+			text-align: left;
 		}
 	}
 
