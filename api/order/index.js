@@ -11,7 +11,7 @@ class OrderModel extends Request {
 	shopping(params) {
 		return this.post('/service/shopping', { ...params, origin: 'Ydui' })
 	}
-	// 订单信息收集
+	// 获取相应物流信息
 	getOrderDelivery(params) {
 		return this.post('/service/getOrderDelivery', { ...params, origin: 'Ydui' })
 	}

@@ -12,7 +12,7 @@
 					<text class="address">{{detail.defaultAddress.province_str}}-{{detail.defaultAddress.city_str}}-{{detail.defaultAddress.area_str}}&nbsp;{{detail.defaultAddress.address}}</text>
 				</view>
 				<view class="cen" v-else>
-					<view class="no-address">添加收货地址</view>
+					<view class="no-address">请选择收货地址</view>
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
@@ -21,10 +21,6 @@
 		</navigator>
 
 		<view class="goods-section">
-			<!-- <view class="g-header b-b">
-				<image class="logo" src="http://duoduo.qibukj.cn/./Upload/Images/20190321/201903211727515.png"></image>
-				<text class="name">西城小店铺</text>
-			</view> -->
 			<!-- 商品列表 -->
 			<view class="g-item" v-for="(item, index) in detail.goodsList" :key="index">
 				<image :src="item.img"></image>
@@ -38,35 +34,16 @@
 				</view>
 			</view>
 		</view>
-
-		<!-- 优惠明细 -->
-		<!-- <view class="yt-list">
-			<view class="yt-list-cell b-b" @click="toggleMask('show')">
-				<view class="cell-icon">
-					券
-				</view>
-				<text class="cell-tit clamp">优惠券</text>
-				<text class="cell-tip active">
-					选择优惠券
-				</text>
-				<text class="cell-more wanjia wanjia-gengduo-d"></text>
-			</view>
-			<view class="yt-list-cell b-b">
-				<view class="cell-icon hb">
-					减
-				</view>
-				<text class="cell-tit clamp">商家促销</text>
-				<text class="cell-tip disabled">暂无可用优惠</text>
-			</view>
-		</view> -->
-		<!-- 金额明细 -->
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">配送信息</text>
 				<view class="cell-tip" style="color: #909399;">
-					<picker :value="index" :range="logistics" @change="bindPickerChange">
-						<view class="picker">
-							{{logistics[index]}}
+					<picker :value="logisticsIndex" :range="logistics" @change="bindPickerChange">
+						<view v-if="detail.defaultAddress" class="picker">
+							{{logistics[logisticsIndex]}}
+						</view>
+						<view v-else class="picker" @click.stop>
+							请先选择收货地址
 						</view>
 					</picker>
 				</view>
@@ -74,34 +51,34 @@
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">物流金额</text>
-				<text class="cell-tip red">-￥35</text>
+				<text class="cell-tip">￥{{detail.logisticsPrice}}</text>
 			</view>
 
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">商品总金额</text>
-				<text class="cell-tip red">-￥35</text>
+				<text class="cell-tip">￥{{detail.final_sum}}</text>
 			</view>
 
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">应付金额</text>
-				<text class="cell-tip red">-￥35</text>
+				<text class="cell-tip red">￥{{finalSum}}</text>
 			</view>
 
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit clamp">备注</text>
-				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
+				<input class="desc" type="text" v-model="detail.remark" placeholder="请填写备注信息" placeholder-class="placeholder" />
 			</view>
 		</view>
 
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">可用金额</text>
-				<text class="cell-tip red">-￥35</text>
+				<text class="cell-tit clamp">可用vip积分</text>
+				<text class="cell-tip">￥{{Number(detail.revisit)}}</text>
 			</view>
 
-			<view class="yt-list-cell desc-cell">
-				<text class="cell-tit clamp">实付金额</text>
-				<input class="desc" type="text" v-model="desc" placeholder="请填写实付金额" placeholder-class="placeholder" />
+			<view class="yt-list-cell">
+				<text class="cell-tit clamp">vip积分抵扣</text>
+				<input class="desc" type="number" v-model="detail.pay_revisit" @input="contorlPoint" placeholder="请填写实付金额" placeholder-class="placeholder" />
 			</view>
 		</view>
 
@@ -110,40 +87,18 @@
 			<view class="price-content">
 				<text>实付款</text>
 				<text class="price-tip">￥</text>
-				<text class="price">475</text>
+				<text class="price">{{finalLastSum}}</text>
 			</view>
 			<text class="submit" @click="submit">确认订单</text>
 		</view>
 
-		<!-- 优惠券面板 -->
-		<!-- 优惠券页面，仿mt -->
-		<!-- <view class="mask" :class="maskState===0 ? 'none' : maskState===1 ? 'show' : ''" @click="toggleMask">
-			<view class="mask-content" @click.stop.prevent="stopPrevent">
-				
-				<view class="coupon-item" v-for="(item,index) in couponList" :key="index">
-					<view class="con">
-						<view class="left">
-							<text class="title">{{item.title}}</text>
-							<text class="time">有效期至2019-06-30</text>
-						</view>
-						<view class="right">
-							<text class="price">{{item.price}}</text>
-							<text>满30可用</text>
-						</view>
-
-						<view class="circle l"></view>
-						<view class="circle r"></view>
-					</view>
-					<text class="tips">限新用户使用</text>
-				</view>
-			</view>
-		</view> -->
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
 <script>
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
+	import orderModel from '../../api/order/index.js'
 	import {
 		mapGetters,
 		mapMutations
@@ -157,53 +112,104 @@
 		},
 		data() {
 			return {
-				index: 0,
 				pageLoading: false, // 加载按钮
-				detail: {}, // 详情承载对象
-				logistics: ['德邦物流', '自提'], // 物流
-				maskState: 0, //优惠券面板显示状态
-				desc: '', //备注
-				payType: 1, //1微信 2支付宝
-				couponList: [{
-						title: '新用户专享优惠券',
-						price: 5,
-					},
-					{
-						title: '庆五一发一波优惠券',
-						price: 10,
-					},
-					{
-						title: '优惠券优惠券优惠券优惠券',
-						price: 15,
-					}
-				],
-				addressData: {
-					name: '许小星',
-					mobile: '13853989563',
-					addressName: '金九大道',
-					address: '山东省济南市历城区',
-					area: '149号',
-					default: false,
-				}
+				detail: {
+					remark: '', // 备注
+					pay_revisit: '', // 实付积分
+					logisticsPrice: 0 ,// 物流价格
+					logisticsId: '' // 物流id
+				}, // 详情承载对象
+				logisticsIndex: 0, // 物流选中第几个
+				logistics: [], // 物流
+				logisticsInitial: [], // 初始对象
+				payType: 1 //1微信 2支付宝
 			}
 		},
 		onLoad(option) {
 			this.getDetail()
 		},
 		computed: {
-			...mapGetters(['params'])
+			...mapGetters(['params']),
+			finalLastSum() { // 最终金额减轻积分的
+				const {
+					pay_revisit,
+					final_sum,
+					logisticsPrice
+				} = this.detail
+				const fin = Number(final_sum) + Number(logisticsPrice) - Number(pay_revisit)
+				return fin > 0 ? fin : 0
+			},
+			finalSum() { // 实际应付金额 算上运费
+				const {
+					final_sum,
+					logisticsPrice
+				} = this.detail
+				return Number(final_sum) + Number(logisticsPrice)
+			}
 		},
 		methods: {
 			...mapMutations(['setParams']),
+			contorlPoint(event) { // 控制积分
+				const value = event.target.value
+				if (Number(value) > Number(this.detail.revisit)) {
+					this.detail.pay_revisit = Number(this.detail.revisit)
+				}
+			},
 			setAddress(item) { // 修改地址
 				this.detail.defaultAddress = JSON.parse(JSON.stringify(item))
+				this.getLogistics()
 			},
 			bindPickerChange(e) { // 物流修改
-				console.log(e)
+				this.logisticsIndex = e.detail.value
+				const { price, id } = this.logisticsInitial[e.detail.value]
+				Object.assign(this.detail, {
+					logisticsPrice: price,
+					logisticsId: id
+				})
+			},
+			getLogistics() { // 根据地址选择获取物流信息
+				const {
+					goodsList,
+					defaultAddress: {
+						province
+					}
+				} = this.detail
+				const productId = []
+				const goodsId = []
+				const num = []
+				goodsList.forEach(c => {
+					goodsId.push(c.goods_id)
+					productId.push(c.product_id)
+					num.push(c.count)
+				})
+				orderModel.getOrderDelivery({
+					productId,
+					goodsId,
+					num,
+					province
+				}).then(({
+					data
+				}) => {
+					const logistics = []
+					const logisticsInitial = []
+					const list = Object.keys(data).forEach(c => {
+						logistics.push(data[c].name)
+						logisticsInitial.push(data[c])
+					})
+					this.logistics = logistics
+					this.logisticsInitial = logisticsInitial
+					this.bindPickerChange({
+						detail: {
+							value: 0
+						}
+					})
+				})
 			},
 			getDetail() { // 获取新订单信息
-				this.detail = JSON.parse(JSON.stringify(this.params))
-				console.log(this.detail)
+				Object.assign(this.detail, JSON.parse(JSON.stringify(this.params)))
+				this.detail.defaultAddress = JSON.stringify(this.detail.defaultAddress) !== '[]' ? this.detail.defaultAddress :
+					null
+				this.detail.remark = '' // 备注字段
 				this.detail.goodsList.forEach(c => {
 					c.img = `${url_image}/${c.img}`
 					if (c.spec_array) {
@@ -212,16 +218,11 @@
 						}).join(',')
 					}
 				})
+				if (this.detail.defaultAddress) {
+					this.getLogistics()
+				}
 			},
-			//显示优惠券面板
-			// toggleMask(type) {
-			// 	let timer = type === 'show' ? 10 : 300;
-			// 	let state = type === 'show' ? 1 : 0;
-			// 	this.maskState = 2;
-			// 	setTimeout(() => {
-			// 		this.maskState = state;
-			// 	}, timer)
-			// },
+
 			numberChange(data) {
 				this.number = data.number;
 			},

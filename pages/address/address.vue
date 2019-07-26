@@ -117,7 +117,7 @@
 		flex: 1;
 	}
 	.address-box{
-		display: flex;
+		/* display: flex; */
 		align-items: center;
 		.tag{
 			font-size: 24upx;
