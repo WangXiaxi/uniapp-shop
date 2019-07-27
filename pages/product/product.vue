@@ -301,13 +301,13 @@
 				if (this.specSelected.length !== this.specArray.length) return this.$api.msg('请选择规格！')
 				const {
 					detail: {
-						id: goods_id
+						id
 					},
 					goods_num,
 					type
 				} = this
 				const sendData = {
-					goods_id,
+					id,
 					goods_num,
 					type
 				}
@@ -315,6 +315,8 @@
 				this.btnLoading = true
 				switch (typeAct) {
 					case 1: // 加入购物车
+						sendData.goods_id = sendData.id
+						delete sendData.id
 						productModel.joinCart(sendData).then(() => {
 							this.btnLoading = false
 							this.$api.msg('加入购物车成功！')
@@ -324,6 +326,8 @@
 						})
 						break
 					case 2: // 立即购买
+						console.log(sendData)
+
 						orderModel.shopping(sendData).then(res => {
 							this.btnLoading = false
 							this.toggleSpec()

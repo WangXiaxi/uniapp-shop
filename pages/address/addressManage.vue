@@ -205,7 +205,7 @@
 
 		.tit {
 			flex-shrink: 0;
-			width: 120upx;
+			width: 140upx;
 			font-size: 30upx;
 			color: $font-color-dark;
 		}
