@@ -233,9 +233,12 @@
 				this.payType = type;
 			},
 			submit() {
+				if(!this.detail.defaultAddress) {
+					this.$api.msg('请选择收货地址')
+					return
+				}
 				this.detail.finalLastSum = this.finalLastSum
 				this.setParams(this.detail)
-				console.log(this.detail)
 				uni.redirectTo({
 					url: '/pages/money/pay'
 				})

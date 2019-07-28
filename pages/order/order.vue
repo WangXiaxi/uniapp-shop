@@ -81,6 +81,8 @@
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import empty from "@/components/empty";
 	import Json from '@/Json';
+	import orderModel from '../../api/order/index.js'
+	
 	export default {
 		components: {
 			uniLoadMore,
@@ -93,31 +95,41 @@
 						state: 0,
 						text: '全部',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						page: 0,
+						total: 0
 					},
 					{
 						state: 1,
 						text: '待付款',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						page: 0,
+						total: 0
 					},
 					{
 						state: 2,
 						text: '待收货',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						page: 0,
+						total: 0
 					},
 					{
 						state: 3,
 						text: '待评价',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						page: 0,
+						total: 0
 					},
 					{
 						state: 4,
 						text: '售后',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						page: 0,
+						total: 0
 					}
 				],
 			};
@@ -146,39 +158,25 @@
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];
-				let state = navItem.state;
 				
 				if(source === 'tabChange' && navItem.loaded === true){
 					//tab切换只有第一次需要加载数据
 					return;
 				}
-				if(navItem.loadingType === 'loading'){
+				if(navItem.loadingType === 'loading' || navItem.loadingType === 'nomore'){
 					//防止重复加载
 					return;
 				}
 				
 				navItem.loadingType = 'loading';
-				
-				setTimeout(()=>{
-					let orderList = Json.orderList.filter(item=>{
-						//添加不同状态下订单的表现形式
-						item = Object.assign(item, this.orderStateExp(item.state));
-						//演示数据所以自己进行状态筛选
-						if(state === 0){
-							//0为全部订单
-							return item;
-						}
-						return item.state === state
-					});
-					orderList.forEach(item=>{
-						navItem.orderList.push(item);
-					})
-					//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
+				navItem.page = navItem.page + 1;
+				let { state, page } = navItem;
+				orderModel.getOrderListByState({ state, page }).then(res => {
+					navItem.orderList.push(res.data.goods ? res.data.goods : []);
 					this.$set(navItem, 'loaded', true);
-					
-					//判断是否还有数据， 有改为 more， 没有改为noMore 
-					navItem.loadingType = 'more';
-				}, 600);	
+					navItem.total = res.data.totalPage;
+					navItem.loadingType = page >= navItem.total ? 'nomore' : 'more';
+				})
 			}, 
 
 			//swiper 切换

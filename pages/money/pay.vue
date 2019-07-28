@@ -2,7 +2,7 @@
 	<view class="app">
 		<view class="price-box">
 			<text>支付金额</text>
-			<text class="price">38.88</text>
+			<text class="price">{{detail.finalLastSum}}</text>
 		</view>
 
 		<view class="pay-type-list">
@@ -46,19 +46,22 @@
 </template>
 
 <script>
-
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
 	export default {
 		data() {
 			return {
 				payType: 1,
-				orderInfo: {}
+				detail: {}
 			};
 		},
 		computed: {
-		
+			...mapGetters(['params']),
 		},
 		onLoad(options) {
-			
+			this.detail = JSON.parse(JSON.stringify(this.params))
 		},
 
 		methods: {
@@ -67,10 +70,11 @@
 				this.payType = type;
 			},
 			//确认支付
-			confirm: async function() {
-				uni.redirectTo({
-					url: '/pages/money/paySuccess'
-				})
+			confirm() {
+				const {} = this.detail
+				// uni.redirectTo({
+				// 	url: '/pages/money/paySuccess'
+				// })
 			},
 		}
 	}
