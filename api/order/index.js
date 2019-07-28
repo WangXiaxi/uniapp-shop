@@ -21,7 +21,11 @@ class OrderModel extends Request {
 	}
 	// 生成订单
 	confirmOrder() {
-		this.post('/service/confirmOrder', { ...params, origin: 'Ydui' })
+		return this.post('/service/confirmOrder', { ...params, origin: 'Ydui' })
+	}
+	// 获取支付方式
+	getPaymentList() {
+		return this.get('/service/getPaymentList')
 	}
 }
 

@@ -50,6 +50,7 @@
 		mapGetters,
 		mapMutations
 	} from 'vuex'
+	import orderModel from '../../api/order/index.js'
 	export default {
 		data() {
 			return {
@@ -62,9 +63,16 @@
 		},
 		onLoad(options) {
 			this.detail = JSON.parse(JSON.stringify(this.params))
+			this.getPaymentList()
 		},
 
 		methods: {
+			// 获取支付方式
+			getPaymentList() {
+				orderModel.getPaymentList().then(res => {
+					console.log(res)
+				})
+			},
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
