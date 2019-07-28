@@ -40,7 +40,7 @@
 				</label>
 			</view>
 		</view>
-		
+
 		<text class="mix-btn" @click="confirm">确认支付</text>
 	</view>
 </template>
@@ -71,7 +71,37 @@
 			},
 			//确认支付
 			confirm() {
-				const {} = this.detail
+				const {
+					revisit,
+					defaultAddress: {
+						id: radio_address,
+						accept_name
+					},
+					logisticsId: delivery_id,
+					remark: message,
+					goodsList
+				} = this.detail
+				const sendData = {
+					radio_address,
+					accept_name,
+					delivery_id,
+					message,
+					direct_gid,
+					revisit
+				}
+				if (goodsList.length === 1) {
+					const {
+						id,
+						count,
+						spec_array
+					} = goodsList[0]
+					Object.assign(sendData, {
+						direct_gid: id,
+						direct_num: count,
+						direct_type: spec_array ? 'products' : 'goods'
+					})
+				}
+				console.log(this.detail)
 				// uni.redirectTo({
 				// 	url: '/pages/money/paySuccess'
 				// })
@@ -95,11 +125,12 @@
 		font-size: 28upx;
 		color: #909399;
 
-		.price{
+		.price {
 			font-size: 50upx;
 			color: #303133;
 			margin-top: 12upx;
-			&:before{
+
+			&:before {
 				content: '￥';
 				font-size: 40upx;
 			}
@@ -110,8 +141,8 @@
 		margin-top: 20upx;
 		background-color: #fff;
 		padding-left: 60upx;
-		
-		.type-item{
+
+		.type-item {
 			height: 120upx;
 			padding: 20upx 0;
 			display: flex;
@@ -119,28 +150,33 @@
 			align-items: center;
 			padding-right: 60upx;
 			font-size: 30upx;
-			position:relative;
+			position: relative;
 		}
-		
-		.icon{
+
+		.icon {
 			width: 100upx;
 			font-size: 52upx;
 		}
+
 		.icon-erjiye-yucunkuan {
 			color: #fe8e2e;
 		}
+
 		.icon-weixinzhifu {
 			color: #36cb59;
 		}
+
 		.icon-alipay {
 			color: #01aaef;
 		}
-		.tit{
+
+		.tit {
 			font-size: $font-lg;
 			color: $font-color-dark;
 			margin-bottom: 4upx;
 		}
-		.con{
+
+		.con {
 			flex: 1;
 			display: flex;
 			flex-direction: column;
@@ -148,6 +184,7 @@
 			color: $font-color-light;
 		}
 	}
+
 	.mix-btn {
 		display: flex;
 		align-items: center;
@@ -161,5 +198,4 @@
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
 	}
-
 </style>
