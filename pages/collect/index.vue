@@ -145,10 +145,8 @@
 
 	/* 商品列表 */
 	.goods-list {
-		display: flex;
-		flex-wrap: wrap;
 		background: #fff;
-
+		width: 100%;
 		.goods-item {
 			display: flex;
 			width: 100%;
