@@ -20,6 +20,10 @@ class MineModel extends Request {
 	addressDel(params) {
 		return this.post('/service/addressDel', params)
 	}
+	// 商品收藏列表
+	getFavoriteList() {
+		return this.get('/service/getFavoriteList')
+	}
 	/**
 	 * 验证表单
 	 */

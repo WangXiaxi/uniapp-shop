@@ -9,34 +9,92 @@
 		</view>
 		<view v-else>
 			<view class="goods-list">
-				<view v-for="(item, index) in goodsList" :key="index" class="goods-item" @click="navToDetailPage(item)">
-					<view class="image-wrapper">
-						<image :src="item.img" mode="aspectFill"></image>
+				<uni-swipe-action :options="options" @click="dele" v-for="(item, index) in goodsList" :key="index">
+					<view class="goods-item" @click="navToDetailPage(item)">
+						<view class="image-wrapper">
+							<image :src="item.img" mode="aspectFill"></image>
+						</view>
+						<view class="info-box">
+							<text class="title">{{item.name | fill}}</text>
+							<view class="price-box">
+								<text class="price">{{item.sell_price | fill}}</text>
+								<!-- <text class="price old" v-if="!(Number(item.sell_price) >= Number(item.market_price))">{{item.market_price}}</text> -->
+								<text class="sell">库存 {{item.store_nums | fill}}</text>
+							</view>
+						</view>
 					</view>
-					<text class="title">{{item.name | fill}}</text>
-					<view class="price-box">
-						<text class="price">{{item.sell_price | fill}}</text>
-						<text class="price old" v-if="!(Number(item.sell_price) >= Number(item.market_price))">{{item.market_price}}</text>
-						<text class="sell">库存 {{item.store_nums | fill}}</text>
-					</view>
-				</view>
+				</uni-swipe-action>
 			</view>
 			<uni-load-more :status="loadingType"></uni-load-more>
 		</view>
+		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
+	import mineModel from '../../api/mine/index.js'
+	import mixLoading from '../../components/mix-loading/mix-loading.vue'
+	import uniSwipeAction from '../../components/uni-swipe-action.vue'
+	import {
+		url_image
+	} from '../../common/config/index.js'
+	import {
+		mapActions
+	} from 'vuex'
 
 	export default {
 		components: {
+			mixLoading,
+			uniSwipeAction,
 			uniLoadMore
 		},
 		data() {
 			return {
-				goodsList: [{}],
-				loadingType: 'more' //加载更多状态
+				options: [{
+					text: '删除',
+					style: {
+						backgroundColor: '#fa436a'
+					}
+				}],
+				pageLoading: false,
+				goodsList: [],
+				loadingType: 'nomore' //加载更多状态
+			}
+		},
+		onLoad() {
+			this.loadData()
+		},
+		methods: {
+			...mapActions(['goodsFavoriteEdit', 'getGoodsFavoriteIds']),
+			loadData() {
+				this.pageLoading = true
+				mineModel.getFavoriteList().then(res => {
+					this.pageLoading = false
+					this.goodsList = res.data.map(c => {
+						c.img = `${url_image}/${c.img}`
+						return c
+					})
+				}).catch(() => {
+					this.pageLoading = false
+				})
+			},
+			dele({
+				text,
+				style,
+				index
+			}) { // 删除操作
+				this.goodsFavoriteEdit({
+					goods_id: this.goodsList[index].goods_id
+				}).then(this.getGoodsFavoriteIds) // 删除完成后重新获取下收藏id
+				this.goodsList.splice(index, 1) // 直接前端删除增加用户体验
+			},
+			//详情
+			navToDetailPage(item) {
+				let id = item.id;
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
 			}
 		}
 	}
@@ -47,6 +105,7 @@
 	.content {
 		background: $page-color-base;
 	}
+
 	/* 空白页 */
 	.empty {
 		position: fixed;
@@ -60,24 +119,25 @@
 		flex-direction: column;
 		align-items: center;
 		background: #fff;
-	
+
 		image {
 			width: 240upx;
 			height: 160upx;
 			margin-bottom: 30upx;
 		}
-	
+
 		.empty-tips {
 			display: flex;
 			font-size: $font-sm+2upx;
 			color: $font-color-disabled;
-	
+
 			.navigator {
 				color: $uni-color-primary;
 				margin-left: 16upx;
 			}
 		}
 	}
+
 	.content {
 		padding-top: 20upx;
 		background: #fff;
@@ -87,23 +147,17 @@
 	.goods-list {
 		display: flex;
 		flex-wrap: wrap;
-		padding: 0 30upx;
 		background: #fff;
 
 		.goods-item {
 			display: flex;
-			flex-direction: column;
-			width: 48%;
-			padding-bottom: 40upx;
-
-			&:nth-child(2n+1) {
-				margin-right: 4%;
-			}
+			width: 100%;
+			padding: 20upx 30upx;
 		}
 
 		.image-wrapper {
-			width: 100%;
-			height: 330upx;
+			width: 180upx;
+			height: 180upx;
 			border-radius: 3px;
 			overflow: hidden;
 
@@ -112,6 +166,12 @@
 				height: 100%;
 				opacity: 1;
 			}
+		}
+
+		.info-box {
+			flex: 1;
+			width: 0;
+			margin-left: 20upx;
 		}
 
 		.title {
@@ -131,6 +191,7 @@
 			align-items: center;
 			padding-right: 10upx;
 			font-size: 24upx;
+			margin-top: 30upx;
 			color: $font-color-light;
 		}
 

@@ -7,35 +7,35 @@
 
 		<view class="pay-type-list">
 
-			<view class="type-item b-b" @click="changePayType(1)">
+			<view class="type-item b-b" @click="changePayType(10)">
 				<text class="icon yticon icon-weixinzhifu"></text>
 				<view class="con">
 					<text class="tit">微信支付</text>
 					<text>推荐使用微信支付</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 1' />
+					<radio value="" color="#fa436a" :checked='payType == 10' />
 					</radio>
 				</label>
 			</view>
-			<view class="type-item b-b" @click="changePayType(2)">
+			<view class="type-item b-b" @click="changePayType(12)">
 				<text class="icon yticon icon-alipay"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 2' />
+					<radio value="" color="#fa436a" :checked='payType == 12' />
 					</radio>
 				</label>
 			</view>
-			<view class="type-item" @click="changePayType(3)">
+			<view class="type-item" @click="changePayType(1)">
 				<text class="icon yticon icon-erjiye-yucunkuan"></text>
 				<view class="con">
-					<text class="tit">预存款支付</text>
-					<text>可用余额 ¥198.5</text>
+					<text class="tit">余额</text>
+					<!-- <text>可用余额 ¥198.5</text> -->
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 3' />
+					<radio value="" color="#fa436a" :checked='payType == 1' />
 					</radio>
 				</label>
 			</view>
@@ -54,7 +54,7 @@
 	export default {
 		data() {
 			return {
-				payType: 1,
+				payType: 10,
 				detail: {}
 			};
 		},
@@ -94,22 +94,22 @@
 					accept_name,
 					delivery_id,
 					message,
-					direct_gid,
-					revisit
+					revisit,
+					payment: this.payType
 				}
 				if (goodsList.length === 1) {
 					const {
-						id,
 						count,
-						spec_array
+						spec_array,
+						goods_id
 					} = goodsList[0]
 					Object.assign(sendData, {
-						direct_gid: id,
+						direct_gid: goods_id,
 						direct_num: count,
 						direct_type: spec_array ? 'products' : 'goods'
 					})
 				}
-				console.log(this.detail)
+				console.log(sendData)
 				// uni.redirectTo({
 				// 	url: '/pages/money/paySuccess'
 				// })
