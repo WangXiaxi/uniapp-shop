@@ -20,7 +20,7 @@ class OrderModel extends Request {
 		return this.get('/service/getOrderListByState', { ...params, limit: 10 })
 	}
 	// 生成订单
-	confirmOrder() {
+	confirmOrder(params) {
 		return this.post('/service/confirmOrder', { ...params, origin: 'Ydui' })
 	}
 	// 获取支付方式

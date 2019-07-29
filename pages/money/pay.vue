@@ -41,7 +41,7 @@
 			</view>
 		</view>
 
-		<text class="mix-btn" @click="confirm">确认支付</text>
+		<text class="mix-btn" @click="confirm" :disabled="btnLoading" :loading="btnLoading">确认支付</text>
 	</view>
 </template>
 
@@ -54,6 +54,7 @@
 	export default {
 		data() {
 			return {
+				btnLoading: false,
 				payType: 10,
 				detail: {}
 			};
@@ -63,16 +64,16 @@
 		},
 		onLoad(options) {
 			this.detail = JSON.parse(JSON.stringify(this.params))
-			this.getPaymentList()
+			// this.getPaymentList() // 暂时写死支付方式
 		},
 
 		methods: {
-			// 获取支付方式
-			getPaymentList() {
-				orderModel.getPaymentList().then(res => {
-					console.log(res)
-				})
-			},
+			// // 获取支付方式
+			// getPaymentList() {
+			// 	orderModel.getPaymentList().then(res => {
+			// 		console.log(res)
+			// 	})
+			// },
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
@@ -80,7 +81,7 @@
 			//确认支付
 			confirm() {
 				const {
-					revisit,
+					pay_revisit: revisit,
 					defaultAddress: {
 						id: radio_address,
 						accept_name
@@ -94,7 +95,7 @@
 					accept_name,
 					delivery_id,
 					message,
-					revisit,
+					revisit: revisit ? revisit : 0,
 					payment: this.payType
 				}
 				if (goodsList.length === 1) {
@@ -110,6 +111,12 @@
 					})
 				}
 				console.log(sendData)
+				this.btnLoading = true
+				orderModel.confirmOrder(sendData).then(res => {
+					console.log(res)
+				}).catch(() => {
+					
+				})
 				// uni.redirectTo({
 				// 	url: '/pages/money/paySuccess'
 				// })
