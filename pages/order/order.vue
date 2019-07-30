@@ -171,12 +171,6 @@
 				navItem.page = navItem.page + 1;
 				let { state, page } = navItem;
 				orderModel.getOrderListByState({ state, page }).then(res => {
-					if (JSON.stringify(res.data) === '[]') {
-						res.data = {
-							totalPage: 0,
-							resultData: []
-						}
-					}
 					navItem.orderList.push(...res.data.resultData);
 					this.$set(navItem, 'loaded', true);
 					navItem.total = res.data.totalPage;

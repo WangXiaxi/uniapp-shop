@@ -221,11 +221,21 @@
 		}
 	    ,{
             "path" : "pages/stock/list/list",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "股权明细"
+			}
         }
         ,{
             "path" : "pages/stock/index/index",
-            "style" : {}
+            "style": {
+            	"navigationBarTitleText": "我的股权",
+            	"app-plus": {
+            		"bounce": "none",
+            		"titleNView": {
+            			"type": "transparent"
+					}
+				}
+			}
         }
     ],
 	"globalStyle": {
