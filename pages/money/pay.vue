@@ -41,7 +41,8 @@
 			</view>
 		</view>
 
-		<text class="mix-btn" @click="confirm" :disabled="btnLoading" :loading="btnLoading">确认支付</text>
+		<button class="mix-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
+
 	</view>
 </template>
 
@@ -94,7 +95,7 @@
 					radio_address,
 					accept_name,
 					delivery_id,
-					message,
+					message: message ? message : ' ',
 					revisit: revisit ? revisit : 0,
 					payment: this.payType
 				}
@@ -113,9 +114,16 @@
 				console.log(sendData)
 				this.btnLoading = true
 				orderModel.confirmOrder(sendData).then(res => {
-					console.log(res)
+					uni.requestPayment({
+						provider: 'wxpay',
+						orderInfo: '',
+						success: () => {
+						},
+						fail: () => {
+						}
+					})
 				}).catch(() => {
-					
+					this.btnLoading = false
 				})
 				// uni.redirectTo({
 				// 	url: '/pages/money/paySuccess'

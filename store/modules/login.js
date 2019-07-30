@@ -4,10 +4,14 @@
  * @date    2019-07-15 17:43:24
  * @version $Id$
  */
+import mineModel from '../../api/mine/index.js'
 
 const tokenStorage  = uni.getStorageSync('token')
 const userInfoStorage  = uni.getStorageSync('userInfo')
 const hasLoginStorage = !!tokenStorage
+
+console.log(tokenStorage)
+console.log(userInfoStorage)
 
 const login = {
 	state: {
@@ -27,12 +31,16 @@ const login = {
 			uni.setStorageSync('token', token) // 缓存用户登陆状态
 		},
 		logout(state) {
-			console.log(state)
 			state.hasLogin = false
 			state.token = ''
 			state.userInfo = {}
 			uni.removeStorageSync('userInfo')
 			uni.removeStorageSync('token')
+		},
+		setUserInfo(state, data) {
+			const datas = JSON.parse(JSON.stringify(data))
+			state.userInfo = datas
+			uni.setStorageSync('userInfo', datas) // 缓存用户
 		}
 	},
 	actions: {
@@ -44,6 +52,12 @@ const login = {
 			} else {
 				callback()
 			}
+		},
+		getUserInfo({ commit }) { // 获取用户信息
+			return mineModel.getMemberInfo().then(res => {
+				commit('setUserInfo', res.data)
+				return res
+			})
 		}
 	}
 }

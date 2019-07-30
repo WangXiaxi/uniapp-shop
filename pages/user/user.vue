@@ -8,20 +8,20 @@
 					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
 				</view>
 				<view class="info-box">
-					<text class="username">{{userInfo.nickname || '游客'}}</text>
+					<text class="username">{{userInfo.username || '游客'}}</text>
 				</view>
 			</view>
 			<view class="vip-card-box">
 				<image class="card-bg" src="/static/vip-card-bg.png" mode=""></image>
-				<view class="b-btn">
+				<view class="b-btn" v-if="!userInfo.is_vip">
 					立即开通
 				</view>
 				<view class="tit">
 					<text class="yticon icon-iLinkapp-"></text>
-					DCloud会员
+					{{userInfo.is_agent ? userInfo.agent_text : userInfo.is_vip ? 'VIP会员' : '普通客户'}}
 				</view>
-				<text class="e-m">DCloud Union</text>
-				<text class="e-b">开通会员开发无bug 一测就上线</text>
+				<!-- <text class="e-m"></text> -->
+				<!-- <text class="e-b"></text> -->
 			</view>
 		</view>
 		
@@ -39,16 +39,16 @@
 			
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text class="num">128.8</text>
-					<text>余额</text>
+					<text class="num">{{ userInfo.balance || '0.00' }}</text>
+					<text>账户余额</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">0</text>
-					<text>优惠券</text>
+					<text class="num">{{ userInfo.sec_stocks || '0.00' }}</text>
+					<text>我的股权</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">20</text>
-					<text>积分</text>
+					<text class="num">{{ userInfo.revisit || '0' }}</text>
+					<text>VIP消费</text>
 				</view>
 			</view>
 			<!-- 订单 -->
@@ -72,23 +72,35 @@
 			</view>
 			<!-- 浏览历史 -->
 			<view class="history-section icon">
-				<view class="sec-header">
+				<!-- <view class="sec-header">
 					<text class="yticon icon-lishijilu"></text>
 					<text>浏览历史</text>
-				</view>
-				<scroll-view scroll-x class="h-list">
+				</view> -->
+				<!-- <scroll-view scroll-x class="h-list">
 					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105186633&di=c121a29beece4e14269948d990f9e720&imgtype=0&src=http%3A%2F%2Fimg004.hc360.cn%2Fm8%2FM04%2FDE%2FDE%2FwKhQplZ-QteEBvsbAAAAADUkobU751.jpg" mode="aspectFill"></image>
 					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105231218&di=09534b9833b5243296630e6d5b728eff&imgtype=0&src=http%3A%2F%2Fimg002.hc360.cn%2Fm1%2FM05%2FD1%2FAC%2FwKhQcFQ3iN2EQTo8AAAAAHQU6_8355.jpg" mode="aspectFill"></image>
 					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105320890&di=c743386be51f2c4c0fd4b75754d14f3c&imgtype=0&src=http%3A%2F%2Fimg007.hc360.cn%2Fhb%2FMTQ1OTg4ODY0MDA3Ny05OTQ4ODY1NDQ%3D.jpg" mode="aspectFill"></image>
 					<image @click="navTo('/pages/product/product')" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2691146630,2165926318&fm=26&gp=0.jpg" mode="aspectFill"></image>
 					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105443324&di=8141bf13f3f208c61524d67f9bb83942&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01ac9a5548d29b0000019ae98e6d98.jpg" mode="aspectFill"></image>
 					<image @click="navTo('/pages/product/product')" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=191678693,2701202375&fm=26&gp=0.jpg" mode="aspectFill"></image>
-				</scroll-view>
-				<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="我的钱包" tips="您的会员还有3天过期"></list-cell>
+				</scroll-view> -->
+				<list-cell icon="icon-share" iconColor="#9789f7" title="售后服务" tips=""></list-cell>
 				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell>
-				<list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell>
-				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="晒单" tips="晒单抢红包"></list-cell>
 				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="商品评价" tips=""></list-cell>
+			</view>
+			<view class="history-section icon">
+				<list-cell image="rmb" iconColor="#e07472" title="我的钱包" tips=""></list-cell>
+				<list-cell image="point" iconColor="#e07472" title="VIP消费" tips=""></list-cell>
+				<list-cell image="user" iconColor="#e07472" title="实名认证" tips=""></list-cell>
+				<list-cell image="stocks" iconColor="#e07472" title="股权明细" tips=""></list-cell>
+			</view>
+			<view class="history-section icon">
+				<list-cell image="team" iconColor="#ee883b" title="我的分享" tips=""></list-cell>
+				<list-cell image="qrcode" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell image="tip" iconColor="#54b4ef" title="短消息" @eventClick="navTo('/pages/collect/index')"></list-cell>
+			</view>
+			<view class="history-section icon">
 				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
@@ -97,9 +109,11 @@
     </view>  
 </template>  
 <script>  
-	import listCell from '@/components/mix-list-cell';
+	import listCell from '@/components/mix-list-cell'
+	import mineModel from '../../api/mine/index.js'
     import {  
-        mapGetters 
+        mapGetters,
+		mapActions
     } from 'vuex';  
 	let startY = 0, moveY = 0, pageAtTop = true;
     export default {
@@ -114,6 +128,7 @@
 			}
 		},
 		onLoad(){
+			this.getUserInfo()
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
@@ -136,10 +151,10 @@
 		},
 		// #endif
         computed: {
-			...mapGetters(['hasLogin','userInfo'])
+			...mapGetters(['hasLogin', 'userInfo'])
 		},
         methods: {
-
+			...mapActions(['getUserInfo']),
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view
@@ -195,6 +210,9 @@
     }  
 </script>  
 <style lang='scss'>
+	page {
+		background: #f5f5f5;
+	}
 	%flex-center {
 	 display:flex;
 	 flex-direction: column;
@@ -340,7 +358,7 @@
 		}
 	}
 	.history-section{
-		padding: 30upx 0 0;
+		padding: 0upx 0 0;
 		margin-top: 20upx;
 		background: #fff;
 		border-radius:10upx;

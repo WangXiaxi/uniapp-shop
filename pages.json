@@ -219,7 +219,15 @@
 				"navigationBarTitleText": "搜索结果"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/stock/list/list",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/stock/index/index",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

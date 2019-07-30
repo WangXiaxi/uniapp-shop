@@ -36,18 +36,18 @@
 							></text>
 						</view>
 						
-						<scroll-view v-if="item.goodsList.length > 1" class="goods-box" scroll-x>
+						<scroll-view v-if="item.goods.length > 1" class="goods-box" scroll-x>
 							<view
-								v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+								v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex"
 								class="goods-item"
 							>
 								<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
 						<view 
-							v-if="item.goodsList.length === 1" 
+							v-if="item.goods.length === 1" 
 							class="goods-box-single"
-							v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+							v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex"
 						>
 							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							<view class="right">
@@ -167,12 +167,17 @@
 					//防止重复加载
 					return;
 				}
-				
 				navItem.loadingType = 'loading';
 				navItem.page = navItem.page + 1;
 				let { state, page } = navItem;
 				orderModel.getOrderListByState({ state, page }).then(res => {
-					navItem.orderList.push(res.data.goods ? res.data.goods : []);
+					if (JSON.stringify(res.data) === '[]') {
+						res.data = {
+							totalPage: 0,
+							resultData: []
+						}
+					}
+					navItem.orderList.push(...res.data.resultData);
 					this.$set(navItem, 'loaded', true);
 					navItem.total = res.data.totalPage;
 					navItem.loadingType = page >= navItem.total ? 'nomore' : 'more';

@@ -24,6 +24,10 @@ class MineModel extends Request {
 	getFavoriteList() {
 		return this.get('/service/getFavoriteList')
 	}
+	// 获取用户信息
+	getMemberInfo() {
+		return this.get('/service/getMemberInfo', {}, { noredirect: true })
+	}
 	/**
 	 * 验证表单
 	 */
