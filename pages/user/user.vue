@@ -93,7 +93,7 @@
 				<list-cell image="rmb" iconColor="#e07472" title="我的钱包" tips=""></list-cell>
 				<list-cell image="point" iconColor="#e07472" title="VIP消费" tips=""></list-cell>
 				<list-cell image="user" iconColor="#e07472" title="实名认证" tips=""></list-cell>
-				<list-cell image="stocks" iconColor="#e07472" title="股权明细" tips=""></list-cell>
+				<list-cell image="stocks" iconColor="#e07472" title="股权明细" tips="" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
 			</view>
 			<view class="history-section icon">
 				<list-cell image="team" iconColor="#ee883b" title="我的分享" tips=""></list-cell>

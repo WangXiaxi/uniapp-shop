@@ -100,13 +100,15 @@
 					payment: this.payType
 				}
 				if (goodsList.length === 1) {
+					console.log(goodsList[0])
 					const {
 						count,
 						spec_array,
-						goods_id
+						goods_id,
+						product_id,
 					} = goodsList[0]
 					Object.assign(sendData, {
-						direct_gid: goods_id,
+						direct_gid: spec_array ? product_id : goods_id,
 						direct_num: count,
 						direct_type: spec_array ? 'products' : 'goods'
 					})
