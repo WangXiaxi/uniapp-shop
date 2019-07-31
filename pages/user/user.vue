@@ -2,13 +2,17 @@
     <view class="container">  
 		
 		<view class="user-section">
-			<image class="bg" src="/static/user-bg.jpg"></image>
+			<image class="bg" src="/static/bj.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
 					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
 				</view>
 				<view class="info-box">
-					<text class="username">{{userInfo.username || '游客'}}</text>
+					<view class="username">{{userInfo.username || '游客'}}</view>
+					<view class="tips">
+						<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
+						<view class="pick-tip" v-if="!userInfo.is_agent"><image src="/static/icon/shop.png" class="shop"></image>旗舰店</view>
+					</view>
 				</view>
 			</view>
 			<view class="vip-card-box">
@@ -43,12 +47,12 @@
 					<text>账户余额</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">{{ userInfo.sec_stocks || '0.00' }}</text>
-					<text>我的股权</text>
-				</view>
-				<view class="tj-item">
 					<text class="num">{{ userInfo.revisit || '0' }}</text>
 					<text>VIP消费</text>
+				</view>
+				<view class="tj-item">
+					<text class="num">{{ favorite.length || '0' }}</text>
+					<text>收藏</text>
 				</view>
 			</view>
 			<!-- 订单 -->
@@ -70,38 +74,17 @@
 					<text>退款/售后</text>
 				</view>
 			</view>
-			<!-- 浏览历史 -->
 			<view class="history-section icon">
-				<!-- <view class="sec-header">
-					<text class="yticon icon-lishijilu"></text>
-					<text>浏览历史</text>
-				</view> -->
-				<!-- <scroll-view scroll-x class="h-list">
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105186633&di=c121a29beece4e14269948d990f9e720&imgtype=0&src=http%3A%2F%2Fimg004.hc360.cn%2Fm8%2FM04%2FDE%2FDE%2FwKhQplZ-QteEBvsbAAAAADUkobU751.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105231218&di=09534b9833b5243296630e6d5b728eff&imgtype=0&src=http%3A%2F%2Fimg002.hc360.cn%2Fm1%2FM05%2FD1%2FAC%2FwKhQcFQ3iN2EQTo8AAAAAHQU6_8355.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105320890&di=c743386be51f2c4c0fd4b75754d14f3c&imgtype=0&src=http%3A%2F%2Fimg007.hc360.cn%2Fhb%2FMTQ1OTg4ODY0MDA3Ny05OTQ4ODY1NDQ%3D.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2691146630,2165926318&fm=26&gp=0.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105443324&di=8141bf13f3f208c61524d67f9bb83942&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01ac9a5548d29b0000019ae98e6d98.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=191678693,2701202375&fm=26&gp=0.jpg" mode="aspectFill"></image>
-				</scroll-view> -->
-				<list-cell icon="icon-share" iconColor="#9789f7" title="售后服务" tips=""></list-cell>
-				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell>
-				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏" @eventClick="navTo('/pages/collect/index')"></list-cell>
-				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="商品评价" tips=""></list-cell>
+				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" tips=""></list-cell>
+				<list-cell image="home-4" iconColor="#e07472" title="我的股权" tips="" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
+				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" tips=""></list-cell>
+				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell image="home-2" iconColor="#e07472" title="我的评价" tips=""></list-cell>
 			</view>
 			<view class="history-section icon">
-				<list-cell image="rmb" iconColor="#e07472" title="我的钱包" tips=""></list-cell>
-				<list-cell image="point" iconColor="#e07472" title="VIP消费" tips=""></list-cell>
-				<list-cell image="user" iconColor="#e07472" title="实名认证" tips=""></list-cell>
-				<list-cell image="stocks" iconColor="#e07472" title="股权明细" tips="" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
-			</view>
-			<view class="history-section icon">
-				<list-cell image="team" iconColor="#ee883b" title="我的分享" tips=""></list-cell>
-				<list-cell image="qrcode" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
-				<list-cell image="tip" iconColor="#54b4ef" title="短消息" @eventClick="navTo('/pages/collect/index')"></list-cell>
-			</view>
-			<view class="history-section icon">
-				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
+				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/address/address')"></list-cell>
+				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell image="home-1" title="关于我们" tips=""></list-cell>
 			</view>
 		</view>
 			
@@ -151,7 +134,7 @@
 		},
 		// #endif
         computed: {
-			...mapGetters(['hasLogin', 'userInfo'])
+			...mapGetters(['hasLogin', 'userInfo', 'favorite'])
 		},
         methods: {
 			...mapActions(['getUserInfo']),
@@ -190,11 +173,11 @@
 					return;
 				}
 				this.moving = true;
-				if(moveDistance >= 80 && moveDistance < 100){
-					moveDistance = 80;
+				if(moveDistance >= 60 && moveDistance < 80){
+					moveDistance = 60;
 				}
 		
-				if(moveDistance > 0 && moveDistance <= 80){
+				if(moveDistance > 0 && moveDistance <= 60){
 					this.coverTransform = `translateY(${moveDistance}px)`;
 				}
 			},
@@ -236,9 +219,7 @@
 			left: 0;
 			top: 0;
 			width: 100%;
-			height: 100%;
-			filter: blur(1px);
-			opacity: .7;
+			height: 460upx;
 		}
 	}
 	.user-info-box{
@@ -255,7 +236,7 @@
 		}
 		.username{
 			font-size: $font-lg + 6upx;
-			color: $font-color-dark;
+			color: #fff;
 			margin-left: 20upx;
 		}
 	}
@@ -388,5 +369,33 @@
 			}
 		}
 	}
-	
+	.info-box {
+		.tips {
+			display: flex;
+			align-items: center;
+			margin-top: 10upx;
+			.vip-tip {
+				width: 83upx;
+				height: 32upx;
+				margin-left: 20upx;
+			}
+			.pick-tip {
+				background: #d874fd;
+				border-radius: 24upx;
+				font-size: 20upx;
+				line-height: 32upx;
+				color: #fff;
+				padding: 0upx 20upx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-left: 10upx;
+				.shop {
+					width: 24upx;
+					height: 24upx;
+					margin-right: 10upx;
+				}
+			}
+		}
+	}
 </style>
