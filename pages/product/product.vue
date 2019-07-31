@@ -990,9 +990,9 @@
 		height: 76upx;
 		border-radius: 100px;
 		overflow: hidden;
-		box-shadow: 0 20upx 40upx -16upx #fa436a;
+		box-shadow: 0 20upx 40upx -16upx #ea1212;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-		background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
+		background: linear-gradient(to right, #ffac30, #ea1212, #F56C6C);
 		margin-left: 20upx;
 		position: relative;
 

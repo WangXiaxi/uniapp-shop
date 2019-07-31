@@ -22,7 +22,7 @@
 
 		<view class="row default-row">
 			<text class="tit">设为默认</text>
-			<switch :checked="addressData.is_default" color="#fa436a" @change="switchChange" />
+			<switch :checked="addressData.is_default" color="#ea1212" @change="switchChange" />
 		</view>
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
 		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" :pickerValueDefault="cityPickerValue" @onCancel="onCancel"
@@ -48,7 +48,7 @@
 					is_default: false
 				},
 				cityPickerValue: [0, 0, 0],
-				themeColor: '#fa436a',
+				themeColor: '#ea1212',
 				region: {
 					label: '请点击选择地址',
 					value: [],

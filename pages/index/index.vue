@@ -99,7 +99,7 @@
 							
 							<view class="pro-box">
 							  	<view class="progress-box">
-							  		<progress percent="72" activeColor="#fa436a" active stroke-width="6" />
+							  		<progress percent="72" activeColor="#ea1212" active stroke-width="6" />
 							  	</view>
 								<text>6人成团</text>
 							</view>
@@ -116,7 +116,7 @@
 							</view>
 							<view class="pro-box">
 							  	<view class="progress-box">
-							  		<progress percent="72" activeColor="#fa436a" active stroke-width="6" />
+							  		<progress percent="72" activeColor="#ea1212" active stroke-width="6" />
 							  	</view>
 								<text>10人成团</text>
 							</view>

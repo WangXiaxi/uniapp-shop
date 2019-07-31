@@ -54,7 +54,7 @@
 				options: [{
 					text: '删除',
 					style: {
-						backgroundColor: '#fa436a'
+						backgroundColor: '#ea1212'
 					}
 				}],
 				pageLoading: false,

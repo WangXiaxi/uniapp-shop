@@ -14,7 +14,7 @@
 					<text>推荐使用微信支付</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 10' />
+					<radio value="" color="#ea1212" :checked='payType == 10' />
 					</radio>
 				</label>
 			</view>
@@ -24,7 +24,7 @@
 					<text class="tit">支付宝支付</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 12' />
+					<radio value="" color="#ea1212" :checked='payType == 12' />
 					</radio>
 				</label>
 			</view>
@@ -35,7 +35,7 @@
 					<!-- <text>可用余额 ¥198.5</text> -->
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 1' />
+					<radio value="" color="#ea1212" :checked='payType == 1' />
 					</radio>
 				</label>
 			</view>

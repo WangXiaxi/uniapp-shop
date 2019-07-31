@@ -224,7 +224,7 @@
 			//订单状态文字和颜色
 			orderStateExp(state) {
 				let stateTip = '',
-					stateTipColor = '#fa436a';
+					stateTipColor = '#ea1212';
 				switch (+state) {
 					case 1:
 						stateTip = '待付款';

@@ -231,7 +231,8 @@
             	"navigationBarTitleText": "我的股权",
             	"app-plus": {
             		"titleNView": {
-						"type": "transparent"
+						"type": "transparent",
+						"buttons": []
 					}
 				}
 			}
@@ -245,7 +246,7 @@
 	},
 	"tabBar": {
 		"color": "#C0C4CC",
-		"selectedColor": "#fa436a",
+		"selectedColor": "#ea1212",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{

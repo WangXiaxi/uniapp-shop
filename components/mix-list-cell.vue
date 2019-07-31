@@ -5,7 +5,7 @@
 			<text v-if="icon" class="cell-icon yticon" :style="[{
 					color: iconColor,
 				}]" :class="icon"></text>
-			<image v-if="image" class="cell-image" :src="`../../static/icon/${image}.png`"></image>
+			<image v-if="image" class="cell-image" :src="`/static/icon/${image}.png`"></image>
 			<text class="cell-tit clamp">{{title}}</text>
 			<text v-if="tips" class="cell-tip">{{tips}}</text>
 			<text class="cell-more yticon" :class="typeList[navigateType]"></text>
