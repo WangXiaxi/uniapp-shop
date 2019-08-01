@@ -69,7 +69,7 @@
 		computed: {},
 		methods: {
 			...mapMutations(['login']),
-			...mapActions(['getGoodsFavoriteIds']),
+			...mapActions(['getGoodsFavoriteIds', 'getUserInfo']),
 			navBack() {
 				uni.navigateBack()
 			},
@@ -93,18 +93,23 @@
 				if (!loginModel.WxValidate.checkForm(sendData)) return
 				this.loading = true
 				loginModel.login(sendData).then(result => {
-					this.loading = false
 					this.loginInfo = ''
 					this.password = ''
 					this.login(result.data.userToken)
-					this.getGoodsFavoriteIds()
-					if (this.$api.prePage()) {
-						uni.navigateBack()
-					} else {
-						uni.switchTab({
-							url: '../user/user'
-						})
-					}
+					const a = this.getGoodsFavoriteIds()
+					const b = this.getUserInfo()
+					Promise.all([a, b]).then(res => {
+						this.loading = false
+						if (this.$api.prePage()) {
+							uni.navigateBack()
+						} else {
+							uni.switchTab({
+								url: '../user/user'
+							})
+						}
+					}).catch(() => {
+						this.loading = false
+					})
 				}).catch(() => {
 					this.loading = false
 				})

@@ -51,7 +51,7 @@
 					<text>VIP消费</text>
 				</view>
 				<view class="tj-item" @click="navTo('/pages/collect/index')">
-					<text class="num">{{ favorite.length || '0' }}</text>
+					<text class="num">{{ favorite && favorite.length || '0' }}</text>
 					<text>收藏</text>
 				</view>
 			</view>
@@ -75,17 +75,16 @@
 				</view>
 			</view>
 			<view class="history-section icon">
-				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" tips="" @eventClick="navTo('/pages/money/money')"></list-cell>
-				<list-cell image="home-4" iconColor="#e07472" title="我的股权" tips="" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
-				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" tips=""></list-cell>
+				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" @eventClick="navTo('/pages/money/money')"></list-cell>
+				<list-cell image="home-4" iconColor="#e07472" title="我的股权" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
+				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐"></list-cell>
 				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
-				<list-cell image="home-2" iconColor="#e07472" title="我的评价" tips=""></list-cell>
-				<list-cell image="home-2" iconColor="#e07472" title="我的评价" tips=""></list-cell>
+				<list-cell image="home-2" iconColor="#e07472" title="我的评价"></list-cell>
 			</view>
 			<view class="history-section icon">
 				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/address/address')"></list-cell>
 				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/collect/index')"></list-cell>
-				<list-cell image="home-1" title="关于我们" tips=""></list-cell>
+				<list-cell image="home-1" title="关于我们"></list-cell>
 			</view>
 		</view>
 			
@@ -112,7 +111,6 @@
 			}
 		},
 		onLoad(){
-			this.getUserInfo()
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
@@ -138,7 +136,6 @@
 			...mapGetters(['hasLogin', 'userInfo', 'favorite'])
 		},
         methods: {
-			...mapActions(['getUserInfo']),
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view

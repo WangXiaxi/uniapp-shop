@@ -128,7 +128,14 @@
 			}
 		}, {
 			"path": "pages/money/money",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
 		}, {
 			"path": "pages/order/createOrder",
 			"style": {

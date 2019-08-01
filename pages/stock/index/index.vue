@@ -73,6 +73,9 @@
 </script>
 
 <style lang="scss">
+	page {
+		background: #f5f5f5;
+	}
 	.top-part {
 		position: relative;
 		width: 100%;
@@ -176,6 +179,9 @@
 		}
 	}
 	.ic-box {
-		margin-top: 40upx;
+		margin: 40upx 32upx 0;
+		border-radius: 10upx;
+		background: #fff;
+		
 	}
 </style>

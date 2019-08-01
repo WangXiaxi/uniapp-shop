@@ -62,7 +62,7 @@
 			changeHead() { // 修改头像
 				uni.chooseImage({
 					count: 1,
-					sizeType: 'original',
+					sizeType: ['original'],
 					success: (data) => {
 						console.log(data)
 					}
