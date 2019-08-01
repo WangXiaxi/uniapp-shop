@@ -225,6 +225,12 @@
 				"navigationBarTitleText": "股权明细"
 			}
         }
+		 ,{
+		    "path" : "pages/order/detail",
+		    "style" : {
+				"navigationBarTitleText": "订单详情"
+			}
+		}
         ,{
             "path" : "pages/stock/index/index",
             "style": {

@@ -5,13 +5,13 @@
 			<image class="bg" src="/static/bj.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
+					<image class="portrait" :src="userInfo.head_ico || '/static/missing-face.png'"></image>
 				</view>
 				<view class="info-box">
 					<view class="username">{{userInfo.username || '游客'}}</view>
-					<view class="tips">
+					<view class="tips" v-if="hasLogin">
 						<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
-						<view class="pick-tip" v-if="!userInfo.is_agent"><image src="/static/icon/shop.png" class="shop"></image>旗舰店</view>
+						<view class="pick-tip" v-if="userInfo.is_agent"><image src="/static/icon/shop.png" class="shop"></image>{{userInfo.agent_text}}</view>
 					</view>
 				</view>
 			</view>
@@ -22,7 +22,7 @@
 				</view>
 				<view class="tit">
 					<text class="yticon icon-iLinkapp-"></text>
-					{{userInfo.is_agent ? userInfo.agent_text : userInfo.is_vip ? 'VIP会员' : '普通客户'}}
+					{{userInfo.is_agent ? userInfo.agent_text : userInfo.is_vip ? userInfo.vip_text : '普通会员'}}
 				</view>
 				<!-- <text class="e-m"></text> -->
 				<!-- <text class="e-b"></text> -->
@@ -47,10 +47,10 @@
 					<text>账户余额</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">{{ userInfo.revisit || '0' }}</text>
+					<text class="num">{{ userInfo.revisit || '0.00' }}</text>
 					<text>VIP消费</text>
 				</view>
-				<view class="tj-item">
+				<view class="tj-item" @click="navTo('/pages/collect/index')">
 					<text class="num">{{ favorite.length || '0' }}</text>
 					<text>收藏</text>
 				</view>
@@ -75,10 +75,11 @@
 				</view>
 			</view>
 			<view class="history-section icon">
-				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" tips=""></list-cell>
+				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" tips="" @eventClick="navTo('/pages/money/money')"></list-cell>
 				<list-cell image="home-4" iconColor="#e07472" title="我的股权" tips="" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
 				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" tips=""></list-cell>
 				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell image="home-2" iconColor="#e07472" title="我的评价" tips=""></list-cell>
 				<list-cell image="home-2" iconColor="#e07472" title="我的评价" tips=""></list-cell>
 			</view>
 			<view class="history-section icon">
@@ -260,8 +261,8 @@
 		}
 		.b-btn{
 			position: absolute;
-			right: 20upx;
-			top: 16upx;
+			right: 22upx;
+			top: 22upx;
 			width: 132upx;
 			height: 40upx;
 			text-align: center;

@@ -18,7 +18,7 @@
 						<view class="i-top b-b">
 							<text class="time">{{item.create_time}}</text>
 							<text class="state" :style="{color: item.stateTipColor}">{{item.status_text}}</text>
-							<text v-if="true" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(index)"></text>
+							<text v-if="true" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.id)"></text>
 						</view>
 
 						<scroll-view v-if="item.goods.length > 1" class="goods-box" scroll-x>
@@ -44,6 +44,10 @@
 						<view class="action-box b-t" v-if="item.state != 9">
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
 							<button class="action-btn recom">立即支付</button>
+							<button class="action-btn recom">申请售后</button>
+							<button class="action-btn recom">确认收货</button>
+							<button class="action-btn recom">去评价</button>
+							<button class="action-btn recom">已完成</button>
 						</view>
 					</view>
 
@@ -114,7 +118,10 @@
 				],
 			};
 		},
-
+		//下拉刷新
+		onPullDownRefresh() {
+			this.loadData('refresh');
+		},
 		onLoad(options) {
 			/**
 			 * 修复app端点击除全部订单外的按钮进入时不加载数据的问题
@@ -143,10 +150,17 @@
 					//tab切换只有第一次需要加载数据
 					return;
 				}
+				if (source === 'refresh') {
+					navItem.page = 0;
+					navItem.loadingType = 'more';
+					navItem.total = 0;
+					navItem.orderList = [];
+				}
 				if (navItem.loadingType === 'loading' || navItem.loadingType === 'nomore') {
 					//防止重复加载
 					return;
 				}
+				
 				navItem.loadingType = 'loading';
 				navItem.page = navItem.page + 1;
 				let {
@@ -173,7 +187,11 @@
 					}));
 					this.$set(navItem, 'loaded', true);
 					navItem.total = res.data.totalPage;
+					
 					navItem.loadingType = page >= navItem.total ? 'nomore' : 'more';
+					if (source === 'refresh') {
+						uni.stopPullDownRefresh();
+					}
 				})
 			},
 
@@ -187,14 +205,13 @@
 				this.tabCurrentIndex = index;
 			},
 			//删除订单
-			deleteOrder(index) {
-				uni.showLoading({
-					title: '请稍后'
-				})
-				setTimeout(() => {
-					this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
+			deleteOrder(id) {
+				uni.showLoading({ title: '请稍后' })
+				orderModel.orderDel({ id }).then(res => {
 					uni.hideLoading();
-				}, 600)
+					this.$api.msg('删除订单成功！')
+					this.loadData('refresh')
+				})
 			},
 			//取消订单
 			cancelOrder(item) {

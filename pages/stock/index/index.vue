@@ -3,7 +3,7 @@
 		<view class="top-part">
 			<image class="bg" src="/static/bj.png"></image>
 			<view class="tit">目前拥有股权</view>
-			<view class="num">34545 / 33534543</view>
+			<view class="num">{{userInfo.fir_stocks}} / {{userInfo.sec_stocks}}</view>
 		</view>
 		<view class="center-part">
 			<view class="top-name">
@@ -49,7 +49,10 @@
 
 <script>
 	import listCell from '@/components/mix-list-cell'
-
+	import {  
+        mapGetters,
+		mapActions
+    } from 'vuex';  
 	export default {
 		components: {
 			listCell
@@ -58,6 +61,9 @@
 			return {
 
 			};
+		},
+		computed: {
+			...mapGetters(['userInfo'])
 		},
 		methods: {
 			navTo() {

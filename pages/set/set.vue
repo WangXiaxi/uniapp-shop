@@ -1,35 +1,42 @@
 <template>
 	<view class="container">
-		<view class="list-cell b-b m-t" @click="navTo('个人资料')" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">个人资料</text>
-			<text class="cell-more yticon icon-you"></text>
-		</view>
-		<view class="list-cell b-b" @click="navTo('收货地址')" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">收货地址</text>
-			<text class="cell-more yticon icon-you"></text>
-		</view>
-		<view class="list-cell" @click="navTo('实名认证')" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">实名认证</text>
+		<view class="list-cell m-t" @click="changeHead()" hover-class="cell-hover" :hover-stay-time="50">
+			<view class="cell-tit">
+				<image :src="userInfo.head_ico || '/static/missing-face.png'" class="face"></image>
+			</view>
+			<text class="cell-tip">更换头像</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
 		
-		<view class="list-cell m-t">
-			<text class="cell-tit">消息推送</text>
-			<switch checked color="#ea1212" @change="switchChange" />
+		<view class="list-cell m-t b-b">
+			<text class="cell-tit">昵称</text>
+			<text class="cell-tip">{{userInfo.username}}</text>
+			<!-- <text class="cell-more yticon icon-you"></text> -->
 		</view>
-		<view class="list-cell m-t b-b" @click="navTo('清除缓存')" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">清除缓存</text>
+		<view class="list-cell b-b">
+			<text class="cell-tit">手机号</text>
+			<text class="cell-tip">{{userInfo.mobile}}</text>
+			<!-- <text class="cell-more yticon icon-you"></text> -->
+		</view>
+		<view class="list-cell b-b" @click="navTo('/pages/address/address')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">修改登陆密码</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell b-b" @click="navTo('关于Dcloud')" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">关于Dcloud</text>
+		<view class="list-cell b-b" @click="navTo('实名认证')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">修改提现密码</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell">
+		
+		<view class="list-cell b-b" @click="navTo('/pages/address/address')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">我的收货地址</text>
+			<text class="cell-more yticon icon-you"></text>
+		</view>
+
+		<!-- <view class="list-cell">
 			<text class="cell-tit">检查更新</text>
-			<text class="cell-tip">当前版本 1.0.3</text>
+			<text class="cell-tip">当前版本 1.0.0</text>
 			<text class="cell-more yticon icon-you"></text>
-		</view>
+		</view> -->
 		<view class="list-cell log-out-btn" @click="toLogout">
 			<text class="cell-tit">退出登录</text>
 		</view>
@@ -38,7 +45,8 @@
 
 <script>
 	import {  
-	    mapMutations  
+	    mapMutations,
+		mapGetters
 	} from 'vuex';
 	export default {
 		data() {
@@ -46,11 +54,24 @@
 				
 			};
 		},
+		computed: {
+			...mapGetters(['userInfo']),
+		},
 		methods:{
 			...mapMutations(['logout', 'clearOut']),
-
+			changeHead() { // 修改头像
+				uni.chooseImage({
+					count: 1,
+					sizeType: 'original',
+					success: (data) => {
+						console.log(data)
+					}
+				})
+			},
 			navTo(url){
-				this.$api.msg(`跳转到${url}`);
+				uni.navigateTo({  
+					url
+				})
 			},
 			//退出登录
 			toLogout(){
@@ -78,12 +99,17 @@
 </script>
 
 <style lang='scss'>
+	.face {
+		display: block;
+		width: 102upx;
+		height: 102upx;
+	}
 	page{
 		background: $page-color-base;
 	}
 	.list-cell{
 		display:flex;
-		align-items:baseline;
+		align-items:center;
 		padding: 20upx $page-row-spacing;
 		line-height:60upx;
 		position:relative;
@@ -107,7 +133,6 @@
 			margin-top: 16upx; 
 		}
 		.cell-more{
-			align-self: baseline;
 			font-size:$font-lg;
 			color:$font-color-light;
 			margin-left:10upx;

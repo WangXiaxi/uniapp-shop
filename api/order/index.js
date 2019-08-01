@@ -27,6 +27,10 @@ class OrderModel extends Request {
 	getPaymentList() {
 		return this.get('/service/getPaymentList')
 	}
+	// 删除订单
+	orderDel(params) {
+		return this.post('/service/orderDel', params)
+	}
 }
 
 const orderModel = new OrderModel()
