@@ -13,7 +13,7 @@
 			<input class="input" type="number" v-model="addressData.repassword" placeholder="请确认密码" placeholder-class="placeholder" />
 		</view>
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
-		<view class="pass">忘记原密码？</view>
+		<view class="pass" @click="navTo('/pages/set/landPassMobile')">忘记原密码？</view>
 	</view>
 </template>
 
@@ -27,6 +27,13 @@
 					repassword: '', // 原密码
 				},
 				btnLoading: false
+			}
+		},
+		methods: {
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})
 			}
 		}
 	}

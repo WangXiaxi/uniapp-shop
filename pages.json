@@ -229,6 +229,7 @@
 	    ,{
             "path" : "pages/stock/list/list",
             "style" : {
+				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "股权明细"
 			}
         }
@@ -272,6 +273,17 @@
 		    "path" : "pages/set/landPassMobile",
 		    "style" : {
 				"navigationBarTitleText": "忘记提现密码"
+			}
+		},{
+		    "path" : "pages/money/balanceDetails",
+		    "style" : {
+				"navigationBarTitleText": "余额明细"
+			}
+		}
+		 ,{
+		    "path" : "pages/money/vipsDetails",
+		    "style" : {
+				"navigationBarTitleText": "VIP消费明细"
 			}
 		}
     ],
