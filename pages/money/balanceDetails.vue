@@ -2,6 +2,17 @@
 	<view>
 		<view class="list">
 			<view class="item">
+				<image :src="icon[0]"></image>
+				<view class="mian-info">
+					<view>
+						<text class="type">消费</text>
+						<text class="detail"></text>
+					</view>
+					<view class="time"></view>
+				</view>
+				<view class="price-info">
+					<view class="price"></view>
+				</view>
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
@@ -17,6 +28,11 @@
 		},
 		data() {
 			return {
+				icon: {
+					0: '/static/icon/xiaofei-1.png',
+					1: '/static/icon/xiaofei-2.png',
+					2: '/static/icon/xiaofei-3.png'
+				},
 				loadingType: 'more', //加载更多状态
 				list: [],
 				page: 0,
@@ -46,7 +62,7 @@
 				} else {
 					this.loadingType = 'loading';
 				}
-				
+
 				if (type === 'refresh') {
 					this.page = 1;
 					this.list = [];
@@ -55,7 +71,7 @@
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
 				})
-				
+
 			}
 		}
 	}

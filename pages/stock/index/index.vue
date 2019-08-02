@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="top-part">
-			<image class="bg" src="/static/bj.png"></image>
+			<image class="bg" src="/static/qbbj.png"></image>
 			<view class="tit">目前拥有股权</view>
 			<view class="num">{{userInfo.fir_stocks}} / {{userInfo.sec_stocks}}</view>
 		</view>
@@ -79,13 +79,13 @@
 	.top-part {
 		position: relative;
 		width: 100%;
-		height: 460upx;
+		height: 370upx;
 		text-align: center;
 
 		.tit {
 			color: #fff;
 			position: relative;
-			padding-top: 130upx;
+			padding-top: 60upx;
 			z-index: 1;
 			font-size: 28upx;
 		}
@@ -103,7 +103,7 @@
 			left: 0;
 			top: 0;
 			width: 100%;
-			height: 460upx;
+			height: 370upx;
 		}
 	}
 

@@ -225,67 +225,66 @@
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "搜索结果"
 			}
-		}
-	    ,{
-            "path" : "pages/stock/list/list",
-            "style" : {
+		}, {
+			"path": "pages/stock/list/list",
+			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "股权明细"
 			}
-        }
-		 ,{
-		    "path" : "pages/order/detail",
-		    "style" : {
+		}, {
+			"path": "pages/order/detail",
+			"style": {
 				"navigationBarTitleText": "订单详情"
 			}
-		}
-        ,{
-            "path" : "pages/stock/index/index",
-            "style": {
-            	"navigationBarTitleText": "我的股权",
-            	"app-plus": {
-            		"titleNView": {
-						"type": "transparent",
+		}, {
+			"path": "pages/stock/index/index",
+			"style": {
+				"navigationBarTitleText": "我的股权",
+				"navigationBarBackgroundColor": "#EA1212",
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"titleNView": {
 						"buttons": []
 					}
 				}
 			}
-        }
-		 ,{
-		    "path" : "pages/set/cashPass",
-		    "style" : {
+		}, {
+			"path": "pages/set/cashPass",
+			"style": {
 				"navigationBarTitleText": "修改登陆密码"
 			}
-		}
-		 ,{
-		    "path" : "pages/set/landPass",
-		    "style" : {
+		}, {
+			"path": "pages/set/landPass",
+			"style": {
 				"navigationBarTitleText": "修改提现密码"
 			}
-		}
-		 ,{
-		    "path" : "pages/set/cashPassMobile",
-		    "style" : {
+		}, {
+			"path": "pages/set/cashPassMobile",
+			"style": {
 				"navigationBarTitleText": "忘记登陆密码"
 			}
-		}
-		 ,{
-		    "path" : "pages/set/landPassMobile",
-		    "style" : {
+		}, {
+			"path": "pages/set/landPassMobile",
+			"style": {
 				"navigationBarTitleText": "忘记提现密码"
 			}
-		},{
-		    "path" : "pages/money/balanceDetails",
-		    "style" : {
+		}, {
+			"path": "pages/money/balanceDetails",
+			"style": {
 				"navigationBarTitleText": "余额明细"
 			}
-		}
-		 ,{
-		    "path" : "pages/money/vipsDetails",
-		    "style" : {
+		}, {
+			"path": "pages/money/vipsDetails",
+			"style": {
 				"navigationBarTitleText": "VIP消费明细"
 			}
 		}
+	    ,{
+            "path" : "pages/recommend/recommend",
+            "style" : {
+				"navigationBarTitleText": "我的推荐"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
