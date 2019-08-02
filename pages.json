@@ -250,6 +250,30 @@
 				}
 			}
         }
+		 ,{
+		    "path" : "pages/set/cashPass",
+		    "style" : {
+				"navigationBarTitleText": "修改登陆密码"
+			}
+		}
+		 ,{
+		    "path" : "pages/set/landPass",
+		    "style" : {
+				"navigationBarTitleText": "修改提现密码"
+			}
+		}
+		 ,{
+		    "path" : "pages/set/cashPassMobile",
+		    "style" : {
+				"navigationBarTitleText": "忘记登陆密码"
+			}
+		}
+		 ,{
+		    "path" : "pages/set/landPassMobile",
+		    "style" : {
+				"navigationBarTitleText": "忘记提现密码"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
