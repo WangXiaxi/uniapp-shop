@@ -42,14 +42,14 @@
 				<!-- <view class="name">----</view> -->
 				<view class="des">尾号8025的储蓄卡</view>
 			</view>
-			<view class="bd-btn">更换银行卡</view>
+			<view class="bd-btn" @click="navTo('/pages/money/bindBank')">更换银行卡</view>
 			<!-- <view class="bd-btn">绑定银行卡</view> -->
 		</view>
 		<view class="ic-box">
 			<list-cell image="money-3" title="提现" @eventClick="navTo('/pages/set/set')"></list-cell>
 			<list-cell image="money-1" title="充值" @eventClick="navTo('/pages/set/set')"></list-cell>
-			<list-cell image="money-4"title="转账" @eventClick="navTo('/pages/set/set')"></list-cell>
-			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/set/set')"></list-cell>
+			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
+			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
 		</view>
 		<view class="descript">将遵循杭州义桥网络科技有限公司<text class="text">《冰酒协议》</text></view>
 	</view>
@@ -70,7 +70,12 @@
 		methods: {
 			changeType(type) {
 				this.type = type
-			}
+			},
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})  
+			}, 
 		}
 	}
 </script>
@@ -82,13 +87,13 @@
 	.top-part {
 		position: relative;
 		width: 100%;
-		height: 460upx;
+		height: 370upx;
 		text-align: left;
 		padding-left: 32upx;
 		.tit {
 			color: #fff;
 			position: relative;
-			padding-top: 130upx;
+			padding-top: 50upx;
 			z-index: 1;
 			font-size: 28upx;
 			text {
@@ -109,7 +114,7 @@
 			left: 0;
 			top: 0;
 			width: 100%;
-			height: 460upx;
+			height: 370upx;
 		}
 	}
 	.center-part {

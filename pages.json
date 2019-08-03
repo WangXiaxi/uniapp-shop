@@ -130,9 +130,11 @@
 			"path": "pages/money/money",
 			"style": {
 				"navigationBarTitleText": "我的钱包",
+				"navigationBarBackgroundColor": "#EA1212",
+				"navigationBarTextStyle": "white",
 				"app-plus": {
 					"titleNView": {
-						"type": "transparent"
+						"buttons": []
 					}
 				}
 			}
@@ -278,11 +280,46 @@
 			"style": {
 				"navigationBarTitleText": "VIP消费明细"
 			}
+		}, {
+			"path": "pages/money/bindBank",
+			"style": {
+				"navigationBarTitleText": "绑定银行卡"
+			}
+		}, {
+			"path": "pages/money/trans",
+			"style": {
+				"navigationBarTitleText": "转账"
+			}
+		}, {
+			"path": "pages/recommend/add",
+			"style": {
+				"navigationBarTitleText": "添加会员"
+			}
+		}, {
+			"path": "pages/recommend/register",
+			"style": {
+				"navigationBarTitleText": "激活会员",
+				"navigationBarBackgroundColor": "#EA1212",
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"titleNView": {
+						"buttons": []
+					}
+				}
+			}
 		}
+		
 	    ,{
             "path" : "pages/recommend/recommend",
             "style" : {
-				"navigationBarTitleText": "我的推荐"
+				"navigationBarTitleText": "我的推荐",
+				"navigationBarBackgroundColor": "#EA1212",
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"titleNView": {
+						"buttons": []
+					}
+				}
 			}
         }
     ],

@@ -434,6 +434,11 @@
 	.placeholder {
 		color: #999999;
 	}
+
+	.placeholderText {
+		color: #999999;
+		line-height: 1.6;
+	}
 	
 	.uni-input-wrapper {
 		display: flex;
@@ -468,5 +473,18 @@
 				margin-left: 16upx;
 			}
 		}
+	}
+	.add-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 690upx;
+		height: 80upx;
+		margin: 60upx auto 20upx;
+		font-size: $font-lg;
+		color: #fff;
+		background-color: $base-color;
+		border-radius: 10upx;
+		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
 	}
 </style>

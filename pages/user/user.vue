@@ -77,7 +77,7 @@
 			<view class="history-section icon">
 				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" @eventClick="navTo('/pages/money/money')"></list-cell>
 				<list-cell image="home-4" iconColor="#e07472" title="我的股权" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
-				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐"></list-cell>
+				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" @eventClick="navTo('/pages/recommend/recommend')"></list-cell>
 				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
 				<list-cell image="home-2" iconColor="#e07472" title="我的评价"></list-cell>
 			</view>

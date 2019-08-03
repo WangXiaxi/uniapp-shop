@@ -2,16 +2,16 @@
 	<view>
 		<view class="list">
 			<view class="item">
-				<image :src="icon[0]"></image>
+				<image class="img" :src="icon[0]"></image>
 				<view class="mian-info">
-					<view>
+					<view class="top">
 						<text class="type">消费</text>
-						<text class="detail"></text>
+						<text class="detail">(中信银行7392)</text>
 					</view>
-					<view class="time"></view>
+					<view class="time">2019-02-16 12:20</view>
 				</view>
 				<view class="price-info">
-					<view class="price"></view>
+					<view class="price" :class="{red : true}">-10000</view>
 				</view>
 			</view>
 		</view>
@@ -21,6 +21,7 @@
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
+	import moneyModel from '../../api/money/index.js'
 
 	export default {
 		components: {
@@ -62,12 +63,17 @@
 				} else {
 					this.loadingType = 'loading';
 				}
-
+				
 				if (type === 'refresh') {
 					this.page = 1;
 					this.list = [];
 				}
 				setTimeout(() => {
+					moneyModel.getUcenterAccountLog().then(res => {
+						console.log(res)
+					}).catch(() => {
+					})
+					
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
 				})
@@ -77,6 +83,46 @@
 	}
 </script>
 
-<style lang="less">
-
+<style lang="scss">
+	.list {
+		.item {
+			padding: 32upx;
+			display: flex;
+			border-bottom: 1upx solid #F2F2F2; 
+			.img {
+				width: 64upx;
+				height: 64upx;
+			}
+			.mian-info {
+				margin-left: 70upx;
+				flex: 1;
+				width: 0;
+				.top {
+					font-size: 0;
+				}
+				.type {
+					font-size: 26upx;
+					color: #111;
+				}
+				.detail {
+					font-size: 26upx;
+					color: #666;
+				}
+				.time {
+					color: #666;
+					font-size: 24upx;
+					margin-top: 24upx;
+				}
+			}
+			.price-info {
+				.price {
+					font-size: 28upx;
+					color: #111;
+				}
+				.red {
+					color: $base-color;
+				}
+			}
+		}
+	}
 </style>
