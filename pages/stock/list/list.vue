@@ -2,6 +2,9 @@
 	<view>
 		<view class="list">
 			<view class="item">
+				<view class="tit">股权变更</view>
+				<view class="time">2019-06-15 11:24:00</view>
+				<view class="des">用户忆杭1[18877744754]增加500股权，目前有5500股权。</view>
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
@@ -61,6 +64,25 @@
 	}
 </script>
 
-<style lang="less">
-
+<style lang="scss">
+	page {
+		background: #f5f5f5;
+	}
+	.item {
+		background: #fff;
+		margin: 20upx 30upx 0;
+		border-radius: 10upx;
+		padding: 30upx;
+		.tit {
+			font-size: 30upx;
+		}
+		.time {
+			font-size: 24upx;
+			margin-top: 14upx;
+		}
+		.des {
+			font-size: 24upx;
+			margin-top: 20upx;
+		}
+	}
 </style>

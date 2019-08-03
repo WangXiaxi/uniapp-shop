@@ -6,7 +6,7 @@
 			<view class="num">{{userInfo.fir_stocks}} / {{userInfo.sec_stocks}}</view>
 		</view>
 		<view class="center-part">
-			<view class="top-name">
+			<view class="top-name" @click="navTo('/pages/stock/list/list')">
 				<view class="tit">股权明细</view>
 				<text class="cell-tip">更多</text>
 				<text class="cell-more yticon icon-you"></text>
@@ -66,7 +66,10 @@
 			...mapGetters(['userInfo'])
 		},
 		methods: {
-			navTo() {
+			navTo(url) {
+				uni.navigateTo({  
+					url
+				})
 			}
 		}
 	}

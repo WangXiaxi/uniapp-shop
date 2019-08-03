@@ -21,7 +21,7 @@
 						<view class="num text">3562</view>
 					</view>
 				</view>
-				<image class="ico-add" src="/static/icon/add.png"></image>
+				<image class="ico-add" src="/static/icon/add.png" @click="navTo('/pages/recommend/add')"></image>
 			</view>
 		</view>
 		<view class="search-box">
