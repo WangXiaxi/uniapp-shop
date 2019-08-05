@@ -3,7 +3,7 @@
 		<view class="top-part">
 			<image class="bg" src="/static/qbbj.png"></image>
 			<view class="tit">目前拥有股权</view>
-			<view class="num">{{userInfo.fir_stocks}} / {{userInfo.sec_stocks}}</view>
+			<view class="num">{{userInfo.fir_stocks !== '0' ? `${userInfo.fir_stocks} / ` : ''}}{{userInfo.sec_stocks}}</view>
 		</view>
 		<view class="center-part">
 			<view class="top-name" @click="navTo('/pages/stock/list/list')">
@@ -12,31 +12,13 @@
 				<text class="cell-more yticon icon-you"></text>
 			</view>
 			<view class="list">
-				<view class="item">
+				<view class="item" v-for="(item, index) in list" :key="index">
 					<view class="top">
-						<view class="type">股权增加</view>
-						<view class="time">2018:09:08 02:02</view>
+						<view class="type">{{item.type ? '增加' : '减少'}}</view>
+						<view class="time">{{item.datetime | fill}}</view>
 					</view>
 					<view class="bot">
-						用户忆杭1[18877744754]增加500股权。
-					</view>
-				</view>
-				<view class="item">
-					<view class="top">
-						<view class="type">股权增加</view>
-						<view class="time">2018:09:08 02:02</view>
-					</view>
-					<view class="bot">
-						用户忆杭1[18877744754]增加500股权。
-					</view>
-				</view>
-				<view class="item">
-					<view class="top">
-						<view class="type">股权增加</view>
-						<view class="time">2018:09:08 02:02</view>
-					</view>
-					<view class="bot">
-						用户忆杭1[18877744754]增加500股权。
+						[{{item.datetime | fill}}] {{item.type ? '增加' : '减少'}}股权 <text class="red">{{item.value}}</text>
 					</view>
 				</view>
 			</view>
@@ -49,6 +31,8 @@
 
 <script>
 	import listCell from '@/components/mix-list-cell'
+	import stockModel from '../../../api/stock/index.js'
+
 	import {  
         mapGetters,
 		mapActions
@@ -59,13 +43,21 @@
 		},
 		data() {
 			return {
-
+				list: []
 			};
+		},
+		onLoad() {
+			this.loadData()
 		},
 		computed: {
 			...mapGetters(['userInfo'])
 		},
 		methods: {
+			loadData() {
+				stockModel.getUcenterStocksLog({ page: 1, limit: 3 }).then(res => {
+					this.list = res.data.data
+				})
+			},
 			navTo(url) {
 				uni.navigateTo({  
 					url
@@ -174,6 +166,9 @@
 					margin-top: 20upx;
 					font-size: 24upx;
 					color: $font-color-light;
+					.red {
+						color: $base-color;
+					}
 				}
 				&:last-child {
 					border-bottom: none;

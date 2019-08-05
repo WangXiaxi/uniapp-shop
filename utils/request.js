@@ -108,7 +108,7 @@ export default class Request {
 							// 清空数据并跳转至登陆页
 							store.commit('logout')
 							store.commit('logout')
-							if (!options.noredirect) uni.navigateTo({
+							if (!options.noredirect) uni.redirectTo({
 								url: '/pages/public/login'
 							})
 							reject(response)

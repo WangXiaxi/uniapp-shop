@@ -1,17 +1,17 @@
 <template>
 	<view>
 		<view class="list">
-			<view class="item">
-				<image class="img" :src="icon[0]"></image>
+			<view class="item" v-for="(item, index) in list" :key="index">
+				<image class="img" :src="icon[2]"></image>
 				<view class="mian-info">
 					<view class="top">
-						<text class="type">消费</text>
-						<text class="detail">(中信银行7392)</text>
+						<text class="type">{{item.type === '0'? '增加' : '减少' }}</text>
+						<text class="detail">({{ item.note | fill }})</text>
 					</view>
-					<view class="time">2019-02-16 12:20</view>
+					<view class="time">{{item.time}}</view>
 				</view>
 				<view class="price-info">
-					<view class="price" :class="{red : true}">-10000</view>
+					<view class="price" :class="{red : item.type === '1'}">{{item.amount}}</view>
 				</view>
 			</view>
 		</view>
@@ -68,16 +68,14 @@
 					this.page = 1;
 					this.list = [];
 				}
-				setTimeout(() => {
-					moneyModel.getUcenterAccountLog().then(res => {
-						console.log(res)
-					}).catch(() => {
-					})
-					
+				moneyModel.getUcenterAccountLog({ page: this.page, limit: 10 }).then(res => {
+					this.list.push(...res.data.data)
+					this.pages = res.data.totalPage
+					uni.stopPullDownRefresh();
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
+				}).catch(() => {
 				})
-
 			}
 		}
 	}
@@ -107,6 +105,7 @@
 				.detail {
 					font-size: 26upx;
 					color: #666;
+					word-wrap:break-word;
 				}
 				.time {
 					color: #666;

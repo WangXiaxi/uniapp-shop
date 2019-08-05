@@ -9,7 +9,7 @@ import Request from '../../utils/request'
 class MoneyModel extends Request {
 	// 地址获取接口
 	getUcenterAccountLog(params) {
-		return this.get('/service/getUcenterAccountLog', params)
+		return this.get('/service/getUcenterAccountLog', { ...params, paging: true })
 	}
 	
 	

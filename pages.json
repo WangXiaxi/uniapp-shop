@@ -273,7 +273,8 @@
 		}, {
 			"path": "pages/money/balanceDetails",
 			"style": {
-				"navigationBarTitleText": "余额明细"
+				"navigationBarTitleText": "余额明细",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/money/vipsDetails",

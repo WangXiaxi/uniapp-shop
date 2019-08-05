@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="list-cell m-t" @click="changeHead()" hover-class="cell-hover" :hover-stay-time="50">
 			<view class="cell-tit">
-				<image :src="userInfo.head_ico || '/static/missing-face.png'" class="face"></image>
+				<image class="face" :src="userInfo.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
 			</view>
 			<text class="cell-tip">更换头像</text>
 			<text class="cell-more yticon icon-you"></text>
@@ -44,6 +44,9 @@
 </template>
 
 <script>
+	import {
+		url_base_image
+	} from '../../common/config/index.js'
 	import {  
 	    mapMutations,
 		mapGetters
@@ -51,7 +54,7 @@
 	export default {
 		data() {
 			return {
-				
+				url_base_image
 			};
 		},
 		computed: {
@@ -103,6 +106,7 @@
 		display: block;
 		width: 102upx;
 		height: 102upx;
+		border-radius: 50%;
 	}
 	page{
 		background: $page-color-base;

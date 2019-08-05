@@ -5,7 +5,7 @@
 			<image class="bg" src="/static/bj.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.head_ico || '/static/missing-face.png'"></image>
+					<image class="portrait" :src="userInfo.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
 				</view>
 				<view class="info-box">
 					<view class="username">{{userInfo.username || '游客'}}</view>
@@ -94,6 +94,9 @@
 <script>  
 	import listCell from '@/components/mix-list-cell'
 	import mineModel from '../../api/mine/index.js'
+	import {
+		url_base_image
+	} from '../../common/config/index.js'
     import {  
         mapGetters,
 		mapActions
@@ -105,6 +108,7 @@
 		},
 		data(){
 			return {
+				url_base_image,
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
 				moving: false,

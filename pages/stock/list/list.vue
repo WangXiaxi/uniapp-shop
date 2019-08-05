@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<view class="list">
-			<view class="item">
+			<view class="item" v-for="(item, index) in list" :key="index">
 				<view class="tit">股权变更</view>
-				<view class="time">2019-06-15 11:24:00</view>
-				<view class="des">用户忆杭1[18877744754]增加500股权，目前有5500股权。</view>
+				<view class="time">{{item.datetime | fill}}</view>
+				<view class="des">[{{item.datetime | fill}}] {{item.type ? '增加' : '减少'}}股权 <text class="red">{{item.value}}</text></view>
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
@@ -13,6 +13,7 @@
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
+	import stockModel from '../../../api/stock/index.js'
 
 	export default {
 		components: {
@@ -54,9 +55,14 @@
 					this.page = 1;
 					this.list = [];
 				}
-				setTimeout(() => {
+				
+				stockModel.getUcenterStocksLog({ page: this.page, limit: 10 }).then(res => {
+					this.list.push(...res.data.data)
+					this.pages = res.data.totalPage
+					uni.stopPullDownRefresh();
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
+				}).catch(() => {
 				})
 				
 			}
@@ -83,6 +89,9 @@
 		.des {
 			font-size: 24upx;
 			margin-top: 20upx;
+		}
+		.red {
+			color: $base-color;
 		}
 	}
 </style>
