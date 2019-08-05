@@ -279,7 +279,8 @@
 		}, {
 			"path": "pages/money/vipsDetails",
 			"style": {
-				"navigationBarTitleText": "VIP消费明细"
+				"navigationBarTitleText": "VIP消费明细",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/money/bindBank",

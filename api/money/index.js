@@ -7,12 +7,15 @@ import Request from '../../utils/request'
  */
 
 class MoneyModel extends Request {
-	// 地址获取接口
+	// 余额明细
 	getUcenterAccountLog(params) {
 		return this.get('/service/getUcenterAccountLog', { ...params, paging: true })
 	}
 	
-	
+	// vip消费
+	getUcenterRevisitLog(params) {
+		return this.get('/service/getUcenterRevisitLog', { ...params, paging: true })
+	}
 }
 
 const moneyModel = new MoneyModel()

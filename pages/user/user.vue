@@ -42,11 +42,11 @@
 			<image class="arc" src="/static/arc.png"></image>
 			
 			<view class="tj-sction">
-				<view class="tj-item">
+				<view class="tj-item" @click="navTo('/pages/money/money')">
 					<text class="num">{{ userInfo.balance || '0.00' }}</text>
 					<text>账户余额</text>
 				</view>
-				<view class="tj-item">
+				<view class="tj-item" @click="navTo('/pages/money/vipsDetails')">
 					<text class="num">{{ userInfo.revisit || '0.00' }}</text>
 					<text>VIP消费</text>
 				</view>

@@ -25,7 +25,7 @@
 			</view>
 		</view>
 		<view class="search-box">
-			<input class="input" type="text" v-model="search" @confirm="handleSearch" placeholder="请输入关键字" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="keyworld" @confirm="handleSearch" placeholder="请输入关键字" placeholder-class="placeholder" />
 			<view class="btn" @click="handleSearch">搜索</view>
 		</view>
 		<view class="item-list">
@@ -53,24 +53,70 @@
 				</view>
 			</view>
 		</view>
+		<uni-load-more :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
 <script>
+	import recommendModel from '../../api/recommend/index.js'
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 	import {
 		mapGetters
 	} from 'vuex';
-
+	
 	export default {
+		components: {
+			uniLoadMore
+		},
 		data() {
 			return {
-				search: ''
+				keyworld: '',
+				loadingType: 'more', //加载更多状态
+				list: [],
+				page: 0,
+				pages: 0 // 总页数
 			};
 		},
 		computed: {
 			...mapGetters(['userInfo'])
 		},
+		onLoad(options) {
+			this.loadData();
+		},
+		//下拉刷新
+		onPullDownRefresh() {
+			this.loadData('refresh');
+		},
+		//加载更多
+		onReachBottom() {
+			this.loadData();
+		},
 		methods: {
+			loadData(type = 'add', loading) {
+				//没有更多直接返回
+				if (type === 'add') {
+					if (this.loadingType === 'nomore') {
+						return;
+					}
+					this.page = this.page + 1;
+					this.loadingType = 'loading';
+				} else {
+					this.loadingType = 'loading';
+				}
+				
+				if (type === 'refresh') {
+					this.page = 1;
+					this.list = [];
+				}
+				recommendModel.getMyTeam({ page: this.page, limit: 10, keyworld: this.keyworld }).then(res => {
+					this.list.push(...res.data.data)
+					this.pages = res.data.totalPage
+					uni.stopPullDownRefresh();
+					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
+					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
+				}).catch(() => {
+				})
+			},
 			handleSearch() { // 搜索操作
 			},
 			navTo(url){
