@@ -2,8 +2,8 @@
 	<view class="content">
 		<view class="top-part">
 			<image class="bg" src="/static/qbbj.png"></image>
-			<view class="tit">总余额<text>（￥）</text></view>
-			<view class="num">25522</view>
+			<view class="tit">余额<text>(￥)</text></view>
+			<view class="num">{{userInfo.remain_balance | nf }}</view>
 		</view>
 		<view class="center-part">
 			<view class="type-list">
@@ -12,25 +12,29 @@
 			</view>
 			<view class="money-box" v-if="type === 0">
 				<view class="item">
-					<view class="num">8000</view>
+					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
 					<view class="name">分享佣金(￥)</view>
 				</view>
 				<view class="item">
-					<view class="num">8000</view>
+					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+
 					<view class="name">管理佣金(￥)</view>
 				</view>
 				<view class="item">
-					<view class="num">8000</view>
+					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+
 					<view class="name">分红(%)</view>
 				</view>
 			</view>
-			<view class="money-box"v-if="type === 1">
+			<view class="money-box" v-if="type === 1">
 				<view class="item">
-					<view class="num">8000</view>
+					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+
 					<view class="name">零售佣金(￥)</view>
 				</view>
 				<view class="item">
-					<view class="num">8000</view>
+					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+
 					<view class="name">店铺佣金(￥)</view>
 				</view>
 			</view>
@@ -45,7 +49,7 @@
 			<view v-else @click="navTo('/pages/money/bindBank')" class="bd-btn">绑定银行卡</view>
 		</view>
 		<view class="ic-box">
-			<list-cell image="money-3" title="提现" @eventClick="navTo('/pages/set/set')"></list-cell>
+			<list-cell image="money-3" title="提现" @eventClick="navTo('/pages/money/withdraw')"></list-cell>
 			<list-cell image="money-1" title="充值" @eventClick="navTo('/pages/set/set')"></list-cell>
 			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
 			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
@@ -59,11 +63,16 @@
 	import listCell from '@/components/mix-list-cell'
 	import moneyModel from '../../api/money/index.js'
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
-
+	import {
+		mapGetters,
+	} from 'vuex';
 	export default {
 		components: {
 			listCell,
 			mixLoading
+		},
+		computed: {
+			...mapGetters(['userInfo'])
 		},
 		data() {
 			return {
@@ -88,11 +97,11 @@
 			changeType(type) {
 				this.type = type
 			},
-			navTo(url){
-				uni.navigateTo({  
+			navTo(url) {
+				uni.navigateTo({
 					url
-				})  
-			}, 
+				})
+			},
 		}
 	}
 </script>
@@ -101,23 +110,26 @@
 	page {
 		background: #f5f5f5;
 	}
+
 	.top-part {
 		position: relative;
 		width: 100%;
 		height: 370upx;
 		text-align: left;
 		padding-left: 32upx;
+
 		.tit {
 			color: #fff;
 			position: relative;
 			padding-top: 50upx;
 			z-index: 1;
 			font-size: 28upx;
+
 			text {
 				font-size: 20upx;
 			}
 		}
-	
+
 		.num {
 			position: relative;
 			z-index: 1;
@@ -125,7 +137,7 @@
 			color: #fff;
 			font-size: 66upx;
 		}
-	
+
 		.bg {
 			position: absolute;
 			left: 0;
@@ -134,6 +146,7 @@
 			height: 370upx;
 		}
 	}
+
 	.center-part {
 		position: relative;
 		z-index: 2;
@@ -142,9 +155,11 @@
 		background: #fff;
 		// box-shadow: 0px 12upx 18upx 2upx rgba(0, 0, 0, 0.1);
 		padding: 30upx 30upx 40upx;
+
 		.type-list {
 			display: flex;
 			height: 44upx;
+
 			.type {
 				font-size: 24upx;
 				color: #666666;
@@ -155,9 +170,11 @@
 				letter-spacing: 4upx;
 				transition: all 0.3s;
 			}
+
 			.act {
 				font-size: 32upx;
 				color: $base-color;
+
 				&:after {
 					content: ' ';
 					position: absolute;
@@ -171,15 +188,19 @@
 				}
 			}
 		}
+
 		.money-box {
 			display: flex;
 			margin-top: 72upx;
 			text-align: center;
+
 			.item {
 				flex: 1;
+
 				.num {
 					font-size: 44upx;
 				}
+
 				.name {
 					font-size: 24upx;
 					color: #999999;
@@ -187,6 +208,7 @@
 			}
 		}
 	}
+
 	.card-box {
 		position: relative;
 		margin: 20upx 32upx 0;
@@ -195,18 +217,22 @@
 		padding: 30upx 30upx 30upx;
 		display: flex;
 		align-items: center;
+
 		.card-img {
 			width: 80upx;
 			height: 80upx;
 		}
+
 		.info {
 			flex: 1;
 			width: 0;
 			margin-left: 30upx;
+
 			.name {
 				font-size: 36upx;
 				letter-spacing: 8upx;
 			}
+
 			.des {
 				margin-top: 20upx;
 				font-size: 24upx;
@@ -214,6 +240,7 @@
 				letter-spacing: 4upx;
 			}
 		}
+
 		.bd-btn {
 			width: 150upx;
 			height: 48upx;
@@ -226,17 +253,20 @@
 			align-items: center;
 		}
 	}
+
 	.ic-box {
 		margin: 20upx 32upx 0;
 		border-radius: 10upx;
 		background: #fff;
 	}
+
 	.descript {
 		font-size: 24upx;
 		color: #666666;
 		text-align: center;
 		margin-top: 20upx;
 		margin-bottom: 40upx;
+
 		.text {
 			color: $base-color;
 		}

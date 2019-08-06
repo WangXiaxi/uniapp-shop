@@ -28,9 +28,6 @@
 							<view class="code-box-item">{{password[4] && '*' || ''}}</view>
 							<view class="code-box-item">{{password[5] && '*' || ''}}</view>
 						</view>
-						<view class="forget">
-							<text>忘记密码</text>
-						</view>
 					</view>
 				</view>
 				<input type="number" v-model="password" />
@@ -84,14 +81,14 @@
 				}
 			},
 			shuffle(a) {
-				var len = a.length;
-				for (var i = 0; i < len; i++) {
-					var end = len - 1;
-					var index = (Math.random() * (end + 1)) >> 0;
-					var t = a[end];
-					a[end] = a[index];
-					a[index] = t;
-				}
+				// let len = a.length;
+				// for (let i = 0; i < len; i++) {
+				// 	let end = len - 1;
+				// 	let index = (Math.random() * (end + 1)) >> 0;
+				// 	let t = a[end];
+				// 	a[end] = a[index];
+				// 	a[index] = t;
+				// }
 				return a;
 			}
 		},

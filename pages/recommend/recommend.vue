@@ -124,6 +124,7 @@
 				})
 			},
 			handleSearch() { // 搜索操作
+				this.loadData('refresh');
 			},
 			navTo(url){
 				uni.navigateTo({  

@@ -30,6 +30,10 @@ class LoginModel extends Request {
 	getCaptcha() {
 		return getCaptcha('getCaptcha')
 	}
+	// 修改密码
+	changePassword(params) {
+		return this.post('/service/changePassword', params)
+	}
 	/**
 	 * 验证表单
 	 */
