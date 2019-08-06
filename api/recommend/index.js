@@ -9,7 +9,7 @@ import Request from '../../utils/request'
 class RecommendModel extends Request {
 	// 获取我的推荐
 	getMyTeam(params) {
-		return this.get('/service/getMyTeam', { ...params, paging: true })
+		return this.get('/service/getMyTeam', { ...params })
 	}
 }
 

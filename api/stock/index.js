@@ -9,7 +9,9 @@ import Request from '../../utils/request'
 class StockModel extends Request {
 	// 获取股权
 	getUcenterStocksLog(params) {
-		return this.get('/service/getUcenterStocksLog', { ...params, paging: true })
+		return this.get('/service/getUcenterStocksLog', { ...params,
+			paging: true
+		})
 	}
 }
 

@@ -62,15 +62,7 @@ export default class Request {
 	setConfig(f) {
 		this.config = f(this.config)
 	}
-
-	request(options = {}) {
-		// 签名 时间戳 随机数
-		options.baseUrl = options.baseUrl || this.config.baseUrl
-		options.dataType = options.dataType || this.config.dataType
-		options.url = Request.posUrl(options.url) ? options.url : (options.baseUrl + options.url)
-		options.data = options.data || {}
-		options.method = options.method || this.config.method
-		options.header = options.header || this.config.header[options.method]
+	static setPubParams(options = {}) {
 		const token = store.getters.token
 		if (token) Object.assign(options.header, {
 			token
@@ -81,6 +73,16 @@ export default class Request {
 			time,
 			sign: md5(sign)
 		})
+	}
+	request(options = {}) {
+		// 签名 时间戳 随机数
+		options.baseUrl = options.baseUrl || this.config.baseUrl
+		options.dataType = options.dataType || this.config.dataType
+		options.url = Request.posUrl(options.url) ? options.url : (options.baseUrl + options.url)
+		options.data = options.data || {}
+		options.method = options.method || this.config.method
+		options.header = options.header || this.config.header[options.method]
+		Request.setPubParams(options)
 		if (options.qs) options.data = qs.stringify(options.data)
 		return new Promise((resolve, reject) => {
 			let next = true
@@ -107,7 +109,7 @@ export default class Request {
 						case 'token30401':
 							// 清空数据并跳转至登陆页
 							store.commit('logout')
-							store.commit('logout')
+							store.commit('clearOut')
 							if (!options.noredirect) uni.redirectTo({
 								url: '/pages/public/login'
 							})
@@ -149,5 +151,51 @@ export default class Request {
 		options.data = data
 		options.method = 'POST'
 		return this.request(options)
+	}
+	uploadFile(url, filePath, data, options = {}) {
+		options.url = url
+		options.data = data
+		options.name = 'file'
+		options.header = options.header || {}
+		options.baseUrl = options.baseUrl || this.config.baseUrl
+		options.url = Request.posUrl(options.url) ? options.url : (options.baseUrl + options.url)
+		options.formData = options.data || {}
+		options.filePath = filePath
+		Request.setPubParams(options)
+		return new Promise((resolve, reject) => {
+			uni.uploadFile(Object.assign(options, {
+				complete: (response) => {
+					let statusCode = response.statusCode
+					let data = JSON.parse(response.data)
+					if (statusCode === 200) { // 成功
+						switch (data.status) {
+							case 'success':
+								resolve(data)
+								break
+							case 'fail':
+								uni.showToast({
+									title: data.error,
+									duration: 1500,
+									mask: false,
+									icon: 'none'
+								})
+								reject(response)
+								break
+							case 'token30401':
+								// 清空数据并跳转至登陆页
+								store.commit('logout')
+								store.commit('clearOut')
+								if (!options.noredirect) uni.redirectTo({
+									url: '/pages/public/login'
+								})
+								reject(response)
+								break
+						}
+					} else {
+						reject(response)
+					}
+				}
+			}))
+		})
 	}
 }

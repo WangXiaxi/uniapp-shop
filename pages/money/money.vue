@@ -38,12 +38,11 @@
 		<view class="card-box">
 			<image class="card-img" mode="aspectFit" src="../../static/card.png"></image>
 			<view class="info">
-				<view class="name">中信银行</view>
-				<!-- <view class="name">----</view> -->
-				<view class="des">尾号8025的储蓄卡</view>
+				<view class="name">{{detail.bank | fill('----')}}</view>
+				<view class="des">尾号{{(detail.card_num ? detail.card_num.substr(-4) : false) | fill('----')}}的储蓄卡</view>
 			</view>
-			<view class="bd-btn" @click="navTo('/pages/money/bindBank')">更换银行卡</view>
-			<!-- <view class="bd-btn">绑定银行卡</view> -->
+			<view v-if="detail.bank" class="bd-btn" @click="navTo(`/pages/money/bindBank?data=JSON.stringify(detail)`)">更换银行卡</view>
+			<view v-else @click="navTo('/pages/money/bindBank')" class="bd-btn">绑定银行卡</view>
 		</view>
 		<view class="ic-box">
 			<list-cell image="money-3" title="提现" @eventClick="navTo('/pages/set/set')"></list-cell>
@@ -52,22 +51,40 @@
 			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
 		</view>
 		<view class="descript">将遵循杭州义桥网络科技有限公司<text class="text">《冰酒协议》</text></view>
+		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
 <script>
 	import listCell from '@/components/mix-list-cell'
+	import moneyModel from '../../api/money/index.js'
+	import mixLoading from '../../components/mix-loading/mix-loading.vue'
 
 	export default {
 		components: {
-			listCell
+			listCell,
+			mixLoading
 		},
 		data() {
 			return {
-				type: 0 // 0 市场 1 商城
+				pageLoading: false,
+				type: 0, // 0 市场 1 商城
+				detail: {}
 			}
 		},
+		onLoad() {
+			this.loadData()
+		},
 		methods: {
+			loadData() { // 获取信息
+				this.pageLoading = true
+				moneyModel.getMemberBankInfo().then(res => {
+					Object.assign(this.detail, res.data)
+					this.pageLoading = false
+				}).catch(res => {
+					this.pageLoading = false
+				})
+			},
 			changeType(type) {
 				this.type = type
 			},

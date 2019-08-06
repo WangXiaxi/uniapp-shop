@@ -7,7 +7,7 @@
 			<text class="cell-tip">更换头像</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		
+
 		<view class="list-cell m-t b-b">
 			<text class="cell-tit">昵称</text>
 			<text class="cell-tip">{{userInfo.username}}</text>
@@ -26,7 +26,7 @@
 			<text class="cell-tit">修改提现密码</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		
+
 		<view class="list-cell b-b" @click="navTo('/pages/address/address')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">我的收货地址</text>
 			<text class="cell-more yticon icon-you"></text>
@@ -44,13 +44,15 @@
 </template>
 
 <script>
+	import mineModel from '../../api/mine/index.js'
 	import {
 		url_base_image
 	} from '../../common/config/index.js'
-	import {  
-	    mapMutations,
-		mapGetters
-	} from 'vuex';
+	import {
+		mapMutations,
+		mapGetters,
+		mapActions
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -60,43 +62,48 @@
 		computed: {
 			...mapGetters(['userInfo']),
 		},
-		methods:{
+		methods: {
 			...mapMutations(['logout', 'clearOut']),
+			...mapActions(['getUserInfo']),
 			changeHead() { // 修改头像
 				uni.chooseImage({
 					count: 1,
 					sizeType: ['original'],
 					success: (data) => {
-						console.log(data)
+						const tempFilePaths = data.tempFilePaths;
+						uni.showLoading({
+							title: '请稍后'
+						})
+						console.log(mineModel.uploadUserIco(tempFilePaths[0]).then(res => {
+							uni.hideLoading()
+							this.$api.msg('头像上传成功！')
+							this.getUserInfo()
+						}).catch(res => {
+							uni.hideLoading()
+						}))
 					}
 				})
 			},
-			navTo(url){
-				uni.navigateTo({  
+			navTo(url) {
+				uni.navigateTo({
 					url
 				})
 			},
 			//退出登录
-			toLogout(){
+			toLogout() {
 				uni.showModal({
-				    content: '确定要退出登录么',
-				    success: (e)=>{
-				    	if(e.confirm){
-				    		this.logout();
+					content: '确定要退出登录么',
+					success: (e) => {
+						if (e.confirm) {
+							this.logout();
 							this.clearOut();
-				    		setTimeout(()=>{
-				    			uni.navigateBack();
-				    		}, 200)
-				    	}
-				    }
+							setTimeout(() => {
+								uni.navigateBack();
+							}, 200)
+						}
+					}
 				});
-			},
-			//switch
-			switchChange(e){
-				let statusTip = e.detail.value ? '打开': '关闭';
-				this.$api.msg(`${statusTip}消息推送`);
-			},
-
+			}
 		}
 	}
 </script>
@@ -108,50 +115,61 @@
 		height: 102upx;
 		border-radius: 50%;
 	}
-	page{
+
+	page {
 		background: $page-color-base;
 	}
-	.list-cell{
-		display:flex;
-		align-items:center;
+
+	.list-cell {
+		display: flex;
+		align-items: center;
 		padding: 20upx $page-row-spacing;
-		line-height:60upx;
-		position:relative;
+		line-height: 60upx;
+		position: relative;
 		background: #fff;
 		justify-content: center;
-		&.log-out-btn{
+
+		&.log-out-btn {
 			margin-top: 40upx;
-			.cell-tit{
+
+			.cell-tit {
 				color: $uni-color-primary;
 				text-align: center;
 				margin-right: 0;
 			}
 		}
-		&.cell-hover{
-			background:#fafafa;
+
+		&.cell-hover {
+			background: #fafafa;
 		}
-		&.b-b:after{
+
+		&.b-b:after {
 			left: 30upx;
 		}
-		&.m-t{
-			margin-top: 16upx; 
+
+		&.m-t {
+			margin-top: 16upx;
 		}
-		.cell-more{
-			font-size:$font-lg;
-			color:$font-color-light;
-			margin-left:10upx;
+
+		.cell-more {
+			font-size: $font-lg;
+			color: $font-color-light;
+			margin-left: 10upx;
 		}
-		.cell-tit{
+
+		.cell-tit {
 			flex: 1;
 			font-size: $font-base + 2upx;
 			color: $font-color-dark;
-			margin-right:10upx;
+			margin-right: 10upx;
 		}
-		.cell-tip{
+
+		.cell-tip {
 			font-size: $font-base;
 			color: $font-color-light;
 		}
-		switch{
+
+		switch {
 			transform: translateX(16upx) scale(.84);
 		}
 	}

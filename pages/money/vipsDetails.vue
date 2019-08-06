@@ -6,7 +6,7 @@
 				<view class="mian-info">
 					<view class="top">
 						<text class="type">{{item.type === '0'? '增加' : '减少' }}</text>
-						<text class="detail">({{ item.note | fill }})</text>
+						<text class="detail" v-if="item.note">({{ item.note | fill }})</text>
 					</view>
 					<view class="time">{{item.time}}</view>
 				</view>

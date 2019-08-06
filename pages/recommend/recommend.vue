@@ -4,7 +4,8 @@
 			<image class="bg" src="/static/qbbj.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.head_ico || '/static/missing-face.png'"></image>
+					<image class="portrait" :src="userInfo.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
+
 				</view>
 				<view class="info-box">
 					<view class="username">
@@ -16,9 +17,9 @@
 					</view>
 					<view class="tips">
 						<image class="ico" src="/static/icon/mobile.png"></image>
-						<view class="mobile text">15058559592(王爸爸)</view>
+						<view class="mobile text">{{userInfo.mobile}}({{userInfo.true_name | fill}})</view>
 						<image class="ico" src="/static/icon/num.png"></image>
-						<view class="num text">3562</view>
+						<view class="num text">{{userInfo.team_sum | fill(0)}}</view>
 					</view>
 				</view>
 				<image class="ico-add" src="/static/icon/add.png" @click="navTo('/pages/recommend/add')"></image>
@@ -29,24 +30,24 @@
 			<view class="btn" @click="handleSearch">搜索</view>
 		</view>
 		<view class="item-list">
-			<view class="item">
+			<view class="item" v-for="(item, index) in list" :key="index">
 				<view class="user-info-box">
 					<view class="portrait-box">
-						<image class="portrait" :src="userInfo.head_ico || '/static/missing-face.png'"></image>
+						<image class="portrait" :src="item.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
 					</view>
 					<view class="info-box">
 						<view class="username">
-							<view class="name">{{userInfo.username}}</view>
-							<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
-							<view class="pick-tip" v-if="!userInfo.is_agent">
-								<image src="/static/icon/shop.png" class="shop"></image>{{userInfo.agent_text}}社区店
+							<view class="name">{{item.username}}</view>
+							<image class="vip-tip" src="/static/icon/vip.png" v-if="item.is_vip"></image>
+							<view class="pick-tip" v-if="!item.is_agent">
+								<image src="/static/icon/shop.png" class="shop"></image>{{item.agent_text}}社区店
 							</view>
 						</view>
 						<view class="tips">
 							<image class="ico" src="/static/icon/mobile.png"></image>
-							<view class="mobile text">15058559592(王爸爸)</view>
+							<view class="mobile text">{{item.mobile}}({{item.true_name | fill}})</view>
 							<image class="ico" src="/static/icon/num.png"></image>
-							<view class="num text">3562</view>
+							<view class="num text">{{item.team_sum | fill(0)}}</view>
 						</view>
 					</view>
 					<image class="ico-more" src="/static/icon/more.png" @click="navTo('/pages/recommend/register')"></image>
@@ -61,6 +62,10 @@
 	import recommendModel from '../../api/recommend/index.js'
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 	import {
+		url_base_image
+	} from '../../common/config/index.js'
+
+	import {
 		mapGetters
 	} from 'vuex';
 	
@@ -70,7 +75,8 @@
 		},
 		data() {
 			return {
-				keyworld: '',
+				url_base_image,
+				keyworld: ' ',
 				loadingType: 'more', //加载更多状态
 				list: [],
 				page: 0,
@@ -108,7 +114,7 @@
 					this.page = 1;
 					this.list = [];
 				}
-				recommendModel.getMyTeam({ page: this.page, limit: 10, keyworld: this.keyworld }).then(res => {
+				recommendModel.getMyTeam({ page: this.page, limit: 10, keyworld: this.keyworld ? this.keyworld: ' ' }).then(res => {
 					this.list.push(...res.data.data)
 					this.pages = res.data.totalPage
 					uni.stopPullDownRefresh();

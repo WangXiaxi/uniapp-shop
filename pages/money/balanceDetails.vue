@@ -6,7 +6,7 @@
 				<view class="mian-info">
 					<view class="top">
 						<text class="type">{{item.type === '0'? '增加' : '减少' }}</text>
-						<text class="detail">({{ item.note | fill }})</text>
+						<text class="detail" v-if="item.note">({{ item.note | fill }})</text>
 					</view>
 					<view class="time">{{item.time}}</view>
 				</view>
@@ -63,19 +63,21 @@
 				} else {
 					this.loadingType = 'loading';
 				}
-				
+
 				if (type === 'refresh') {
 					this.page = 1;
 					this.list = [];
 				}
-				moneyModel.getUcenterAccountLog({ page: this.page, limit: 10 }).then(res => {
+				moneyModel.getUcenterAccountLog({
+					page: this.page,
+					limit: 10
+				}).then(res => {
 					this.list.push(...res.data.data)
 					this.pages = res.data.totalPage
 					uni.stopPullDownRefresh();
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
-				}).catch(() => {
-				})
+				}).catch(() => {})
 			}
 		}
 	}
@@ -86,38 +88,46 @@
 		.item {
 			padding: 32upx;
 			display: flex;
-			border-bottom: 1upx solid #F2F2F2; 
+			border-bottom: 1upx solid #F2F2F2;
+
 			.img {
 				width: 64upx;
 				height: 64upx;
 			}
+
 			.mian-info {
 				margin-left: 70upx;
 				flex: 1;
 				width: 0;
+
 				.top {
 					font-size: 0;
 				}
+
 				.type {
 					font-size: 26upx;
 					color: #111;
 				}
+
 				.detail {
 					font-size: 26upx;
 					color: #666;
-					word-wrap:break-word;
+					word-wrap: break-word;
 				}
+
 				.time {
 					color: #666;
 					font-size: 24upx;
 					margin-top: 24upx;
 				}
 			}
+
 			.price-info {
 				.price {
 					font-size: 28upx;
 					color: #111;
 				}
+
 				.red {
 					color: $base-color;
 				}

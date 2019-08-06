@@ -26,7 +26,13 @@ class MineModel extends Request {
 	}
 	// 获取用户信息
 	getMemberInfo() {
-		return this.get('/service/getMemberInfo', {}, { noredirect: true })
+		return this.get('/service/getMemberInfo', {}, {
+			noredirect: true
+		})
+	}
+	// 上传头像
+	uploadUserIco(file, params = {}) {
+		return this.uploadFile('/service/uploadUserIco', file, params)
 	}
 	/**
 	 * 验证表单

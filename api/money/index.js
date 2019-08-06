@@ -9,12 +9,21 @@ import Request from '../../utils/request'
 class MoneyModel extends Request {
 	// 余额明细
 	getUcenterAccountLog(params) {
-		return this.get('/service/getUcenterAccountLog', { ...params, paging: true })
+		return this.get('/service/getUcenterAccountLog', { ...params,
+			paging: true
+		})
 	}
-	
+
 	// vip消费
 	getUcenterRevisitLog(params) {
-		return this.get('/service/getUcenterRevisitLog', { ...params, paging: true })
+		return this.get('/service/getUcenterRevisitLog', { ...params,
+			paging: true
+		})
+	}
+	// 获取银行卡
+	getMemberBankInfo(params) {
+		return this.get('/service/getMemberBankInfo', { ...params
+		})
 	}
 }
 
