@@ -17,7 +17,7 @@
 			</view>
 		</view>
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
-		<pay-password :show="show"></pay-password>
+		<pay-password :show="show" @close="close" @success="success"></pay-password>
 	</view>
 </template>
 
@@ -26,6 +26,7 @@
 	import moneyModel from '../../api/money/index.js'
 	import {
 		mapGetters,
+		mapActions
 	} from 'vuex';
 	const fields = {
 		amount: '',
@@ -46,8 +47,29 @@
 			...mapGetters(['userInfo'])
 		},
 		methods: {
+			...mapActions(['getUserInfo']),
+			success(password) {
+				this.close()
+				const { amount, note } = this.formData
+				const sendData = { amount, note, password }
+				this.btnLoading = true
+				moneyModel.withdraw(sendData).then(res => {
+					this.btnLoading = false
+					this.$api.msg('提现申请提交成功，将在两个工作日内到账！', 1500)
+					this.getUserInfo()
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1500)
+				}).catch(() => {
+					this.btnLoading = false
+				})
+			},
+			close() {
+				this.show = false
+			},
 			confirm() {
 				if (!this.formData.amount || Number(this.formData.amount) > Number(this.userInfo.remain_balance)) return this.$api.msg('提现金额必填并且必须小于账户余额！')
+				if (!this.formData.note)  return this.$api.msg('请填写备注！')
 				this.show = true
 			}
 		},

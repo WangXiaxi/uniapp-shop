@@ -43,7 +43,7 @@
 			
 			<view class="tj-sction">
 				<view class="tj-item" @click="navTo('/pages/money/money')">
-					<text class="num">{{ userInfo.balance || '0.00' }}</text>
+					<text class="num">{{ userInfo.remain_balance || '0.00' }}</text>
 					<text>账户余额</text>
 				</view>
 				<view class="tj-item" @click="navTo('/pages/money/vipsDetails')">

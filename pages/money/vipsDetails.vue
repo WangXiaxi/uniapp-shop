@@ -43,6 +43,16 @@
 		onLoad(options) {
 			this.loadData();
 		},
+		// #ifndef MP
+		onNavigationBarButtonTap(e) {
+			const index = e.index;
+			if (index === 0) {
+				uni.navigateTo({
+					url: '/pages/money/transVip'
+				})
+			}
+		},
+		// #endif
 		//下拉刷新
 		onPullDownRefresh() {
 			this.loadData('refresh');

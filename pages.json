@@ -145,8 +145,7 @@
 				"navigationBarBackgroundColor": "#EA1212",
 				"navigationBarTextStyle": "white",
 				"app-plus": {
-					"titleNView": {
-					}
+					"titleNView": {}
 				}
 			}
 		}, {
@@ -291,7 +290,18 @@
 			"path": "pages/money/vipsDetails",
 			"style": {
 				"navigationBarTitleText": "VIP消费明细",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"width": "50px",
+							"text": "转账",
+							"fontSize": "15",
+							"color": "#666"
+						}]
+					}
+				}
+
 			}
 		}, {
 			"path": "pages/money/bindBank",
@@ -302,6 +312,11 @@
 			"path": "pages/money/trans",
 			"style": {
 				"navigationBarTitleText": "转账"
+			}
+		},{
+			"path": "pages/money/transVip",
+			"style": {
+				"navigationBarTitleText": "VIP积分转账"
 			}
 		}, {
 			"path": "pages/recommend/add",
@@ -321,10 +336,10 @@
 				}
 			}
 		}
-		
-	    ,{
-            "path" : "pages/recommend/recommend",
-            "style" : {
+
+		, {
+			"path": "pages/recommend/recommend",
+			"style": {
 				"navigationBarTitleText": "我的推荐",
 				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#EA1212",
@@ -335,8 +350,8 @@
 					}
 				}
 			}
-        }
-    ],
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

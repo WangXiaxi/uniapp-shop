@@ -32,12 +32,8 @@
 				</view>
 				<input type="number" v-model="password" />
 				<view class="keyboard flex-row flex-wrap">
-					<button v-for="item in list.slice(0, 9)" class="keyboard-item" @click="key(item)" :key="item">
+					<button v-for="(item, index) in list" class="keyboard-item" :class="{ hide: index === 9 }" @click="key(item, index)" :key="index">
 						<text>{{item}}</text>
-					</button>
-					<button class="keyboard-item hide">-</button>
-					<button class="keyboard-item" @click="key(list[9])">
-						<text>{{list[9]}}</text>
 					</button>
 					<button class="keyboard-item delte" @click="del()">
 						<image class="" src="/static/delte.png" mode="aspectFill" :lazy-load="true"></image>
@@ -50,25 +46,24 @@
 </template>
 
 <script>
+	const field = '[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]'
 	export default {
 		data() {
 			return {
 				password: '',
-				list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+				list: []
 			};
 		},
 		props: ['show'],
+		computed: {
+		},
 		methods: {
-			key(key) {
+			key(key, index) {
+				if (index === 9) return
 				if (this.password.length < 6) {
 					this.password += key
 					if (this.password.length === 6) {
-						// 尝试校验密码
-						uni.showToast({
-							title: '支付密码正确',
-							icon: 'nonea'
-						})
-						this.$emit('close', false)
+						this.$emit('success', this.password)
 					}
 				}
 			},
@@ -80,15 +75,19 @@
 					this.password = this.password.substring(0, this.password.length - 1)
 				}
 			},
+			clear() {
+				this.password = ''
+			},
 			shuffle(a) {
-				// let len = a.length;
-				// for (let i = 0; i < len; i++) {
-				// 	let end = len - 1;
-				// 	let index = (Math.random() * (end + 1)) >> 0;
-				// 	let t = a[end];
-				// 	a[end] = a[index];
-				// 	a[index] = t;
-				// }
+				const len = a.length;
+				for (let i = 0; i < len; i++) {
+					let end = len - 1;
+					let index = (Math.random() * (end + 1)) >> 0;
+					let t = a[end];
+					a[end] = a[index];
+					a[index] = t;
+				}
+				a.splice(9, 0, '-')
 				return a;
 			}
 		},
@@ -96,10 +95,11 @@
 			show: {
 				handler(v) {
 					if (v) {
-						this.shuffle(this.list)
+						this.list = this.shuffle(JSON.parse(field))
+					} else {
+						this.clear()
 					}	
-				},
-				immediate: true
+				}
 			}
 		},
 	}
@@ -234,6 +234,7 @@
 	}
 
 	.password.plane {
+		visibility: hidden;
 		position: fixed;
 		width: 100vw;
 		height: 100vh;
@@ -247,6 +248,7 @@
 	}
 
 	.password.plane.active {
+		visibility: visible;
 		transition-delay: 0s;
 		z-index: 999;
 	}
@@ -283,7 +285,8 @@
 	}
 
 	.password.plane.active .plane-content {
-		transform: translateY(0)
+		transform: translateY(0);
+		transition-delay: 0.3s;
 	}
 
 	.password .code {

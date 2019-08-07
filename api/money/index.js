@@ -30,6 +30,16 @@ class MoneyModel extends Request {
 		return this.post('/service/withdraw', { ...params
 		})
 	}
+	// 用户名验证接口
+	validateUsername(params) {
+		return this.post('/service/validateUsername', { ...params
+		})
+	}
+	// 用户转账接口
+	trans2user(params) {
+		return this.post('/service/trans2user', { ...params
+		})
+	}
 	/**
 	 * 验证表单
 	 */
