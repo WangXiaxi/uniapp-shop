@@ -176,11 +176,13 @@
 				this.btnLoading = true
 				mineModel.addressEdit(sendData).then(res => {
 					this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-					this.$api.prePage().refreshList();
+					if(this.$api.prePage()) {
+						this.$api.prePage().refreshList();
+					}
 					setTimeout(() => {
 						this.btnLoading = false
 						uni.navigateBack()
-					}, 800)
+					}, 1500)
 				}).catch(() =>{
 					this.btnLoading = false
 				})

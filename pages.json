@@ -281,6 +281,11 @@
 				"navigationBarTitleText": "忘记登陆密码"
 			}
 		}, {
+			"path": "pages/money/invest",
+			"style": {
+				"navigationBarTitleText": "充值"
+			}
+		}, {
 			"path": "pages/money/balanceDetails",
 			"style": {
 				"navigationBarTitleText": "余额明细",
@@ -313,7 +318,7 @@
 			"style": {
 				"navigationBarTitleText": "转账"
 			}
-		},{
+		}, {
 			"path": "pages/money/transVip",
 			"style": {
 				"navigationBarTitleText": "VIP积分转账"

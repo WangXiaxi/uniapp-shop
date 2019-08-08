@@ -39,8 +39,8 @@
 						<view class="username">
 							<view class="name">{{item.username}}</view>
 							<image class="vip-tip" src="/static/icon/vip.png" v-if="item.is_vip"></image>
-							<view class="pick-tip" v-if="!item.is_agent">
-								<image src="/static/icon/shop.png" class="shop"></image>{{item.agent_text}}社区店
+							<view class="pick-tip" v-if="item.is_agent">
+								<image src="/static/icon/shop.png" class="shop"></image>{{item.agent_text}}
 							</view>
 						</view>
 						<view class="tips">
@@ -50,7 +50,8 @@
 							<view class="num text">{{item.team_sum | fill(0)}}</view>
 						</view>
 					</view>
-					<image class="ico-more" src="/static/icon/more.png" @click="navTo('/pages/recommend/register')"></image>
+					<image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navTo(`/pages/recommend/register?data=${JSON.stringify(item)}`)"></image>
+					<image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navTo(`/pages/recommend/add?data=${JSON.stringify(item)}`)"></image>
 				</view>
 			</view>
 		</view>

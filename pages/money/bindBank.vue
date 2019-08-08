@@ -189,11 +189,13 @@
 				this.btnLoading = true
 				moneyModel.editBankInfo(sendData).then(res => {
 					this.$api.msg(`银行卡${this.formData.id? '修改': '添加'}成功`);
-					this.$api.prePage().loadData();
+					if (this.$api.prePage()) {
+						this.$api.prePage().loadData()
+					}
 					setTimeout(() => {
 						this.btnLoading = false
 						uni.navigateBack()
-					}, 800)
+					}, 1500)
 				}).catch(() =>{
 					this.btnLoading = false
 				})

@@ -97,7 +97,7 @@
 	import {
 		url_base_image
 	} from '../../common/config/index.js'
-    import {  
+    import {
         mapGetters,
 		mapActions
     } from 'vuex';  
@@ -114,7 +114,10 @@
 				moving: false,
 			}
 		},
-		onLoad(){
+		onLoad(option){
+			if (!option.isload) {
+				this.getUserInfo()
+			}
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
@@ -140,6 +143,7 @@
 			...mapGetters(['hasLogin', 'userInfo', 'favorite'])
 		},
         methods: {
+			...mapActions(['getUserInfo']),
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view

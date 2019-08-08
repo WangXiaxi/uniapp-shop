@@ -88,7 +88,9 @@
 					this.btnLoading = false
 					this.$api.msg('转账操作成功！', 1500)
 					this.getUserInfo()
-					this.$api.prePage().loadData('refresh')
+					if (this.$api.prePage()) {
+						this.$api.prePage().loadData('refresh')
+					}
 					setTimeout(() => {
 						uni.navigateBack()
 					}, 1500)

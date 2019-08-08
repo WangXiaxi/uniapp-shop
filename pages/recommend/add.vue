@@ -1,17 +1,14 @@
 <template>
 	<view class="content">
 		<view class="row b-b">
-			<text class="tit">姓名</text>
-			<input class="input" type="text" v-model="formData.username" placeholder="请输入姓名" placeholder-class="placeholder" />
+			<text class="tit">用户名</text>
+			<input class="input" type="text" v-model="formData.username" placeholder="请输入登陆名" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
 			<text class="tit">手机号</text>
 			<input class="input" type="number" v-model="formData.mobile" placeholder="请输入手机号" placeholder-class="placeholder" />
 		</view>
-		<view class="row b-b">
-			<text class="tit">登陆名</text>
-			<input class="input" type="text" v-model="formData.username" placeholder="请输入登陆名" placeholder-class="placeholder" />
-		</view>
+
 		<view class="row b-b">
 			<text class="tit spec">密码</text>
 			<input class="input" type="password" v-model="formData.password" placeholder="请输入6-32位密码" placeholder-class="placeholder" />
@@ -20,7 +17,7 @@
 			<text class="tit spec">请确认密码</text>
 			<input class="input" type="password" v-model="formData.repassword" placeholder="请再次输入密码" placeholder-class="placeholder" />
 		</view>
-		
+
 		<view class="row b-b">
 			<text class="tit">图形验证码</text>
 			<input class="input" type="text" v-model="formData.captcha" placeholder="请输入图形验证码" placeholder-class="placeholder" />
@@ -33,14 +30,17 @@
 
 <script>
 	import loginModel from '../../api/login/index.js'
-
+	import {
+		mapGetters,
+		mapActions
+	} from 'vuex';
 	const formFields = {
 		username: '',
 		password: '',
 		repassword: '',
 		mobile: '',
 		captcha: '',
-		parent_name: ''
+		from_id: ''
 	}
 	export default {
 		data() {
@@ -64,9 +64,6 @@
 					},
 					captcha: {
 						required: true
-					},
-					parent_name: {
-						required: true
 					}
 				},
 				messages: {
@@ -84,16 +81,22 @@
 					},
 					captcha: {
 						required: '请输入图形验证码！'
-					},
-					parent_name: {
-						required: '请输入邀请人用户名！'
 					}
 				}
 			}
 		},
 		onLoad(option) {
+			if (option.data) {
+				this.formData.from_id = JSON.parse(option.data).id
+			} else {
+				this.formData.from_id = this.userInfo.id
+			}
+		},
+		computed: {
+			...mapGetters(['userInfo'])
 		},
 		methods: {
+			...mapActions(['getUserInfo']),
 			// 获取图形验证
 			getCaptcha() {
 				this.codeImage = loginModel.getCaptcha()
@@ -109,10 +112,15 @@
 				loginModel.initValidate(rules, messages)
 				if (!loginModel.WxValidate.checkForm(formData)) return
 				this.loading = true
-				loginModel.register(formData).then(res => {
+				const sendData = Object.assign({}, formData)
+				loginModel.register(sendData).then(res => {
 					this.loading = false
 					this.formData = JSON.parse(JSON.stringify(formFields))
-					this.$api.msg('注册成功！', 1500, false, 'success')
+					this.$api.msg('添加会员成功！', 1500, false, 'success')
+					if (this.$api.prePage()) {
+						this.$api.prePage().loadData('refresh')
+					}
+					this.getUserInfo()
 					setTimeout(() => {
 						uni.navigateBack()
 					}, 1500)
@@ -200,6 +208,7 @@
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
 	}
+
 	.code-image {
 		width: 260upx;
 		height: 90upx;

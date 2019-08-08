@@ -104,7 +104,7 @@
 							uni.navigateBack()
 						} else {
 							uni.switchTab({
-								url: '../user/user'
+								url: '../user/user?isload=1'
 							})
 						}
 					}).catch(() => {
