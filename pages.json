@@ -145,8 +145,21 @@
 				"navigationBarBackgroundColor": "#EA1212",
 				"navigationBarTextStyle": "white",
 				"app-plus": {
-					"titleNView": {}
+					"titleNView": {
+						"buttons": [{
+							"width": "70px",
+							"text": "提现记录",
+							"fontSize": "15",
+							"color": "#FFFFFF"
+						}]
+					}
 				}
+			}
+		}, {
+			"path": "pages/money/withdraw-detail",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "提现记录"
 			}
 		}, {
 			"path": "pages/order/createOrder",
@@ -269,6 +282,11 @@
 			"path": "pages/set/landPass",
 			"style": {
 				"navigationBarTitleText": "修改登陆密码"
+			}
+		}, {
+			"path": "pages/set/realname",
+			"style": {
+				"navigationBarTitleText": "实名认证"
 			}
 		}, {
 			"path": "pages/set/cashPassMobile",

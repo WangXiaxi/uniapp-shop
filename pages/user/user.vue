@@ -82,7 +82,7 @@
 				<list-cell image="home-2" iconColor="#e07472" title="我的评价"></list-cell>
 			</view>
 			<view class="history-section icon">
-				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/address/address')"></list-cell>
+				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
 				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/collect/index')"></list-cell>
 				<list-cell image="home-1" title="关于我们"></list-cell>
 			</view>

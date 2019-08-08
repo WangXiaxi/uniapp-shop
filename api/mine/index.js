@@ -26,13 +26,25 @@ class MineModel extends Request {
 	}
 	// 获取用户信息
 	getMemberInfo() {
-		return this.get('/service/getMemberInfo', {}, {
+		return this.get('/service/getUserInfo', {}, {
 			noredirect: true
 		})
 	}
 	// 上传头像
 	uploadUserIco(file, params = {}) {
 		return this.uploadFile('/service/uploadUserIco', file, params)
+	}
+	// 实名图片上传
+	uploadRealNamePhoto(file, params = {}) {
+		return this.uploadFile('/service/uploadRealNamePhoto', file, params)
+	}
+	// 实名
+	realNameSave(params) {
+		return this.post('/service/realNameSave', {...params})
+	}
+	// 获取实名信息
+	getRealNameInfo(params = {}) {
+		return this.post('/service/getRealNameInfo', {...params})
 	}
 	/**
 	 * 验证表单

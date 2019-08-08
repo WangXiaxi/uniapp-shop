@@ -17,7 +17,7 @@ class OrderModel extends Request {
 	}
 	// 订单列表
 	getOrderListByState(params) {
-		return this.get('/service/getOrderListByState', { ...params, limit: 10 })
+		return this.get('/service/getOrderListByState', { ...params, limit: 10, paging: true })
 	}
 	// 生成订单
 	confirmOrder(params) {

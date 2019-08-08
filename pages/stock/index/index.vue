@@ -26,6 +26,7 @@
 		<view class="ic-box">
 			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 		</view>
+		<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
 	</view>
 </template>
 
@@ -48,6 +49,7 @@
 		},
 		onLoad() {
 			this.loadData()
+			this.createdCanvas()
 		},
 		computed: {
 			...mapGetters(['userInfo'])
@@ -62,6 +64,20 @@
 				uni.navigateTo({  
 					url
 				})
+			},
+			createdCanvas() {
+				const context = uni.createCanvasContext('firstCanvas')
+				uni.downloadFile({
+					url: '/static/book.png',
+					success(res) {
+						context.drawImage(res.tempFilePath, 0, 0, 0)
+						context.draw()
+						ctx.setFontSize(20)
+						ctx.setFillStyle('black')
+						ctx.fillText('0', 165, 78)
+					}
+				})
+				
 			}
 		}
 	}

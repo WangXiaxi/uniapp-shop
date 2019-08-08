@@ -74,13 +74,13 @@
 						uni.showLoading({
 							title: '请稍后'
 						})
-						console.log(mineModel.uploadUserIco(tempFilePaths[0]).then(res => {
+						mineModel.uploadUserIco(tempFilePaths[0]).then(res => {
 							uni.hideLoading()
 							this.$api.msg('头像上传成功！')
 							this.getUserInfo()
 						}).catch(res => {
 							uni.hideLoading()
-						}))
+						})
 					}
 				})
 			},

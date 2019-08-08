@@ -10,7 +10,7 @@ import WxValidate from '../../utils/validate'
 class RecommendModel extends Request {
 	// 获取我的推荐
 	getMyTeam(params) {
-		return this.get('/service/getMyTeam', { ...params })
+		return this.get('/service/getMyTeam', { ...params, paging: true })
 	}
 	// 获取激活金额接口
 	getBecomVipAmount(params) {

@@ -4,7 +4,7 @@
 			<image class="bg" src="/static/qbbj.png"></image>
 			<view class="tit">账户余额<text>(￥)</text></view>
 			<view class="num">{{userInfo.remain_balance | nf }}</view>
-			<view class="tip">2个工作日到账</view>
+			<view class="tip">7个工作日到账</view>
 		</view>
 		<view class="info-box">
 			<view class="row b-b">
@@ -16,6 +16,7 @@
 				<input class="input" type="text" v-model="formData.note" placeholder="可填写转账说明" placeholder-class="placeholder" />
 			</view>
 		</view>
+		<view class="tips">注：提现收取<text>2%</text>手续费</view>
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
 		<pay-password :show="show" @close="close" @success="success"></pay-password>
 	</view>
@@ -43,6 +44,16 @@
 				formData: JSON.parse(JSON.stringify(fields))
 			}
 		},
+		// #ifndef MP
+		onNavigationBarButtonTap(e) {
+			const index = e.index;
+			if (index === 0) {
+				uni.navigateTo({
+					url: '/pages/money/withdraw-detail'
+				})
+			}
+		},
+		// #endif
 		computed: {
 			...mapGetters(['userInfo'])
 		},
@@ -80,7 +91,15 @@
 	page {
 		background: #f5f5f5;
 	}
-
+	.tips {
+		padding-left: 30upx;
+		font-size: 24upx;
+		color: #999999;
+		margin-top: 30upx;
+		text {
+			color: $base-color;
+		}
+	}
 	.top-part {
 		position: relative;
 		width: 100%;

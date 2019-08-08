@@ -2,9 +2,10 @@
 	<view>
 		<view class="list">
 			<view class="item" v-for="(item, index) in list" :key="index">
-				<view class="tit">股权变更</view>
-				<view class="time">{{item.datetime | fill}}</view>
-				<view class="des">[{{item.datetime | fill}}] {{item.type ? '增加' : '减少'}}股权 <text class="red">{{item.value}}</text></view>
+				<view class="tit">提现记录<view class="fr" :class="{ red: item.status === '0' }">{{item.status_text}}</view></view>
+				<view class="time">{{item.bank | fill}} 尾号 <text class="red">{{item.card_num.substr(-4)}}</text></view>
+				<view class="des">[{{item.time | fill}}] 申请提现，提现金额<text class="red">{{item.amount}}元</text></view>
+				<view class="des" v-if="item.note">备注:{{item.note}}</view>
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
@@ -13,7 +14,7 @@
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
-	import stockModel from '../../../api/stock/index.js'
+	import moneyModel from '../../api/money/index.js'
 
 	export default {
 		components: {
@@ -56,14 +57,14 @@
 					this.list = [];
 				}
 				
-				stockModel.getUcenterStocksLog({ page: this.page, limit: 10 }).then(res => {
+				moneyModel.getWithdrawLog({ page: this.page, limit: 10 }).then(res => {
 					if (!res.data.data) {
 						res.data.data = []
 						res.data.totalPage = 0
 					}
 					this.list.push(...res.data.data)
 					this.pages = res.data.totalPage
-					uni.stopPullDownRefresh()
+					uni.stopPullDownRefresh();
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
 				}).catch(() => {
@@ -77,6 +78,10 @@
 <style lang="scss">
 	page {
 		background: #f5f5f5;
+	}
+	.fr {
+		float: right;
+		color: #999;
 	}
 	.item {
 		background: #fff;

@@ -171,7 +171,7 @@
 					state,
 					page
 				}).then(res => {
-					navItem.orderList.push(...res.data.resultData.map(k => {
+					navItem.orderList.push(...res.data.data.map(k => {
 						let num = 0
 						if (!k.goods) {
 							k.goods = []

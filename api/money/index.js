@@ -46,6 +46,11 @@ class MoneyModel extends Request {
 		return this.post('/service/editBankInfo', { ...params
 		})
 	}
+	// 修改银行卡
+	getWithdrawLog(params) {
+		return this.get('/service/getWithdrawLog', { ...params, paging: true
+		})
+	}
 	/**
 	 * 验证表单
 	 */
