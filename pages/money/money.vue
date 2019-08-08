@@ -45,7 +45,7 @@
 				<view class="name">{{detail.bank | fill('----')}}</view>
 				<view class="des">尾号{{(detail.card_num ? detail.card_num.substr(-4) : false) | fill('----')}}的储蓄卡</view>
 			</view>
-			<view v-if="detail.bank" class="bd-btn" @click="navTo(`/pages/money/bindBank?data=JSON.stringify(detail)`)">更换银行卡</view>
+			<view v-if="detail.bank" class="bd-btn" @click="navTo(`/pages/money/bindBank?data=${JSON.stringify(detail)}`)">更换银行卡</view>
 			<view v-else @click="navTo('/pages/money/bindBank')" class="bd-btn">绑定银行卡</view>
 		</view>
 		<view class="ic-box">

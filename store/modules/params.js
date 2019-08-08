@@ -7,18 +7,27 @@
  */
 
 const paramsStorage  = uni.getStorageSync('params')
+const systemInfoStorage  = uni.getStorageSync('systemInfo')
 
 const params = {
 	state: {
-		params: paramsStorage ? paramsStorage : '' // 参数
+		params: paramsStorage ? paramsStorage : '', // 参数
+		systemInfo: systemInfoStorage ? systemInfoStorage : '' // 系统信息
 	},
 	getters: {
-		params: state => state.params
+		params: state => state.params,
+		systemInfo: state => state.systemInfo // 系统信息
 	},
 	mutations: {
 		setParams(state, params) {
 			state.params = params
 			uni.setStorageSync('params', params)
+		},
+		getSysInfo(state) {
+			if (!state.systemInfo) {
+				let systemInfo = uni.getSystemInfoSync()
+				state.systemInfo = systemInfo
+			}
 		}
 	},
 	actions: {

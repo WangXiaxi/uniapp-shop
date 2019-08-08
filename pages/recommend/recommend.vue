@@ -115,6 +115,10 @@
 					this.list = [];
 				}
 				recommendModel.getMyTeam({ page: this.page, limit: 10, keyworld: this.keyworld ? this.keyworld: ' ' }).then(res => {
+					if (!res.data.data) {
+						res.data.data = []
+						res.data.totalPage = 0
+					}
 					this.list.push(...res.data.data)
 					this.pages = res.data.totalPage
 					uni.stopPullDownRefresh();

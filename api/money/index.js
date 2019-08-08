@@ -1,4 +1,5 @@
 import Request from '../../utils/request'
+import WxValidate from '../../utils/validate'
 /**
  * @name    MoneyModel封装
  * @authors wangxiaoxing (995107408@qq.com)
@@ -38,6 +39,11 @@ class MoneyModel extends Request {
 	// 用户转账接口
 	trans2user(params) {
 		return this.post('/service/trans2user', { ...params
+		})
+	}
+	// 修改银行卡
+	editBankInfo(params) {
+		return this.post('/service/editBankInfo', { ...params
 		})
 	}
 	/**

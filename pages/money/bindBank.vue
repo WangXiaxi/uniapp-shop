@@ -3,11 +3,11 @@
 		<view class="tip" style="margin-top: 10upx;">请绑定持卡人本人的银行卡</view>
 		<view class="row b-b" style="margin-top: 30upx;">
 			<text class="tit">开户银行</text>
-			<input class="input" type="text" v-model="addressData.param1" placeholder="请输入开户银行" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="formData.bank" placeholder="请输入开户银行" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
 			<text class="tit">持卡人</text>
-			<input class="input" type="number" v-model="addressData.param2" placeholder="请输入持卡人" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="formData.true_name" placeholder="请输入持卡人" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
 			<text class="tit">开户地区</text>
@@ -18,12 +18,12 @@
 		</view>
 		<view class="row b-b">
 			<text class="tit">开户支行</text>
-			<input class="input" type="text" v-model="addressData.param3" placeholder="请输入开户支行" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="formData.bank_branch" placeholder="请输入开户支行" placeholder-class="placeholder" />
 		</view>
 		
 		<view class="row b-b">
 			<text class="tit">银行卡号</text>
-			<input class="input" type="text" v-model="addressData.param4" placeholder="请输入银行卡号" placeholder-class="placeholder" />
+			<input class="input" type="number" v-model="formData.card_num" placeholder="请输入银行卡号" placeholder-class="placeholder" />
 		</view>
 
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
@@ -36,8 +36,19 @@
 </template>
 
 <script>
-	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
-	import mineModel from '../../api/mine/index.js'
+	import mpvueCityPicker from '@/components/ydui-citypicker/mpvueCityPicker.vue'
+	import moneyModel from '../../api/money/index.js'
+	
+	const fields = {
+		id: '',
+		province: '',
+		city: '',
+		area: '',
+		bank: '',
+		bank_branch: '',
+		card_num: '',
+		true_name: ''
+	}
 	
 	export default {
 		components: {
@@ -46,12 +57,7 @@
 		data() {
 			return {
 				btnLoading: false,
-				addressData: {
-					param1: '',
-					param2: '',
-					param3: '',
-					param4: ''
-				},
+				formData: JSON.parse(JSON.stringify(fields)),
 				cityPickerValue: [0, 0, 0],
 				themeColor: '#ea1212',
 				region: {
@@ -60,69 +66,78 @@
 					code: []
 				},
 				rules: {
-					param1: {
+					bank: {
 						required: true
 					},
-					param2: {
+					bank_branch: {
 						required: true
 					},
-					param3: {
+					card_num: {
 						required: true
 					},
-					param4: {
+					true_name: {
+						required: true
+					},
+					area: {
 						required: true
 					}
 				},
 				messages: {
-					param1: {
+					bank: {
 						required: '请输入开户银行！'
 					},
-					param2: {
+					true_name: {
 						required: '请输入持卡人！'
 					},
-					param3: {
+					bank_branch: {
 						required: '请输入开户支行！'
 					},
-					param4: {
+					card_num: {
 						required: '请输入银行卡号！'
+					},
+					area: {
+						required: '请选择开户地区！'
 					}
 				}
 			}
 		},
 
 		onLoad(option) {
+			const data = JSON.parse(option.data)
 			let title = '绑定银行卡';
 			this.manageType = option.type;
-			if (option.type === 'edit') {
+			if (data.id) {
 				title = '更换银行卡'
-				// const {
-				// 	id,
-				// 	accept_name,
-				// 	mobile,
-				// 	address,
-				// 	is_default,
-				// 	city,
-				// 	area,
-				// 	province,
-				// 	city_str,
-				// 	area_str,
-				// 	province_str
-				// } = JSON.parse(option.data)
-				// this.addressData = {
-				// 	id,
-				// 	accept_name,
-				// 	mobile,
-				// 	address
-				// }
-				// const code = [province, city, area]
-				// this.$nextTick(() => {
-				// 	this.cityPickerValue = this.$refs.mpvueCityPicker.codeSwitch(code)
-				// 	this.region = {
-				// 		label: `${province_str}-${city_str}-${area_str}`,
-				// 		value: this.cityPickerValue,
-				// 		code
-				// 	}	
-				// })
+				const {
+					id,
+					province,
+					city,
+					area,
+					bank,
+					bank_branch,
+					card_num,
+					name: true_name
+				} = data
+				console.log(true_name)
+				Object.assign(this.formData, {
+					id,
+					province,
+					city,
+					area,
+					bank,
+					bank_branch,
+					card_num,
+					true_name
+				})
+				const code = [province, city, area]
+				this.$nextTick(() => {
+					this.cityPickerValue = this.$refs.mpvueCityPicker.codeSwitch(code)
+					this.region = {
+						label: `${province}-${city}-${area}`,
+						value: this.cityPickerValue,
+						code
+					}	
+				})
 			}
 			uni.setNavigationBarTitle({
 				title
@@ -144,9 +159,6 @@
 				this.$refs.mpvueCityPicker.show()
 			},
 			onCancel(e) {},
-			switchChange(e) {
-				this.addressData.is_default = e.detail.value;
-			},
 			onConfirm(e) {
 				this.region = e;
 				this.cityPickerValue = e.value;
@@ -156,28 +168,28 @@
 				const { rules, messages } = this
 				const {
 					id,
-					accept_name,
-					mobile,
-					is_default,
-					address
-				} = this.addressData;
+					bank,
+					bank_branch,
+					card_num,
+					true_name
+				} = this.formData;
 				const [province, city, area] = this.region.code
 				const sendData = {
 					id,
-					accept_name,
-					mobile,
-					is_default: Number(is_default),
-					address,
+					bank,
+					bank_branch,
+					card_num,
+					true_name,
 					province,
 					city,
 					area
 				}
-				mineModel.initValidate(rules, messages)
-				if (!mineModel.WxValidate.checkForm(sendData)) return
+				moneyModel.initValidate(rules, messages)
+				if (!moneyModel.WxValidate.checkForm(sendData)) return
 				this.btnLoading = true
-				mineModel.addressEdit(sendData).then(res => {
-					this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-					this.$api.prePage().refreshList();
+				moneyModel.editBankInfo(sendData).then(res => {
+					this.$api.msg(`银行卡${this.formData.id? '修改': '添加'}成功`);
+					this.$api.prePage().loadData();
 					setTimeout(() => {
 						this.btnLoading = false
 						uni.navigateBack()

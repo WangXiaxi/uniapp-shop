@@ -78,7 +78,7 @@
 
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit">vip积分抵扣</text>
-				<input class="desc" type="number" v-model="detail.pay_revisit" @blur="contorlPoint" placeholder="请填写实付金额" placeholder-class="placeholder" />
+				<input class="desc" type="number" v-model="detail.pay_revisit" placeholder="请填写实付金额" placeholder-class="placeholder" />
 			</view>
 		</view>
 
@@ -147,17 +147,11 @@
 					logisticsPrice
 				} = this.detail
 				return Number(final_sum) + Number(logisticsPrice)
-			}
+			},
+			
 		},
 		methods: {
-			...mapMutations(['setParams']),
-			contorlPoint(event) { // 控制积分
-				const value = event.target.value
-				if (Number(value) > Number(this.detail.revisit)) {
-					this.$api.msg('vip积分不能大于可用数额')
-					this.detail.pay_revisit = Number(this.detail.revisit)
-				}
-			},
+			...mapMutations(['setParams', 'getSysInfo']),
 			setAddress(item) { // 修改地址
 				this.detail.defaultAddress = JSON.parse(JSON.stringify(item))
 				this.getLogistics()
@@ -244,6 +238,21 @@
 				})
 			},
 			stopPrevent() {}
+		},
+		watch: {
+			'detail.pay_revisit'(value, oldValue) {
+				const revisit = Number(this.detail.revisit)
+				if (Number(value) > revisit) {
+					this.$nextTick(() => {
+						this.detail.pay_revisit = revisit
+					})
+				}
+				if (Number(value) > this.finalSum) {
+					this.$nextTick(() => {
+						this.detail.pay_revisit = this.finalSum
+					})
+				}
+			}
 		}
 	}
 </script>
@@ -540,7 +549,6 @@
 		z-index: 998;
 		color: $font-color-base;
 		box-shadow: 0 -1px 5px rgba(0, 0, 0, .1);
-
 		.price-content {
 			padding-left: 30upx;
 		}

@@ -16,14 +16,14 @@
 				<view class="mobile">{{ detail.mobile | fill }}</view>
 			</view>
 			<view class="spec">
-				<text class="tit">转账金额</text>
+				<text class="tit">转账vip积分</text>
 				<view class="inp">
 					<view class="red">￥</view>
-					<input class="input" type="text" v-model="amount" placeholder="0.00" placeholder-class="placeholder" />
+					<input class="input" type="number" v-model="amount" placeholder="0.00" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认</button>
-			<view class="tip"><text>1.</text>可转账金额<text>{{ userInfo.remain_balance | nf }}元</text>;</view>
+			<view class="tip"><text>1.</text>可转账vip积分<text>{{ userInfo.revisit | nf }}</text>;</view>
 			<view class="tip"><text>2.</text>金额将实时转入对方账户，无法取消。</view>
 		</view>
 		<pay-password :show="show" @close="close" @success="success"></pay-password>
@@ -75,7 +75,7 @@
 				})
 			},
 			confirm() { // 转账提交操作
-				if (!this.amount || Number(this.amount) > Number(this.userInfo.remain_balance)) return this.$api.msg('转账金额必填并且必须小于账户余额！')
+				if (!Number(this.amount) || Number(this.amount) > Number(this.userInfo.remain_balance)) return this.$api.msg('转账vip积分必填并且必须小于账户vip积分！')
 				this.show = true
 			},
 			success(password) { // 支付密码输入后提交

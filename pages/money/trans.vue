@@ -19,7 +19,7 @@
 				<text class="tit">转账金额</text>
 				<view class="inp">
 					<view class="red">￥</view>
-					<input class="input" type="text" v-model="amount" placeholder="0.00" placeholder-class="placeholder" />
+					<input class="input" type="number" v-model="amount" placeholder="0.00" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认</button>
@@ -75,7 +75,7 @@
 				})
 			},
 			confirm() { // 转账提交操作
-				if (!this.amount || Number(this.amount) > Number(this.userInfo.remain_balance)) return this.$api.msg('转账金额必填并且必须小于账户余额！')
+				if (!Number(this.amount) || Number(this.amount) > Number(this.userInfo.remain_balance)) return this.$api.msg('转账金额必填并且必须小于账户余额！')
 				this.show = true
 			},
 			success(password) { // 支付密码输入后提交
