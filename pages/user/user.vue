@@ -166,7 +166,7 @@
 				return true
 			},
 			shwoCode() {
-				if (!this.judIsVip) return
+				if (!this.judIsVip()) return
 				const _ = this
 				const tip = () => {
 					uni.hideLoading()
@@ -217,7 +217,7 @@
 				})
 			},
 			specTo() {
-				if (!this.judIsVip) return
+				if (!this.judIsVip()) return
 				uni.navigateTo({
 					url: '/pages/recommend/recommend'
 				})
