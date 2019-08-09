@@ -13,6 +13,10 @@ class StockModel extends Request {
 			paging: true
 		})
 	}
+	// 获取 证书信息
+	getStocksInfo(params) {
+		return this.get('/service/getStocksInfo', { ...params })
+	}
 }
 
 const stockModel = new StockModel()

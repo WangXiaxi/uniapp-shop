@@ -24,20 +24,27 @@
 			</view>
 		</view>
 		<view class="ic-box">
-			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
+			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="createdCanvas()"></list-cell>
 		</view>
-		<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
+		<view style="width: 100%; height: 0; overflow: hidden;">
+			<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
+		</view>
 	</view>
 </template>
 
 <script>
 	import listCell from '@/components/mix-list-cell'
 	import stockModel from '../../../api/stock/index.js'
-
-	import {  
-        mapGetters,
+	import {
+		fill
+	} from '../../../utils/filter.js'
+	import {
+		mapGetters,
 		mapActions
-    } from 'vuex';  
+	} from 'vuex';
+	import {
+		url_base_image
+	} from '../../../common/config/index.js'
 	export default {
 		components: {
 			listCell
@@ -49,35 +56,83 @@
 		},
 		onLoad() {
 			this.loadData()
-			this.createdCanvas()
 		},
 		computed: {
 			...mapGetters(['userInfo'])
 		},
 		methods: {
 			loadData() {
-				stockModel.getUcenterStocksLog({ page: 1, limit: 3 }).then(res => {
+				stockModel.getUcenterStocksLog({
+					page: 1,
+					limit: 3
+				}).then(res => {
 					this.list = res.data.data
 				})
 			},
 			navTo(url) {
-				uni.navigateTo({  
+				uni.navigateTo({
 					url
 				})
 			},
 			createdCanvas() {
-				const context = uni.createCanvasContext('firstCanvas')
-				uni.downloadFile({
-					url: '/static/book.png',
-					success(res) {
-						context.drawImage(res.tempFilePath, 0, 0, 0)
-						context.draw()
-						ctx.setFontSize(20)
-						ctx.setFillStyle('black')
-						ctx.fillText('0', 165, 78)
-					}
+				uni.showLoading({
+					title: '请稍后'
 				})
-				
+				const _ = this
+				stockModel.getStocksInfo().then(res => {
+					const {
+						true_name,
+						ID_card,
+						serial_no,
+						sec_stocks,
+						active_amount,
+						time
+					} = res.data
+					const context = uni.createCanvasContext('firstCanvas', this)
+					uni.downloadFile({
+						// url: '/static/book.png',
+						url: `${url_base_image}/public/img/gqbj.png`,
+						success: (res) => {
+							context.drawImage(res.tempFilePath, 0, 0, 0)
+							context.setFontSize(20)
+							context.setFillStyle('black')
+							context.fillText(fill(serial_no), 253, 311)
+							context.fillText(fill(sec_stocks), 212, 474)
+							context.fillText(fill(true_name), 234, 342)
+							context.fillText(fill(active_amount), 214, 410)
+							context.fillText(fill(ID_card), 234, 376)
+							context.setFontSize(16)
+							context.fillText(fill(time), 580, 581)
+							context.draw(false, () => {
+								uni.canvasToTempFilePath({
+									x: 0,
+									y: 0,
+									width: 978,
+									height: 686,
+									destWidth: 978,
+									destHeight: 686,
+									canvasId: 'firstCanvas',
+									fileType: 'png',
+									quality: 0.5,
+									success: (res) => {
+										uni.previewImage({
+											urls: [res.tempFilePath],
+											success: () => {
+												uni.hideLoading()
+											}
+										})
+									},
+									fail: (res) => {
+										uni.hideLoading()
+										_.$api.msg('图片加载失败！')
+									}
+								})
+							})
+						}
+					})
+				}).catch(() => {
+					uni.hideLoading()
+				})
 			}
 		}
 	}
@@ -87,6 +142,7 @@
 	page {
 		background: #f5f5f5;
 	}
+
 	.top-part {
 		position: relative;
 		width: 100%;
@@ -155,13 +211,16 @@
 				border-bottom: 1upx solid rgba(242, 242, 242, 1);
 				padding: 28upx 50upx 30upx;
 				position: relative;
+
 				.top {
 					display: flex;
 					align-items: center;
+
 					.type {
 						flex: 1;
 						font-size: 28upx;
 						position: relative;
+
 						&::before {
 							content: ' ';
 							position: absolute;
@@ -171,31 +230,36 @@
 							background: #000;
 							left: -30upx;
 							top: 50%;
-							margin-top: -4upx; 
+							margin-top: -4upx;
 						}
 					}
+
 					.time {
 						font-size: 24upx;
 					}
 				}
+
 				.bot {
 					margin-top: 20upx;
 					font-size: 24upx;
 					color: $font-color-light;
+
 					.red {
 						color: $base-color;
 					}
 				}
+
 				&:last-child {
 					border-bottom: none;
 				}
 			}
 		}
 	}
+
 	.ic-box {
 		margin: 40upx 32upx 0;
 		border-radius: 10upx;
 		background: #fff;
-		
+
 	}
 </style>
