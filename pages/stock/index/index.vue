@@ -128,6 +128,10 @@
 									}
 								})
 							})
+						},
+						fail: (res) => {
+							uni.hideLoading()
+							_.$api.msg('图片加载失败！')
 						}
 					})
 				}).catch(() => {
