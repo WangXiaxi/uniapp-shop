@@ -2,7 +2,7 @@
 	<view>
 		<!-- 空白页 -->
 		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
-		<view>
+		<view v-else>
 			<view class="list">
 				<view class="item" v-for="(item, index) in list" :key="index">
 					<view class="tit">提现记录<view class="fr" :class="{ red: item.status === '0' }">{{item.status_text}}</view></view>

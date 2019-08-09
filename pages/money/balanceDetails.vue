@@ -2,7 +2,7 @@
 	<view>
 		<!-- 空白页 -->
 		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
-		<view>
+		<view v-else>
 			<view class="list">
 				<view class="item" v-for="(item, index) in list" :key="index">
 					<image class="img" :src="icon[2]"></image>

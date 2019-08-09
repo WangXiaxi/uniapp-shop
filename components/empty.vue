@@ -1,5 +1,5 @@
 <template>
-	<view class="empty-content">
+	<view class="empty-content" :style="style">
 		<image class="empty-content-image" :src="setSrc" mode="aspectFit"></image>
 		<view class="text">{{text}}</view>
 	</view>
@@ -16,6 +16,10 @@
 				type: String,
 				default: ''
 			},
+			style: {
+				type: Object,
+				default: {}
+			}
 		},
 
 		data() {
@@ -44,7 +48,6 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		
 		position: fixed;
 		left: 0;
 		top: 0;

@@ -29,33 +29,36 @@
 			<input class="input" type="text" v-model="keyworld" @confirm="handleSearch" placeholder="请输入关键字" placeholder-class="placeholder" />
 			<view class="btn" @click="handleSearch">搜索</view>
 		</view>
-		<view class="item-list">
-			<view class="item" v-for="(item, index) in list" :key="index">
-				<view class="user-info-box">
-					<view class="portrait-box">
-						<image class="portrait" :src="item.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
-					</view>
-					<view class="info-box">
-						<view class="username">
-							<view class="name">{{item.username}}</view>
-							<image class="vip-tip" src="/static/icon/vip.png" v-if="item.is_vip"></image>
-							<view class="pick-tip" v-if="item.is_agent">
-								<image src="/static/icon/shop.png" class="shop"></image>{{item.agent_text}}
+		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录" :style="{ position: 'relative', paddingTop: '80upx', background: '#fff' }"></empty>
+		<view v-else>
+			<view class="item-list">
+				<view class="item" v-for="(item, index) in list" :key="index">
+					<view class="user-info-box">
+						<view class="portrait-box">
+							<image class="portrait" :src="item.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
+						</view>
+						<view class="info-box">
+							<view class="username">
+								<view class="name">{{item.username}}</view>
+								<image class="vip-tip" src="/static/icon/vip.png" v-if="item.is_vip"></image>
+								<view class="pick-tip" v-if="item.is_agent">
+									<image src="/static/icon/shop.png" class="shop"></image>{{item.agent_text}}
+								</view>
+							</view>
+							<view class="tips">
+								<image class="ico" src="/static/icon/mobile.png"></image>
+								<view class="mobile text">{{item.mobile}}({{item.true_name | fill}})</view>
+								<image class="ico" src="/static/icon/num.png"></image>
+								<view class="num text">{{item.team_sum | fill(0)}}</view>
 							</view>
 						</view>
-						<view class="tips">
-							<image class="ico" src="/static/icon/mobile.png"></image>
-							<view class="mobile text">{{item.mobile}}({{item.true_name | fill}})</view>
-							<image class="ico" src="/static/icon/num.png"></image>
-							<view class="num text">{{item.team_sum | fill(0)}}</view>
-						</view>
+						<image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navTo(`/pages/recommend/register?data=${JSON.stringify(item)}`)"></image>
+						<image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navTo(`/pages/recommend/add?data=${JSON.stringify(item)}`)"></image>
 					</view>
-					<image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navTo(`/pages/recommend/register?data=${JSON.stringify(item)}`)"></image>
-					<image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navTo(`/pages/recommend/add?data=${JSON.stringify(item)}`)"></image>
 				</view>
 			</view>
+			<uni-load-more :status="loadingType"></uni-load-more>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
@@ -65,14 +68,15 @@
 	import {
 		url_base_image
 	} from '../../common/config/index.js'
-
+	import empty from '@/components/empty'
 	import {
 		mapGetters
 	} from 'vuex';
-	
+
 	export default {
 		components: {
-			uniLoadMore
+			uniLoadMore,
+			empty
 		},
 		data() {
 			return {
@@ -110,12 +114,16 @@
 				} else {
 					this.loadingType = 'loading';
 				}
-				
+
 				if (type === 'refresh') {
 					this.page = 1;
 					this.list = [];
 				}
-				recommendModel.getMyTeam({ page: this.page, limit: 10, keyworld: this.keyworld ? this.keyworld: ' ' }).then(res => {
+				recommendModel.getMyTeam({
+					page: this.page,
+					limit: 10,
+					keyworld: this.keyworld ? this.keyworld : ' '
+				}).then(res => {
 					if (!res.data.data) {
 						res.data.data = []
 						res.data.totalPage = 0
@@ -125,23 +133,21 @@
 					uni.stopPullDownRefresh();
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
-				}).catch(() => {
-				})
+				}).catch(() => {})
 			},
 			handleSearch() { // 搜索操作
 				this.loadData('refresh');
 			},
-			navTo(url){
-				uni.navigateTo({  
+			navTo(url) {
+				uni.navigateTo({
 					url
-				})  
+				})
 			}
 		},
 	}
 </script>
 
 <style lang='scss'>
-	
 	.pick-tip {
 		background: #d874fd;
 		border-radius: 24upx;
@@ -221,6 +227,7 @@
 			width: 48upx;
 			height: 48upx;
 		}
+
 		.ico-more {
 			width: 48upx;
 			height: 48upx;
@@ -230,10 +237,12 @@
 
 	.item {
 		margin: 40upx 30upx;
+
 		.user-info-box {
 			.name {
 				color: #333;
 			}
+
 			.text {
 				color: #666;
 			}

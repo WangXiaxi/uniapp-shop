@@ -32,7 +32,7 @@
 			</view>
 			<view class="spec-list">
 				<view class="item" :class="{ act: item.active_amount === formData.amount }" v-for="(item, index) in amountOptions"
-				 :key="index" @click="formData.amount = item.active_amount">
+				 :key="index" @click="chooseAmount(item)">
 					{{item.agent_show}}
 				</view>
 			</view>
@@ -41,7 +41,7 @@
 			</view>
 			<view class="spec-list">
 				<view class="item" :class="{ act: item.key === formData.distribution }" v-for="(item, index) in distributionOptions"
-				 :key="index" @click="formData.distribution = item.key">
+				 :key="index" @click="chooseDis(item)">
 					{{item.label}}
 				</view>
 			</view>
@@ -168,6 +168,12 @@
 		},
 		methods: {
 			...mapActions(['getUserInfo']),
+			chooseAmount(item) {
+				this.formData.amount = item.active_amount
+			},
+			chooseDis(item) {
+				this.formData.distribution = item.key
+			},
 			close() { // 关闭支付
 				this.show = false
 			},

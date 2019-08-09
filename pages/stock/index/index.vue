@@ -29,12 +29,16 @@
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
 		</view>
+		<empty v-if="pageLoading === false && list.length === 0" text="暂无相关记录" :style="{ position: 'relative', paddingTop: '80upx', background: '#f5f5f5' }"></empty>
+		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
 <script>
 	import listCell from '@/components/mix-list-cell'
 	import stockModel from '../../../api/stock/index.js'
+	import empty from '@/components/empty'
+	import mixLoading from '../../../components/mix-loading/mix-loading.vue'
 	import {
 		fill
 	} from '../../../utils/filter.js'
@@ -47,10 +51,12 @@
 	} from '../../../common/config/index.js'
 	export default {
 		components: {
-			listCell
+			listCell,
+			empty
 		},
 		data() {
 			return {
+				pageLoading: false,
 				list: []
 			};
 		},
@@ -62,11 +68,15 @@
 		},
 		methods: {
 			loadData() {
+				this.pageLoading = true
 				stockModel.getUcenterStocksLog({
 					page: 1,
 					limit: 3
 				}).then(res => {
+					this.pageLoading = false
 					this.list = res.data.data
+				}).catch(() => {
+					this.pageLoading = false
 				})
 			},
 			navTo(url) {
