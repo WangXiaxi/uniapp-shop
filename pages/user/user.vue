@@ -75,7 +75,7 @@
 				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" @eventClick="navTo('/pages/money/money')"></list-cell>
 				<list-cell image="home-4" iconColor="#e07472" title="我的股权" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
 				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" @eventClick="specTo()"></list-cell>
-				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="shwoCode()"></list-cell>
 				<list-cell image="home-2" iconColor="#e07472" title="我的评价"></list-cell>
 			</view>
 			<view class="history-section icon">
@@ -84,8 +84,9 @@
 				<list-cell image="home-1" title="关于我们"></list-cell>
 			</view>
 		</view>
-
-
+		<view style="width: 100%; height: 0; overflow: hidden;">
+			<canvas style="width: 750px; height: 1334px;" canvas-id="codeCanvas"></canvas>
+		</view>
 	</view>
 </template>
 <script>
@@ -143,10 +144,10 @@
 		},
 		methods: {
 			...mapActions(['getUserInfo']),
-			specTo() {
+			judIsVip() {
 				if (!this.hasLogin) {
 					url = '/pages/public/login'
-					return
+					return false
 				}
 				if (!this.userInfo.is_vip) {
 					uni.showModal({
@@ -160,8 +161,63 @@
 							}
 						}
 					})
-					return
+					return false
 				}
+				return true
+			},
+			shwoCode() {
+				if (!this.judIsVip) return
+				const _ = this
+				const tip = () => {
+					uni.hideLoading()
+					_.$api.msg('图片加载失败！')
+				}
+				const { share_qrcode } = this.userInfo
+				if (!share_qrcode) return _.$api.msg('您当前没有二维码！')
+				uni.showLoading({
+					title: '请稍后'
+				})
+				const context = uni.createCanvasContext('codeCanvas', this)
+				uni.downloadFile({
+					// url: '/static/book.png',
+					url: `${url_base_image}/public/img/gqbj.png`,
+					success: (res) => {
+						context.drawImage(res.tempFilePath, 0, 0, 0)
+						uni.downloadFile({
+							url: `${url_base_image}/upload/qrcode/${share_qrcode}`,
+							success: (ress) => {
+								context.drawImage(ress.tempFilePath, 0, 100, 100)
+								context.draw(false, () => {
+									uni.canvasToTempFilePath({
+										x: 0,
+										y: 0,
+										width: 750,
+										height: 1334,
+										destWidth: 750,
+										destHeight: 1334,
+										canvasId: 'codeCanvas',
+										fileType: 'png',
+										quality: 0.5,
+										success: (res) => {
+											uni.previewImage({
+												urls: [res.tempFilePath],
+												success: () => {
+													uni.hideLoading()
+												}
+											})
+										},
+										fail: tip
+									})
+								})
+							},
+							fail: tip
+						})
+					},
+					fail: tip
+				})
+			},
+			specTo() {
+				if (!this.judIsVip) return
 				uni.navigateTo({
 					url: '/pages/recommend/recommend'
 				})
