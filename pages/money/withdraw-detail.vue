@@ -1,24 +1,29 @@
 <template>
 	<view>
-		<view class="list">
-			<view class="item" v-for="(item, index) in list" :key="index">
-				<view class="tit">提现记录<view class="fr" :class="{ red: item.status === '0' }">{{item.status_text}}</view></view>
-				<view class="time">{{item.bank | fill}} 尾号 <text class="red">{{item.card_num.substr(-4)}}</text></view>
-				<view class="des">[{{item.time | fill}}] 申请提现，提现金额<text class="red">{{item.amount}}元</text></view>
-				<view class="des" v-if="item.note">备注:{{item.note}}</view>
+		<!-- 空白页 -->
+		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
+		<view>
+			<view class="list">
+				<view class="item" v-for="(item, index) in list" :key="index">
+					<view class="tit">提现记录<view class="fr" :class="{ red: item.status === '0' }">{{item.status_text}}</view></view>
+					<view class="time">{{item.bank | fill}} 尾号 <text class="red">{{item.card_num.substr(-4)}}</text></view>
+					<view class="des">[{{item.time | fill}}] 申请提现，提现金额<text class="red">{{item.amount}}元</text></view>
+					<view class="des" v-if="item.note">备注:{{item.note}}</view>
+				</view>
 			</view>
+			<uni-load-more :status="loadingType"></uni-load-more>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 	import moneyModel from '../../api/money/index.js'
-
+	import empty from '@/components/empty'
 	export default {
 		components: {
 			uniLoadMore,
+			empty
 		},
 		data() {
 			return {

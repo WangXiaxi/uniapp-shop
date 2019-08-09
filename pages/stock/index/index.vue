@@ -5,7 +5,7 @@
 			<view class="tit">目前拥有股权</view>
 			<view class="num">{{userInfo.fir_stocks !== '0' ? `${userInfo.fir_stocks} / ` : ''}}{{userInfo.sec_stocks}}</view>
 		</view>
-		<view class="center-part">
+		<view class="center-part" v-if="list.length">
 			<view class="top-name" @click="navTo('/pages/stock/list/list')">
 				<view class="tit">股权明细</view>
 				<text class="cell-tip">更多</text>
@@ -23,7 +23,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="ic-box">
+		<view class="ic-box" v-if="list.length">
 			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="createdCanvas()"></list-cell>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">

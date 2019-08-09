@@ -1,5 +1,7 @@
 <template>
-	<view>
+	<!-- 空白页 -->
+	<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
+	<view v-else>
 		<view class="list">
 			<view class="item" v-for="(item, index) in list" :key="index">
 				<image class="img" :src="icon[2]"></image>
@@ -22,10 +24,11 @@
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 	import moneyModel from '../../api/money/index.js'
-
+	import empty from '@/components/empty'
 	export default {
 		components: {
 			uniLoadMore,
+			empty
 		},
 		data() {
 			return {

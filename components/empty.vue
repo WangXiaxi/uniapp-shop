@@ -1,6 +1,7 @@
 <template>
 	<view class="empty-content">
 		<image class="empty-content-image" :src="setSrc" mode="aspectFit"></image>
+		<view class="text">{{text}}</view>
 	</view>
 </template>
 
@@ -10,6 +11,10 @@
 			src: {
 				type: String,
 				default: 'empty'
+			},
+			text: {
+				type: String,
+				default: ''
 			},
 		},
 
@@ -30,6 +35,10 @@
 </script>
 
 <style lang="scss">
+	.text {
+		color: #999;
+		font-size: 26upx;
+	}
 	.empty-content {
 		display: flex;
 		align-items: center;
