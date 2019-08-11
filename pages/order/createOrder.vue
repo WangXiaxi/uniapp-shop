@@ -138,7 +138,7 @@
 					final_sum,
 					logisticsPrice
 				} = this.detail
-				const fin = Number(final_sum) + Number(logisticsPrice) - Number(pay_revisit)
+				const fin = (Number(final_sum) + Number(logisticsPrice) - Number(pay_revisit)).toFixed(2)
 				return fin > 0 ? fin : 0
 			},
 			finalSum() { // 实际应付金额 算上运费
@@ -146,7 +146,7 @@
 					final_sum,
 					logisticsPrice
 				} = this.detail
-				return Number(final_sum) + Number(logisticsPrice)
+				return (Number(final_sum) + Number(logisticsPrice)).toFixed(2)
 			},
 			
 		},

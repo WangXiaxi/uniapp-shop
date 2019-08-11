@@ -21,12 +21,12 @@
 							<text v-if="true" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.id)"></text>
 						</view>
 
-						<scroll-view v-if="item.goods.length > 1" class="goods-box" scroll-x>
+						<scroll-view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length > 1" class="goods-box" scroll-x>
 							<view v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex" class="goods-item">
 								<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
-						<view v-if="item.goods.length === 1" class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex">
+						<view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length === 1" class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex">
 							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{goodsItem.goods_array.name}}</text>
@@ -140,6 +140,11 @@
 		},
 
 		methods: {
+			navTo(url) {
+				uni.navigateTo({
+					url
+				})
+			},
 			//获取订单列表
 			loadData(source) {
 				//这里是将订单挂载到tab列表下

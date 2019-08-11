@@ -146,7 +146,9 @@
 			...mapActions(['getUserInfo']),
 			judIsVip() {
 				if (!this.hasLogin) {
-					url = '/pages/public/login'
+					uni.navigateTo({
+						url: '/pages/public/login'
+					})
 					return false
 				}
 				if (!this.userInfo.is_vip) {

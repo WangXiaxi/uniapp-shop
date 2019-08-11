@@ -31,6 +31,10 @@ class OrderModel extends Request {
 	orderDel(params) {
 		return this.post('/service/orderDel', params)
 	}
+	// 订单详情
+	getOrderDetail(params) {
+		return this.get('/service/getOrderDetail', params)
+	}
 }
 
 const orderModel = new OrderModel()
