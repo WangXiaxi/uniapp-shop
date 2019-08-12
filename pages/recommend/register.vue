@@ -126,13 +126,13 @@
 					}
 				},
 				messages: {
-					bank: {
+					accept_name: {
 						required: '请输入收件人姓名！'
 					},
 					mobile: {
 						required: '请输入手机号！'
 					},
-					true_name: {
+					address: {
 						required: '请输入详细地址！'
 					},
 					area: {

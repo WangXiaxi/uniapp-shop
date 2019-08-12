@@ -50,7 +50,6 @@
 					</view>
 
 					<uni-load-more :status="tabItem.loadingType"></uni-load-more>
-
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -60,7 +59,6 @@
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import empty from "@/components/empty";
-	import Json from '@/Json';
 	import orderModel from '../../api/order/index.js'
 	import {
 		url_image
@@ -121,20 +119,8 @@
 			this.loadData('refresh');
 		},
 		onLoad(options) {
-			/**
-			 * 修复app端点击除全部订单外的按钮进入时不加载数据的问题
-			 * 替换onLoad下代码即可
-			 */
 			this.tabCurrentIndex = +options.state;
-			// #ifndef MP
 			this.loadData()
-			// #endif
-			// #ifdef MP
-			if (options.state == 0) {
-				this.loadData()
-			}
-			// #endif
-
 		},
 
 		methods: {
@@ -155,16 +141,15 @@
 				}
 				if (source === 'refresh') {
 					navItem.page = 0;
-					navItem.loadingType = 'more';
 					navItem.total = 0;
 					navItem.orderList = [];
+					navItem.loadingType = 'loading';
+				} else {
+					if (navItem.loadingType === 'loading' || navItem.loadingType === 'nomore') {
+						//防止重复加载
+						return;
+					}
 				}
-				if (navItem.loadingType === 'loading' || navItem.loadingType === 'nomore') {
-					//防止重复加载
-					return;
-				}
-				
-				navItem.loadingType = 'loading';
 				navItem.page = navItem.page + 1;
 				let {
 					state,
@@ -190,7 +175,6 @@
 					}));
 					this.$set(navItem, 'loaded', true);
 					navItem.total = res.data.totalPage;
-					
 					navItem.loadingType = page >= navItem.total ? 'nomore' : 'more';
 					if (source === 'refresh') {
 						uni.stopPullDownRefresh();

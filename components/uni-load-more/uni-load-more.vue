@@ -62,11 +62,13 @@
 	@charset "UTF-8";
 
 	.uni-load-more {
+		position: relative;
+		z-index: 2;
 		display: flex;
 		flex-direction: row;
 		height: 80upx;
 		align-items: center;
-		justify-content: center
+		justify-content: center;
 	}
 
 	.uni-load-more__text {

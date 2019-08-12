@@ -18,16 +18,14 @@
 				</view>
 			</view>
 			<view class="vip-card-box">
-				<image class="card-bg" src="/static/vip-card-bg.png" mode=""></image>
+				<image class="card-bg" v-if="!userInfo.is_vip" src="/static/bg-pt.jpg" mode=""></image>
+				<image class="card-bg" v-if="userInfo.is_vip" src="/static/bg-hy.jpg" mode=""></image>
 				<view class="b-btn" v-if="!userInfo.is_vip" @click="navTo('/pages/recommend/register')">
 					立即开通
 				</view>
-				<view class="tit">
-					<text class="yticon icon-iLinkapp-"></text>
-					{{userInfo.is_agent ? userInfo.agent_text : userInfo.is_vip ? userInfo.vip_text : '普通会员'}}
+				<view class="tit" v-if="userInfo.is_vip">
+					{{userInfo.is_agent ? userInfo.agent_text : userInfo.vip_text }}
 				</view>
-				<!-- <text class="e-m"></text> -->
-				<!-- <text class="e-b"></text> -->
 			</view>
 		</view>
 
@@ -76,7 +74,7 @@
 				<list-cell image="home-4" iconColor="#e07472" title="我的股权" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
 				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" @eventClick="specTo()"></list-cell>
 				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="shwoCode()"></list-cell>
-				<list-cell image="home-2" iconColor="#e07472" title="我的评价"></list-cell>
+				<list-cell image="home-2" iconColor="#e07472" title="我的评价" @eventClick="navTo('/pages/eval/eval')">></list-cell>
 			</view>
 			<view class="history-section icon">
 				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
@@ -346,14 +344,15 @@
 
 		.card-bg {
 			position: absolute;
-			top: 20upx;
+			top: 0upx;
 			right: 0;
-			width: 380upx;
-			height: 260upx;
+			width: 690upx;
+			height: 197upx;
 		}
 
 		.b-btn {
 			position: absolute;
+			opacity: 0;
 			right: 22upx;
 			top: 22upx;
 			width: 132upx;
@@ -370,12 +369,10 @@
 		.tit {
 			font-size: $font-base+2upx;
 			color: #f7d680;
-			margin-bottom: 28upx;
-
-			.yticon {
-				color: #f6e5a3;
-				margin-right: 16upx;
-			}
+			position: relative;
+			left: 100upx;
+			top: -4upx;
+			z-index: 2;
 		}
 
 		.e-b {
