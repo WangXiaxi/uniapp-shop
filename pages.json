@@ -374,7 +374,13 @@
 				}
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/order/evaluate",
+            "style" : {
+				"navigationBarTitleText": "立即评价"
+			}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
