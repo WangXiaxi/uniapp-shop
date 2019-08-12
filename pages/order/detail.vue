@@ -59,10 +59,10 @@
 		</view>
 		<view style="height: 100upx;"></view>
 		<view class="action-box">
-			<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
-			<button class="action-btn recom">立即支付</button>
-			<button class="action-btn recom">申请售后</button>
-			<button class="action-btn recom">确认收货</button>
+			<button class="action-btn" @click="cancelOrder(id)">取消订单</button>
+			<button class="action-btn recom" @click="payOrder(id)">立即支付</button>
+			<button class="action-btn recom" @click="afterOrder(id)">申请售后</button>
+			<button class="action-btn recom" @click="sureOrder(id)">确认收货</button>
 			<button class="action-btn recom">去评价</button>
 			<button class="action-btn recom">已完成</button>
 		</view>
@@ -108,6 +108,63 @@
 					this.detail = res.data
 				}).catch(() => {
 					this.pageLoading = false
+				})
+			},
+			//删除订单
+			deleteOrder(id) {
+				uni.showModal({
+					title: '提示',
+					content: '确认删除该订单吗？',
+					success: (e) => {
+						if (e.confirm) {
+							uni.showLoading({ title: '请稍后' })
+							orderModel.orderDel({ id }).then(res => {
+								uni.hideLoading();
+								this.$api.msg('删除订单成功！')
+								this.loadData('refresh')
+							}).catch(() => {
+								uni.hideLoading()
+							})
+						}
+					}
+				})
+			},
+			//取消订单
+			cancelOrder(id) {
+				uni.showModal({
+					title: '提示',
+					content: '确认取消该订单吗？',
+					success: (e) => {
+						if (e.confirm) {
+							uni.showLoading({ title: '请稍后' })
+							orderModel.updateOrderStatus({ op: 'cancel', order_id: id }).then(res => {
+								uni.hideLoading();
+								this.$api.msg('取消订单成功！')
+								this.loadData('refresh')
+							}).catch(() => {
+								uni.hideLoading()
+							})
+						}
+					}
+				})
+			},
+			//确认收货
+			sureOrder(id) {
+				uni.showModal({
+					title: '提示',
+					content: '该订单确认收货吗？',
+					success: (e) => {
+						if (e.confirm) {
+							uni.showLoading({ title: '请稍后' })
+							orderModel.updateOrderStatus({ op: 'confirm', order_id: id }).then(res => {
+								uni.hideLoading();
+								this.$api.msg('确认收货成功！')
+								this.loadData('refresh')
+							}).catch(() => {
+								uni.hideLoading()
+							})
+						}
+					}
 				})
 			}
 		}

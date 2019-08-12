@@ -29,7 +29,7 @@
 			<input class="input" type="text" v-model="keyworld" @confirm="handleSearch" placeholder="请输入关键字" placeholder-class="placeholder" />
 			<view class="btn" @click="handleSearch">搜索</view>
 		</view>
-		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录" :style="{ position: 'relative', paddingTop: '80upx', background: '#fff' }"></empty>
+		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录" :styles="{ position: 'relative', paddingTop: '80upx', background: '#fff' }"></empty>
 		<view v-else>
 			<view class="item-list">
 				<view class="item" v-for="(item, index) in list" :key="index">

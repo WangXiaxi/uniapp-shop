@@ -51,11 +51,13 @@
 				uni.showModal({
 					title: '删除地址',
 					content: '确定删除地址吗？',
-					success: () => {
-						mineModel.addressDel({ id }).then(res => {
-							this.$api.msg(`地址删除成功`);
-							this.refreshList()
-						})
+					success: (e) => {
+						if (e.confirm) {
+							mineModel.addressDel({ id }).then(res => {
+								this.$api.msg(`地址删除成功`);
+								this.refreshList()
+							})
+						}
 					}
 				})
 				

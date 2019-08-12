@@ -42,10 +42,10 @@
 							<text class="price">{{item.order_amount}}</text>
 						</view>
 						<view class="action-box b-t" v-if="item.state != 9">
-							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
-							<button class="action-btn recom">立即支付</button>
-							<button class="action-btn recom">申请售后</button>
-							<button class="action-btn recom">确认收货</button>
+							<button v-if="item.isCancel" class="action-btn" @click="cancelOrder(item.id)">取消订单</button>
+							<button v-if="item.isGoPay" class="action-btn recom" @click="payOrder(item)">立即支付</button>
+							<button v-if="item.isRefund" class="action-btn recom" @click="afterOrder(item)">申请售后</button>
+							<button v-if="item.isConfirm" class="action-btn recom" @click="sureOrder(item.id)">确认收货</button>
 							<button class="action-btn recom">去评价</button>
 							<button class="action-btn recom">已完成</button>
 						</view>
@@ -211,60 +211,60 @@
 			},
 			//删除订单
 			deleteOrder(id) {
-				uni.showLoading({ title: '请稍后' })
-				orderModel.orderDel({ id }).then(res => {
-					uni.hideLoading();
-					this.$api.msg('删除订单成功！')
-					this.loadData('refresh')
+				uni.showModal({
+					title: '提示',
+					content: '确认删除该订单吗？',
+					success: (e) => {
+						if (e.confirm) {
+							uni.showLoading({ title: '请稍后' })
+							orderModel.orderDel({ id }).then(res => {
+								uni.hideLoading();
+								this.$api.msg('删除订单成功！')
+								this.loadData('refresh')
+							}).catch(() => {
+								uni.hideLoading()
+							})
+						}
+					}
 				})
 			},
 			//取消订单
-			cancelOrder(item) {
-				uni.showLoading({
-					title: '请稍后'
+			cancelOrder(id) {
+				uni.showModal({
+					title: '提示',
+					content: '确认取消该订单吗？',
+					success: (e) => {
+						if (e.confirm) {
+							uni.showLoading({ title: '请稍后' })
+							orderModel.updateOrderStatus({ op: 'cancel', order_id: id }).then(res => {
+								uni.hideLoading();
+								this.$api.msg('取消订单成功！')
+								this.loadData('refresh')
+							}).catch(() => {
+								uni.hideLoading()
+							})
+						}
+					}
 				})
-				setTimeout(() => {
-					let {
-						stateTip,
-						stateTipColor
-					} = this.orderStateExp(9);
-					item = Object.assign(item, {
-						state: 9,
-						stateTip,
-						stateTipColor
-					})
-
-					//取消订单后删除待付款中该项
-					let list = this.navList[1].orderList;
-					let index = list.findIndex(val => val.id === item.id);
-					index !== -1 && list.splice(index, 1);
-
-					uni.hideLoading();
-				}, 600)
 			},
-
-			//订单状态文字和颜色
-			orderStateExp(state) {
-				let stateTip = '',
-					stateTipColor = '#ea1212';
-				switch (+state) {
-					case 1:
-						stateTip = '待付款';
-						break;
-					case 2:
-						stateTip = '待发货';
-						break;
-					case 9:
-						stateTip = '订单已关闭';
-						stateTipColor = '#909399';
-						break;
-
-						//更多自定义
-				}
-				return {
-					stateTip,
-					stateTipColor
-				};
+			//确认收货
+			sureOrder(id) {
+				uni.showModal({
+					title: '提示',
+					content: '该订单确认收货吗？',
+					success: (e) => {
+						if (e.confirm) {
+							uni.showLoading({ title: '请稍后' })
+							orderModel.updateOrderStatus({ op: 'confirm', order_id: id }).then(res => {
+								uni.hideLoading();
+								this.$api.msg('确认收货成功！')
+								this.loadData('refresh')
+							}).catch(() => {
+								uni.hideLoading()
+							})
+						}
+					}
+				})
 			}
 		},
 	}

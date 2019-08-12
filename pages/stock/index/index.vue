@@ -29,7 +29,7 @@
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
 		</view>
-		<empty v-if="pageLoading === false && list.length === 0" text="暂无相关记录" :style="{ position: 'relative', paddingTop: '80upx', background: '#f5f5f5' }"></empty>
+		<empty v-if="pageLoading === false && list.length === 0" text="暂无相关记录" :styles="{ position: 'relative', paddingTop: '80upx', background: '#f5f5f5' }"></empty>
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>

@@ -1,5 +1,5 @@
 <template>
-	<view class="empty-content" :style="style">
+	<view class="empty-content" :style="styles">
 		<image class="empty-content-image" :src="setSrc" mode="aspectFit"></image>
 		<view class="text">{{text}}</view>
 	</view>
@@ -16,9 +16,11 @@
 				type: String,
 				default: ''
 			},
-			style: {
+			styles: {
 				type: Object,
-				default: {}
+				default: () => {
+					return {}
+				}
 			}
 		},
 

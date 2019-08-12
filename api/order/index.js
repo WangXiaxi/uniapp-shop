@@ -35,6 +35,10 @@ class OrderModel extends Request {
 	getOrderDetail(params) {
 		return this.get('/service/getOrderDetail', params)
 	}
+	// 订单操作接口
+	updateOrderStatus(params) {
+		return this.post('/service/updateOrderStatus', params)
+	}
 }
 
 const orderModel = new OrderModel()
