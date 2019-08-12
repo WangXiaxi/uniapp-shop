@@ -39,6 +39,10 @@ class OrderModel extends Request {
 	updateOrderStatus(params) {
 		return this.post('/service/updateOrderStatus', params)
 	}
+	// 评价图片上传
+	uploadCommonImg(file, params = {}) {
+		return this.uploadFile('/service/uploadCommonImg', file, params)
+	}
 }
 
 const orderModel = new OrderModel()

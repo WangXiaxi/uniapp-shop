@@ -28,6 +28,8 @@
 					<text class="title clamp">{{goodsItem.goods_array.name}}</text>
 					<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
 					<text class="price">{{goodsItem.goods_price}}</text>
+					<view class="eval-btn" @click="navTo(`/pages/order/evaluate?data=${JSON.stringify(goodsItem)}`)">去评价</view>
+					<!-- <view class="eval-btn grey">已评价</view> -->
 				</view>
 			</view>
 			<view class="order-js">
@@ -58,13 +60,11 @@
 			</view>
 		</view>
 		<view style="height: 100upx;"></view>
-		<view class="action-box">
-			<button class="action-btn" @click="cancelOrder(id)">取消订单</button>
-			<button class="action-btn recom" @click="payOrder(id)">立即支付</button>
-			<button class="action-btn recom" @click="afterOrder(id)">申请售后</button>
-			<button class="action-btn recom" @click="sureOrder(id)">确认收货</button>
-			<button class="action-btn recom">去评价</button>
-			<button class="action-btn recom">已完成</button>
+		<view class="action-box" v-if="!(!detail.isCancel && !detail.isGoPay && !detail.isRefund && !detail.isConfirm)">
+			<button v-if="detail.isCancel" class="action-btn" @click="cancelOrder(id)">取消订单</button>
+			<button v-if="detail.isGoPay" class="action-btn recom" @click="payOrder(id)">立即支付</button>
+			<button v-if="detail.isRefund" class="action-btn recom" @click="afterOrder(id)">申请售后</button>
+			<button v-if="detail.isConfirm" class="action-btn recom" @click="sureOrder(id)">确认收货</button>
 		</view>
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
@@ -93,6 +93,11 @@
 			this.loadData()
 		},
 		methods: {
+			navTo(url) {
+				uni.navigateTo({
+					url
+				})
+			},
 			loadData() {
 				this.pageLoading = true
 				orderModel.getOrderDetail({ id: this.id }).then(res => {
@@ -183,6 +188,8 @@
 		height: 100upx;
 		position: fixed;
 		bottom: 0;
+		left: 0;
+		right: 0;
 		padding-right: 30upx;
 		background: #fff;
 	}
@@ -327,12 +334,29 @@
 		}
 	
 		.right {
+			position: relative;
 			flex: 1;
 			display: flex;
 			flex-direction: column;
 			padding: 0 30upx 0 24upx;
 			overflow: hidden;
-	
+			.eval-btn {
+				padding: 10upx 20upx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				color: $base-color;
+				border: 1upx solid $base-color;
+				border-radius: 30upx;
+				font-size: 28upx;
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				&.grey {
+					border-color: #dedede;
+					color: #999;
+				}
+			}
 			.title {
 				font-size: $font-base + 2upx;
 				color: $font-color-dark;

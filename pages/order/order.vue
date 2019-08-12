@@ -41,13 +41,11 @@
 							件商品 实付款
 							<text class="price">{{item.order_amount}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.state != 9">
+						<view class="action-box b-t" v-if="!(!item.isCancel && !item.isGoPay && !item.isRefund && !item.isConfirm)">
 							<button v-if="item.isCancel" class="action-btn" @click="cancelOrder(item.id)">取消订单</button>
 							<button v-if="item.isGoPay" class="action-btn recom" @click="payOrder(item)">立即支付</button>
 							<button v-if="item.isRefund" class="action-btn recom" @click="afterOrder(item)">申请售后</button>
 							<button v-if="item.isConfirm" class="action-btn recom" @click="sureOrder(item.id)">确认收货</button>
-							<button class="action-btn recom">去评价</button>
-							<button class="action-btn recom">已完成</button>
 						</view>
 					</view>
 
