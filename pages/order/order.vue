@@ -49,7 +49,7 @@
 						</view>
 					</view>
 
-					<uni-load-more :status="tabItem.loadingType"></uni-load-more>
+					<uni-load-more :status="tabItem.loadingType" v-if="!(tabItem.loadingType === 'nomore' && tabItem.orderList.length === 0)"></uni-load-more>
 				</scroll-view>
 			</swiper-item>
 		</swiper>

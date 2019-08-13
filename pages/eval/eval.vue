@@ -6,35 +6,27 @@
 				{{item.text}}
 			</view>
 		</view>
-		
+
 		<swiper :current="tabCurrentIndex" class="swiper-box" duration="300" @change="changeTab">
 			<swiper-item class="tab-content" v-for="(tabItem,tabIndex) in navList" :key="tabIndex">
 				<scroll-view class="list-scroll-content" scroll-y @scrolltolower="loadData">
 					<!-- 空白页 -->
 					<empty v-if="tabItem.loaded === true && tabItem.orderList.length === 0"></empty>
-		
 					<!-- 订单列表 -->
 					<view v-for="(item,index) in tabItem.orderList" :key="index" class="order-item">
-						<view class="i-top b-b">
-							<text class="time">{{item.create_time}}</text>
-							<text class="state" :style="{color: item.stateTipColor}">{{item.status_text}}</text>
-							<text v-if="true" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.id)"></text>
-						</view>
-						
-						<view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length === 1" class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex">
-							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
+						<view @click="navTo(`/pages/order/detail?id=${item.id}`)" class="goods-box-single">
+							<image class="goods-img" :src="item.image" mode="aspectFill"></image>
 							<view class="right">
-								<text class="title clamp">{{goodsItem.goods_array.name}}</text>
-								<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
-								<text class="price">{{goodsItem.goods_price}}</text>
+								<text class="title clamp">{{item.name}}</text>
+								<text class="attr-box">{{item.time}}</text>
 							</view>
 						</view>
-						<view class="action-box b-t" v-if="!(!item.isCancel && !item.isGoPay && !item.isRefund && !item.isConfirm)">
-							<button v-if="item.isCancel" class="action-btn" @click="cancelOrder(item.id)">取消订单</button>
+						<view class="action-box" v-if="item.status === '0'">
+							<text class="tip-grey">您还未评价该商品~</text>
+							<button class="action-btn recom" @click="navTo(`/pages/order/evaluate?data=${JSON.stringify(item)}`)">立即评价</button>
 						</view>
 					</view>
-		
-					<uni-load-more :status="tabItem.loadingType"></uni-load-more>
+					<uni-load-more :status="tabItem.loadingType" v-if="!(tabItem.loadingType === 'nomore' && tabItem.orderList.length === 0)"></uni-load-more>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -58,7 +50,7 @@
 				tabCurrentIndex: 0,
 				navList: [{
 						state: 0,
-						text: '已评价',
+						text: '未评价',
 						loadingType: 'more',
 						orderList: [],
 						page: 0,
@@ -66,7 +58,7 @@
 					},
 					{
 						state: 1,
-						text: '未评价',
+						text: '已评价',
 						loadingType: 'more',
 						orderList: [],
 						page: 0,
@@ -93,12 +85,17 @@
 			tabClick(index) {
 				this.tabCurrentIndex = index;
 			},
+			//swiper 切换
+			changeTab(e) {
+				this.tabCurrentIndex = e.target.current;
+				this.loadData('tabChange');
+			},
 			//获取订单列表
 			loadData(source) {
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];
-			
+
 				if (source === 'tabChange' && navItem.loaded === true) {
 					//tab切换只有第一次需要加载数据
 					return;
@@ -113,34 +110,23 @@
 					//防止重复加载
 					return;
 				}
-				
+
 				navItem.loadingType = 'loading';
 				navItem.page = navItem.page + 1;
 				let {
 					state,
 					page
 				} = navItem;
-				orderModel.getOrderListByState({
-					state,
+				orderModel.getUcenterCommonList({
+					common_status: state,
 					page
 				}).then(res => {
 					navItem.orderList.push(...res.data.data.map(k => {
-						let num = 0
-						if (!k.goods) {
-							k.goods = []
-							return k
-						}
-						k.goods.forEach(c => {
-							num = num + Number(c.goods_nums)
-							c.image = `${url_image}/${c.img}`
-							c.goods_array = JSON.parse(c.goods_array)
-						})
-						k.num = num
+						k.image = `${url_image}/${k.img}`
 						return k
 					}));
 					this.$set(navItem, 'loaded', true);
 					navItem.total = res.data.totalPage;
-					
 					navItem.loadingType = page >= navItem.total ? 'nomore' : 'more';
 					if (source === 'refresh') {
 						uni.stopPullDownRefresh();
@@ -157,6 +143,92 @@
 		background: $page-color-base;
 		height: 100%;
 	}
+
+	.swiper-box {
+		height: calc(100% - 40px);
+	}
+
+	.list-scroll-content {
+		height: 100%;
+	}
+
+	.action-box {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		height: 100upx;
+		position: relative;
+		padding-right: 30upx;
+		background: #fff;
+	}
+
+	.action-btn {
+		width: 160upx;
+		height: 60upx;
+		margin: 0;
+		margin-left: 24upx;
+		padding: 0;
+		text-align: center;
+		line-height: 60upx;
+		font-size: $font-sm + 2upx;
+		color: $font-color-dark;
+		background: #fff;
+		border-radius: 100px;
+
+		&:after {
+			border-radius: 100px;
+		}
+
+		&.recom {
+			background: #fff9f9;
+			color: $base-color;
+
+			&:after {
+				border-color: #f7bcc8;
+			}
+		}
+	}
+	.order-item {
+		margin-top: 30upx;
+	}
+	.tip-grey {
+		color: #999;
+		font-size: 28upx;
+		flex: 1;
+		padding-left: 30upx;
+	}
+	/* 单条商品 */
+	.goods-box-single {
+		display: flex;
+		padding: 30upx;
+		background: #fff;
+		.goods-img {
+			display: block;
+			width: 120upx;
+			height: 120upx;
+		}
+
+		.right {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 0 30upx 0 24upx;
+			overflow: hidden;
+
+			.title {
+				font-size: $font-base + 2upx;
+				color: $font-color-dark;
+				line-height: 1;
+			}
+			.attr-box {
+				font-size: $font-sm + 2upx;
+				color: $font-color-light;
+				padding: 16upx 0 0 0;
+			}
+		}
+	}
+
 	.navbar {
 		display: flex;
 		height: 40px;
@@ -165,7 +237,7 @@
 		box-shadow: 0 1px 5px rgba(0, 0, 0, .06);
 		position: relative;
 		z-index: 10;
-	
+
 		.nav-item {
 			flex: 1;
 			display: flex;
@@ -175,10 +247,10 @@
 			font-size: 15px;
 			color: $font-color-dark;
 			position: relative;
-	
+
 			&.current {
 				color: $base-color;
-	
+
 				&:after {
 					content: '';
 					position: absolute;
@@ -187,7 +259,6 @@
 					transform: translateX(-50%);
 					width: 44px;
 					height: 0;
-					border-bottom: 2px solid $base-color;
 				}
 			}
 		}

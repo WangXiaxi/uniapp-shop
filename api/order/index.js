@@ -43,6 +43,14 @@ class OrderModel extends Request {
 	uploadCommonImg(file, params = {}) {
 		return this.uploadFile('/service/uploadCommonImg', file, params)
 	}
+	// 评价列表
+	getUcenterCommonList(params) {
+		return this.get('/service/getUcenterCommonList',  { ...params, limit: 10, paging: true })
+	}
+	// 评价接口
+	getCommonDetail(params) {
+		return this.get('/service/getCommonDetail',  { ...params })
+	}
 }
 
 const orderModel = new OrderModel()
