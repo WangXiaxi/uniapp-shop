@@ -124,7 +124,7 @@
 			this.tabCurrentIndex = +options.state;
 			this.loadData()
 		},
-
+	
 		methods: {
 			navTo(url) {
 				uni.navigateTo({

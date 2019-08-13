@@ -30,9 +30,11 @@
 <script>
 	import sunuiStar from '@/components/sunui-star/sunui-star.vue'
 	import orderModel from '../../api/order/index.js'
+
 	import {
 		url_base_image
 	} from '../../common/config/index.js'
+
 	export default {
 		components: {
 			sunuiStar
@@ -179,6 +181,7 @@
 		.text-area {
 			width: 100%;
 			height: 200upx;
+			font-size: 28upx;
 		}
 
 		.image-box {

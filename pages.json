@@ -121,7 +121,7 @@
 		}, {
 			"path": "pages/order/order",
 			"style": {
-				"enablePullDownRefresh": true,
+				// "enablePullDownRefresh": true,
 				"navigationBarTitleText": "我的订单",
 				"app-plus": {
 					"bounce": "none"
@@ -384,7 +384,7 @@
         ,{
             "path" : "pages/eval/eval",
             "style" : {
-				"enablePullDownRefresh": true,
+				// "enablePullDownRefresh": true,
 				"navigationBarTitleText": "我的评价"
 			}
         }

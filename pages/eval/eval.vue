@@ -18,12 +18,27 @@
 							<image class="goods-img" :src="item.image" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{item.name}}</text>
-								<text class="attr-box">{{item.time}}</text>
+								<text class="attr-box" v-if="item.status === '0'">{{item.time}}</text>
+								<view class="star-box"  v-if="item.status === '1'">
+									<view class="item">
+										<view class="tit">满意度</view>
+										<sunui-star @changeStar="changeStar" :defaultStar="Number(item.point)" :disabledStar="true"></sunui-star>
+									</view>
+								</view>
 							</view>
 						</view>
 						<view class="action-box" v-if="item.status === '0'">
 							<text class="tip-grey">您还未评价该商品~</text>
-							<button class="action-btn recom" @click="navTo(`/pages/order/evaluate?data=${JSON.stringify(item)}`)">立即评价</button>
+							<button class="action-btn recom" @click="navToEvaluate(item)">立即评价</button>
+						</view>
+						<view class="pj-info" v-if="item.status === '1'">
+							<view class="pj-tit">评价内容</view>
+							<view class="con">{{item.contents | fill('您没有填写评价内容~')}}</view>
+							<view class="img-box">
+								<image class="image" v-for="(items, indexs) in item.image_list" :key="indexs" :src="items" @click="preview(indexs, item.image_list)"></image>
+							</view>
+							<view class="pj-tit" v-if="item.recontents">商家回复</view>
+							<view class="con" v-if="item.recontents">{{item.recontents}}</view>
 						</view>
 					</view>
 					<uni-load-more :status="tabItem.loadingType" v-if="!(tabItem.loadingType === 'nomore' && tabItem.orderList.length === 0)"></uni-load-more>
@@ -34,19 +49,23 @@
 </template>
 
 <script>
-	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-	import empty from "@/components/empty";
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
+	import empty from '@/components/empty'
 	import orderModel from '../../api/order/index.js'
+	import sunuiStar from '@/components/sunui-star/sunui-star.vue'
+
 	import {
-		url_image
+		url_base_image, url_image
 	} from '../../common/config/index.js'
 	export default {
 		components: {
 			uniLoadMore,
-			empty
+			empty,
+			sunuiStar
 		},
 		data() {
 			return {
+				url_base_image,
 				tabCurrentIndex: 0,
 				navList: [{
 						state: 0,
@@ -76,6 +95,20 @@
 			this.loadData()
 		},
 		methods: {
+			preview(index, list) {
+				console.log(index, list)
+				uni.previewImage({
+					current: index,
+					urls: list,
+					success: () => {
+					}
+				})
+			},
+			navToEvaluate(item) {
+				uni.navigateTo({
+					url: `/pages/order/evaluate?data=${JSON.stringify(item)}`
+				})
+			},
 			navTo(url) {
 				uni.navigateTo({
 					url
@@ -123,6 +156,9 @@
 				}).then(res => {
 					navItem.orderList.push(...res.data.data.map(k => {
 						k.image = `${url_image}/${k.img}`
+						k.image_list = JSON.parse(k.img_list ? k.img_list : '[]').map(c => {
+							return `${url_base_image}/${c}`
+						})
 						return k
 					}));
 					this.$set(navItem, 'loaded', true);
@@ -147,7 +183,20 @@
 	.swiper-box {
 		height: calc(100% - 40px);
 	}
-
+	.star-box {
+		background: #fff;
+		font-size: 24upx;
+		margin-top: 16upx;
+		.item {
+			display: flex;
+			align-items: center;
+			.tit {
+				color: #999;
+				font-size: 26upx;
+				width: 100upx;
+			}
+		}
+	}
 	.list-scroll-content {
 		height: 100%;
 	}
@@ -191,6 +240,7 @@
 
 	.order-item {
 		margin-top: 30upx;
+		background: #fff;
 	}
 
 	.tip-grey {
@@ -265,6 +315,29 @@
 					width: 44px;
 					height: 0;
 				}
+			}
+		}
+	}
+	.pj-info {
+		position: relative;
+		font-size: 28upx;
+		padding: 0 30upx 30upx;
+		.pj-tit {
+			font-size: 30upx;
+		}
+		.con {
+			margin-top: 20upx; 
+			font-size: 28upx;
+			color: #999;
+			line-height: 1.6;
+		}
+		.img-box {
+			overflow: hidden;
+			margin-top: 20upx;
+			.image {
+				width: 150upx;
+				height: 150upx;
+				margin: 0 20upx 20upx 0;
 			}
 		}
 	}

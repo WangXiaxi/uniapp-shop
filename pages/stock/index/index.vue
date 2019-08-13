@@ -52,7 +52,8 @@
 	export default {
 		components: {
 			listCell,
-			empty
+			empty,
+			mixLoading
 		},
 		data() {
 			return {

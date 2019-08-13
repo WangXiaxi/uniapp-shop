@@ -28,7 +28,7 @@
 					<text class="title clamp">{{goodsItem.goods_array.name}}</text>
 					<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
 					<text class="price">{{goodsItem.goods_price}}</text>
-					<view class="eval-btn" v-if="goodsItem.comments_status === '0'" @click="navTo(`/pages/order/evaluate?data=${JSON.stringify(goodsItem.comments)}`)">去评价</view>
+					<view class="eval-btn" v-if="goodsItem.comments_status === '0'"  @click="navToEvaluate(goodsItem.comments)">去评价</view>
 					<view class="eval-btn grey" v-if="goodsItem.comments_status === '1'">已评价</view>
 				</view>
 			</view>
@@ -93,6 +93,11 @@
 			this.loadData()
 		},
 		methods: {
+			navToEvaluate(item) {
+				uni.navigateTo({
+					url: `/pages/order/evaluate?data=${JSON.stringify(item)}`
+				})
+			},
 			navTo(url) {
 				uni.navigateTo({
 					url
@@ -120,36 +125,13 @@
 								id: data.id
 							}
 						}
-
+					
 						return c
 					})
 					res.data.goods_num = num
 					this.detail = res.data
 				}).catch(() => {
 					this.pageLoading = false
-				})
-			},
-			//删除订单
-			deleteOrder(id) {
-				uni.showModal({
-					title: '提示',
-					content: '确认删除该订单吗？',
-					success: (e) => {
-						if (e.confirm) {
-							uni.showLoading({
-								title: '请稍后'
-							})
-							orderModel.orderDel({
-								id
-							}).then(res => {
-								uni.hideLoading();
-								this.$api.msg('删除订单成功！')
-								this.loadData('refresh')
-							}).catch(() => {
-								uni.hideLoading()
-							})
-						}
-					}
 				})
 			},
 			//取消订单
@@ -169,6 +151,9 @@
 								uni.hideLoading();
 								this.$api.msg('取消订单成功！')
 								this.loadData('refresh')
+								if (this.$api.prePage()) {
+									this.$api.prePage().loadData('refresh')
+								}
 							}).catch(() => {
 								uni.hideLoading()
 							})
@@ -193,6 +178,9 @@
 								uni.hideLoading();
 								this.$api.msg('确认收货成功！')
 								this.loadData('refresh')
+								if (this.$api.prePage()) {
+									this.$api.prePage().loadData('refresh')
+								}
 							}).catch(() => {
 								uni.hideLoading()
 							})
