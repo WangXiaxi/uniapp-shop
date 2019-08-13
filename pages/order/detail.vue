@@ -28,8 +28,8 @@
 					<text class="title clamp">{{goodsItem.goods_array.name}}</text>
 					<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
 					<text class="price">{{goodsItem.goods_price}}</text>
-					<view class="eval-btn" @click="navTo(`/pages/order/evaluate?data=${JSON.stringify(goodsItem)}`)">去评价</view>
-					<!-- <view class="eval-btn grey">已评价</view> -->
+					<view class="eval-btn" v-if="goodsItem.comments_status === '0'" @click="navTo(`/pages/order/evaluate?data=${JSON.stringify(goodsItem.comments)}`)">去评价</view>
+					<view class="eval-btn grey" v-if="goodsItem.comments_status === '1'">已评价</view>
 				</view>
 			</view>
 			<view class="order-js">
@@ -100,13 +100,27 @@
 			},
 			loadData() {
 				this.pageLoading = true
-				orderModel.getOrderDetail({ id: this.id }).then(res => {
+				orderModel.getOrderDetail({
+					id: this.id
+				}).then(res => {
 					this.pageLoading = false
 					let num = 0
+					const comments = res.data.comment ? res.data.comment : []
 					res.data.goods = res.data.goods.map(c => {
 						c.img = `${url_image}/${c.img}`
 						c.goods_array = JSON.parse(c.goods_array)
 						num = num + Number(c.goods_nums)
+						const data = comments.find(k => c.goods_id === k.goods_id)
+						if (data && data.status === '0') {
+							c.comments_id = data.id
+							c.comments_status = data.status
+							c.comments = {
+								image: c.img,
+								name: c.goods_array.name,
+								id: data.id
+							}
+						}
+
 						return c
 					})
 					res.data.goods_num = num
@@ -122,8 +136,12 @@
 					content: '确认删除该订单吗？',
 					success: (e) => {
 						if (e.confirm) {
-							uni.showLoading({ title: '请稍后' })
-							orderModel.orderDel({ id }).then(res => {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							orderModel.orderDel({
+								id
+							}).then(res => {
 								uni.hideLoading();
 								this.$api.msg('删除订单成功！')
 								this.loadData('refresh')
@@ -141,8 +159,13 @@
 					content: '确认取消该订单吗？',
 					success: (e) => {
 						if (e.confirm) {
-							uni.showLoading({ title: '请稍后' })
-							orderModel.updateOrderStatus({ op: 'cancel', order_id: id }).then(res => {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							orderModel.updateOrderStatus({
+								op: 'cancel',
+								order_id: id
+							}).then(res => {
 								uni.hideLoading();
 								this.$api.msg('取消订单成功！')
 								this.loadData('refresh')
@@ -160,8 +183,13 @@
 					content: '该订单确认收货吗？',
 					success: (e) => {
 						if (e.confirm) {
-							uni.showLoading({ title: '请稍后' })
-							orderModel.updateOrderStatus({ op: 'confirm', order_id: id }).then(res => {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							orderModel.updateOrderStatus({
+								op: 'confirm',
+								order_id: id
+							}).then(res => {
 								uni.hideLoading();
 								this.$api.msg('确认收货成功！')
 								this.loadData('refresh')
@@ -181,6 +209,7 @@
 		background: $page-color-base;
 		padding-bottom: 160upx;
 	}
+
 	.action-box {
 		display: flex;
 		justify-content: flex-end;
@@ -193,7 +222,7 @@
 		padding-right: 30upx;
 		background: #fff;
 	}
-	
+
 	.action-btn {
 		width: 160upx;
 		height: 60upx;
@@ -206,35 +235,40 @@
 		color: $font-color-dark;
 		background: #fff;
 		border-radius: 100px;
-	
+
 		&:after {
 			border-radius: 100px;
 		}
-	
+
 		&.recom {
 			background: #fff9f9;
 			color: $base-color;
-	
+
 			&:after {
 				border-color: #f7bcc8;
 			}
 		}
 	}
+
 	.order-info {
 		margin-top: 30upx;
 		font-size: 30upx;
 		padding: 30upx;
 		background: #fff;
+
 		.tit {
 			font-size: 34upx;
 			margin-bottom: 20upx;
 		}
+
 		.item {
 			display: flex;
+
 			view {
 				line-height: 60upx;
 				color: #999;
-				& + view {
+
+				&+view {
 					color: #333;
 					flex: 1;
 					text-align: right;
@@ -242,16 +276,19 @@
 			}
 		}
 	}
+
 	.order-js {
 		font-size: 30upx;
 		padding: 30upx 0;
 		text-align: right;
 		color: #999;
 		line-height: 60upx;
+
 		text {
 			color: $base-color;
 		}
 	}
+
 	.status {
 		background: $base-color;
 		font-size: 30upx;
@@ -260,6 +297,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
 		.img {
 			width: 60upx;
 			height: 60upx;
@@ -269,16 +307,18 @@
 			margin-right: 20upx;
 		}
 	}
+
 	.address-section {
 		padding: 30upx 0;
 		background: #fff;
 		position: relative;
 		margin-top: 20upx;
+
 		.order-content {
 			display: flex;
 			align-items: center;
 		}
-	
+
 		.icon-shouhuodizhi {
 			flex-shrink: 0;
 			display: flex;
@@ -288,7 +328,7 @@
 			color: #888;
 			font-size: 44upx;
 		}
-	
+
 		.cen {
 			display: flex;
 			flex-direction: column;
@@ -296,24 +336,24 @@
 			font-size: 28upx;
 			color: $font-color-dark;
 		}
-	
+
 		.name {
 			font-size: 34upx;
 			margin-right: 24upx;
 		}
-	
+
 		.address {
 			margin-top: 16upx;
 			margin-right: 20upx;
 			color: $font-color-light;
 		}
-	
+
 		.icon-you {
 			font-size: 32upx;
 			color: $font-color-light;
 			margin-right: 30upx;
 		}
-	
+
 		.a-bg {
 			position: absolute;
 			left: 0;
@@ -323,16 +363,17 @@
 			height: 5upx;
 		}
 	}
+
 	.goods-box-single {
 		display: flex;
 		padding: 20upx 0;
-	
+
 		.goods-img {
 			display: block;
 			width: 120upx;
 			height: 120upx;
 		}
-	
+
 		.right {
 			position: relative;
 			flex: 1;
@@ -340,6 +381,7 @@
 			flex-direction: column;
 			padding: 0 30upx 0 24upx;
 			overflow: hidden;
+
 			.eval-btn {
 				padding: 10upx 20upx;
 				display: flex;
@@ -352,27 +394,29 @@
 				position: absolute;
 				right: 0;
 				bottom: 0;
+
 				&.grey {
 					border-color: #dedede;
 					color: #999;
 				}
 			}
+
 			.title {
 				font-size: $font-base + 2upx;
 				color: $font-color-dark;
 				line-height: 1;
 			}
-	
+
 			.attr-box {
 				font-size: $font-sm + 2upx;
 				color: $font-color-light;
 				padding: 10upx 12upx;
 			}
-	
+
 			.price {
 				font-size: $font-base + 2upx;
 				color: $font-color-dark;
-	
+
 				&:before {
 					content: '￥';
 					font-size: $font-sm;
@@ -381,6 +425,7 @@
 			}
 		}
 	}
+
 	.goods-section {
 		padding: 0 30upx;
 		background: #fff;

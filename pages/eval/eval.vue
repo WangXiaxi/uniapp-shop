@@ -188,20 +188,24 @@
 			}
 		}
 	}
+
 	.order-item {
 		margin-top: 30upx;
 	}
+
 	.tip-grey {
 		color: #999;
 		font-size: 28upx;
 		flex: 1;
 		padding-left: 30upx;
 	}
+
 	/* 单条商品 */
 	.goods-box-single {
 		display: flex;
 		padding: 30upx;
 		background: #fff;
+
 		.goods-img {
 			display: block;
 			width: 120upx;
@@ -221,6 +225,7 @@
 				color: $font-color-dark;
 				line-height: 1;
 			}
+
 			.attr-box {
 				font-size: $font-sm + 2upx;
 				color: $font-color-light;

@@ -48,8 +48,8 @@ class OrderModel extends Request {
 		return this.get('/service/getUcenterCommonList',  { ...params, limit: 10, paging: true })
 	}
 	// 评价接口
-	getCommonDetail(params) {
-		return this.get('/service/getCommonDetail',  { ...params })
+	updateCommonGoods(params) {
+		return this.post('/service/updateCommonGoods',  { ...params })
 	}
 }
 

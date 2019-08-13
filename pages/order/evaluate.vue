@@ -68,7 +68,7 @@
 					_imgList: imageList.join(',')
 				}
 				this.loading = true
-				orderModel.getCommonDetail(sendData).then(res => {
+				orderModel.updateCommonGoods(sendData).then(res => {
 					this.$api.msg('评价成功！', 1500, false, 'success')
 					if (this.$api.prePage()) {
 						this.$api.prePage().loadData('refresh')
@@ -183,7 +183,7 @@
 
 		.image-box {
 			overflow: hidden;
-		
+
 			.img {
 				width: 126upx;
 				height: 126upx;

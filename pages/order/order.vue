@@ -21,12 +21,14 @@
 							<text v-if="true" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.id)"></text>
 						</view>
 
-						<scroll-view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length > 1" class="goods-box" scroll-x>
+						<scroll-view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length > 1" class="goods-box"
+						 scroll-x>
 							<view v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex" class="goods-item">
 								<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
-						<view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length === 1" class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex">
+						<view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length === 1" class="goods-box-single"
+						 v-for="(goodsItem, goodsIndex) in item.goods" :key="goodsIndex">
 							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{goodsItem.goods_array.name}}</text>
@@ -198,8 +200,12 @@
 					content: '确认删除该订单吗？',
 					success: (e) => {
 						if (e.confirm) {
-							uni.showLoading({ title: '请稍后' })
-							orderModel.orderDel({ id }).then(res => {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							orderModel.orderDel({
+								id
+							}).then(res => {
 								uni.hideLoading();
 								this.$api.msg('删除订单成功！')
 								this.loadData('refresh')
@@ -217,8 +223,13 @@
 					content: '确认取消该订单吗？',
 					success: (e) => {
 						if (e.confirm) {
-							uni.showLoading({ title: '请稍后' })
-							orderModel.updateOrderStatus({ op: 'cancel', order_id: id }).then(res => {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							orderModel.updateOrderStatus({
+								op: 'cancel',
+								order_id: id
+							}).then(res => {
 								uni.hideLoading();
 								this.$api.msg('取消订单成功！')
 								this.loadData('refresh')
@@ -236,8 +247,13 @@
 					content: '该订单确认收货吗？',
 					success: (e) => {
 						if (e.confirm) {
-							uni.showLoading({ title: '请稍后' })
-							orderModel.updateOrderStatus({ op: 'confirm', order_id: id }).then(res => {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							orderModel.updateOrderStatus({
+								op: 'confirm',
+								order_id: id
+							}).then(res => {
 								uni.hideLoading();
 								this.$api.msg('确认收货成功！')
 								this.loadData('refresh')
