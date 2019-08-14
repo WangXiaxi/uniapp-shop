@@ -40,11 +40,24 @@ class MineModel extends Request {
 	}
 	// 实名
 	realNameSave(params) {
-		return this.post('/service/realNameSave', {...params})
+		return this.post('/service/realNameSave', { ...params
+		})
 	}
 	// 获取实名信息
 	getRealNameInfo(params = {}) {
-		return this.post('/service/getRealNameInfo', {...params})
+		return this.post('/service/getRealNameInfo', { ...params
+		})
+	}
+	// 获取消息列表
+	getMessageList(params = {}) {
+		return this.post('/service/getMessageList', { ...params,
+			limit: 10,
+			paging: true
+		})
+	}
+	// 删除消息
+	delMessage(params = {}) {
+		return this.post('/service/delMessage', { ...params })
 	}
 	/**
 	 * 验证表单

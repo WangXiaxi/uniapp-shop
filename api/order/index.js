@@ -64,6 +64,10 @@ class OrderModel extends Request {
 	uploadRefundsImg(file, params = {}) {
 		return this.uploadFile('/service/uploadRefundsImg', file, params)
 	}
+	// 支付
+	doPay(params = {}) {
+		return this.post('/service/doPay', params)
+	}
 	/**
 	 * 验证表单
 	 */

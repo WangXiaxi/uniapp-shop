@@ -32,8 +32,7 @@
 								"text": "\ue744",
 								"fontSize": "27",
 								"color": "#303133",
-								"background": "rgba(0,0,0,0)",
-								"redDot": true
+								"background": "rgba(0,0,0,0)"
 							}
 						]
 					}
@@ -101,8 +100,7 @@
 								"text": "\ue744",
 								"fontSize": "28",
 								"color": "#303133",
-								"background": "rgba(0,0,0,0)",
-								"redDot": true
+								"background": "rgba(0,0,0,0)"
 							}
 						]
 					}

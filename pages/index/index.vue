@@ -293,15 +293,15 @@
 			const index = e.index;
 			if (index === 0) {
 				// #ifdef APP-PLUS
-				const pages = getCurrentPages();
-				const page = pages[pages.length - 1];
-				const currentWebview = page.$getAppWebview();
-				currentWebview.hideTitleNViewButtonRedDot({
-					index
-				});
+				// const pages = getCurrentPages();
+				// const page = pages[pages.length - 1];
+				// const currentWebview = page.$getAppWebview();
+				// currentWebview.hideTitleNViewButtonRedDot({
+				// 	index
+				// });
 				// #endif
 				uni.navigateTo({
-					url: '/pages/notice/notice'
+					url: '/pages/message/message'
 				})
 			}
 		}

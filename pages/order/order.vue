@@ -18,7 +18,7 @@
 						<view class="i-top b-b">
 							<text class="time">{{item.create_time}}</text>
 							<text class="state" :style="{color: item.stateTipColor}">{{item.status_text}}</text>
-							<text v-if="true" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.id)"></text>
+							<text v-if="item.status === '3' || item.status === '5'" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.id)"></text>
 						</view>
 
 						<scroll-view @click="navTo(`/pages/order/detail?id=${item.id}`)" v-if="item.goods.length > 1" class="goods-box"

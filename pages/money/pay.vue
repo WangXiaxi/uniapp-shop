@@ -113,16 +113,21 @@
 						direct_type: spec_array ? 'products' : 'goods'
 					})
 				}
-				console.log(sendData)
 				this.btnLoading = true
 				orderModel.confirmOrder(sendData).then(res => {
-					uni.requestPayment({
-						provider: 'wxpay',
-						orderInfo: '',
-						success: () => {
-						},
-						fail: () => {
-						}
+					orderModel.doPay({ order_id: res.data }).then(res => {
+						console.log(res, 1000)
+						uni.requestPayment({
+							provider: 'wxpay',
+							orderInfo: res.data,
+							success: () => {
+								this.btnLoading = false
+							},
+							fail: () => {
+							}
+						})
+					}).catch(() => {
+						
 					})
 				}).catch(() => {
 					this.btnLoading = false
