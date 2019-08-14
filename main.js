@@ -32,9 +32,9 @@ const json = type => {
 	})
 }
 
-const prePage = () => {
+const prePage = (num = 2) => {
 	let pages = getCurrentPages();
-	let prePage = pages[pages.length - 2];
+	let prePage = pages[pages.length - num];
 	// #ifdef H5
 	return prePage;
 	// #endif

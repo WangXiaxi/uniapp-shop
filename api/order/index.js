@@ -1,4 +1,5 @@
 import Request from '../../utils/request'
+import WxValidate from '../../utils/validate'
 /**
  * @name    OrderModel封装
  * @authors wangxiaoxing (995107408@qq.com)
@@ -50,6 +51,25 @@ class OrderModel extends Request {
 	// 评价接口
 	updateCommonGoods(params) {
 		return this.post('/service/updateCommonGoods',  { ...params })
+	}
+	// 获取售后详情
+	getRefundsDetail(params) {
+		return this.get('/service/getRefundsDetail',  { ...params })
+	}
+	// 申请售后提交
+	updateRefunds(params) {
+		return this.post('/service/updateRefunds',  { ...params })
+	}
+	// 请售后图片上传
+	uploadRefundsImg(file, params = {}) {
+		return this.uploadFile('/service/uploadRefundsImg', file, params)
+	}
+	/**
+	 * 验证表单
+	 */
+	initValidate(rules, messages) {
+		// 创建实例对象
+		this.WxValidate = new WxValidate(rules, messages)
 	}
 }
 

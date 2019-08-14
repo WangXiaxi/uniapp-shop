@@ -93,6 +93,11 @@
 			this.loadData()
 		},
 		methods: {
+			afterOrder(id) {
+				uni.navigateTo({
+					url: `/pages/order/after?id=${id}`
+				})
+			},
 			navToEvaluate(item) {
 				uni.navigateTo({
 					url: `/pages/order/evaluate?data=${JSON.stringify(item)}`
@@ -103,7 +108,12 @@
 					url
 				})
 			},
-			loadData() {
+			loadData(source) {
+				if (source === 'refresh') {
+					if (this.$api.prePage(3)) {
+						this.$api.prePage(3).loadData('refresh')
+					}
+				}
 				this.pageLoading = true
 				orderModel.getOrderDetail({
 					id: this.id

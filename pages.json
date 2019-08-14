@@ -388,6 +388,18 @@
 				"navigationBarTitleText": "我的评价"
 			}
         }
+		,{
+		    "path" : "pages/order/after",
+		    "style" : {
+				"navigationBarTitleText": "申请售后"
+			}
+		}
+        ,{
+            "path" : "pages/message/message",
+            "style" : {
+				"navigationBarTitleText": "会员通知"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

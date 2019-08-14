@@ -46,7 +46,7 @@
 						<view class="action-box b-t" v-if="!(!item.isCancel && !item.isGoPay && !item.isRefund && !item.isConfirm)">
 							<button v-if="item.isCancel" class="action-btn" @click="cancelOrder(item.id)">取消订单</button>
 							<button v-if="item.isGoPay" class="action-btn recom" @click="payOrder(item)">立即支付</button>
-							<button v-if="item.isRefund" class="action-btn recom" @click="afterOrder(item)">申请售后</button>
+							<button v-if="item.isRefund" class="action-btn recom" @click="afterOrder(item.id)">申请售后</button>
 							<button v-if="item.isConfirm" class="action-btn recom" @click="sureOrder(item.id)">确认收货</button>
 						</view>
 					</view>
@@ -126,6 +126,11 @@
 		},
 	
 		methods: {
+			afterOrder(id) {
+				uni.navigateTo({
+					url: `/pages/order/after?id=${id}`
+				})
+			},
 			navTo(url) {
 				uni.navigateTo({
 					url
@@ -183,7 +188,6 @@
 					}
 				})
 			},
-
 			//swiper 切换
 			changeTab(e) {
 				this.tabCurrentIndex = e.target.current;

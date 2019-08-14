@@ -138,10 +138,11 @@
 					navItem.loadingType = 'more';
 					navItem.total = 0;
 					navItem.orderList = [];
-				}
-				if (navItem.loadingType === 'loading' || navItem.loadingType === 'nomore') {
-					//防止重复加载
-					return;
+				} else {
+					if (navItem.loadingType === 'loading' || navItem.loadingType === 'nomore') {
+						//防止重复加载
+						return;
+					}
 				}
 
 				navItem.loadingType = 'loading';

@@ -16,7 +16,7 @@
 				<input class="input" type="text" v-model="formData.note" placeholder="可填写转账说明" placeholder-class="placeholder" />
 			</view>
 		</view>
-		<view class="tips">注：提现收取<text>2%</text>手续费</view>
+		<view class="tips">注：提现收取<text>{{userInfo.service_percent}}%</text>手续费</view>
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
 		<pay-password :show="show" @close="close" @success="success"></pay-password>
 	</view>
