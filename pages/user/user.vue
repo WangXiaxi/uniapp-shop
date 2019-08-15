@@ -78,7 +78,7 @@
 			</view>
 			<view class="history-section icon">
 				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
-				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/collect/index')"></list-cell>
+				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/message/message')"></list-cell>
 				<list-cell image="home-1" title="关于我们"></list-cell>
 			</view>
 		</view>
@@ -179,14 +179,16 @@
 				})
 				const context = uni.createCanvasContext('codeCanvas', this)
 				uni.downloadFile({
-					// url: '/static/book.png',
-					url: `${url_base_image}/public/img/gqbj.png`,
+					url: `${url_base_image}/public/img/qrbg.png`,
 					success: (res) => {
 						context.drawImage(res.tempFilePath, 0, 0, 0)
 						uni.downloadFile({
 							url: `${url_base_image}/upload/qrcode/${share_qrcode}`,
 							success: (ress) => {
-								context.drawImage(ress.tempFilePath, 0, 100, 100)
+								context.drawImage(ress.tempFilePath, 132, 350, 100)
+								context.setFontSize(30)
+								context.setFillStyle('white')
+								context.fillText('长按图片保存', 290, 900)
 								context.draw(false, () => {
 									uni.canvasToTempFilePath({
 										x: 0,

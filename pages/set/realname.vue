@@ -1,5 +1,9 @@
 <template>
 	<view class="content">
+		<view class="status" v-if="formData.status == '0'">系统审核中</view>
+		<view class="status success" v-if="formData.status == '1'">审核已通过</view>
+		<view class="status red" v-if="formData.status == '2'">系统已拒绝</view>
+		
 		<view class="row b-b">
 			<text class="tit">真实姓名</text>
 			<input class="input" :disabled="disabled" type="text" v-model="formData.real_name" placeholder="请输入真实姓名" placeholder-class="placeholder" />
@@ -31,7 +35,8 @@
 			<view class="tips"><text>1.</text>格式为jpg/jpeg/png，且大小不得超过8MB！</view>
 			<view class="tips"><text>2.</text>请认真仔细填写个人信息，审核通过后不可修改。</view>
 		</view>
-		<button v-if="!disabled" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
+		<button v-if="!disabled && formData.status !== '2'" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
+		<button v-if="!disabled && formData.status === '2'" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">重新提交</button>
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
@@ -110,6 +115,9 @@
 					if(res.data.id) {
 						res.data.real_name = res.data.name
 						Object.assign(this.formData, res.data)
+						if (res.data.status == '2') {
+							this.disabled = false
+						}
 					} else {
 						this.disabled = false
 					}
@@ -161,6 +169,27 @@
 	page {
 		background: $page-color-base;
 		padding-top: 16upx;
+	}
+	.status {
+		margin-top: -16upx;
+		margin-bottom: 30upx;
+		width: 100%;
+		height: 80upx;
+		background: #fdf6d6;
+		color: #e2ccaa;
+		font-size: 28upx;
+		text-align: center;
+		justify-content: center;
+		display: flex;
+		align-items: center;
+		&.success {
+			color: #67c23a;
+			background: #f0f9eb;
+		}
+		&.red {
+			color: #f56c6c;
+			background: #fef0f0;
+		}
 	}
 	.tips {
 		font-size: 24upx;

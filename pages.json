@@ -182,6 +182,12 @@
 			}
 		},
 		{
+			"path": "pages/money/reSuccess",
+			"style": {
+				"navigationBarTitleText": "充值成功"
+			}
+		},
+		{
 			"path": "pages/money/paySuccess",
 			"style": {
 				"navigationBarTitleText": "支付成功"

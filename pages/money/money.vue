@@ -5,7 +5,7 @@
 			<view class="tit">余额<text>(￥)</text></view>
 			<view class="num">{{userInfo.remain_balance | nf }}</view>
 		</view>
-		<view class="center-part">
+		<!-- <view class="center-part">
 			<view class="type-list">
 				<view class="type" :class="{ act: type === 0 }" @click="changeType(0)">市场</view>
 				<view class="type" :class="{ act: type === 1 }" @click="changeType(1)">商城</view>
@@ -38,8 +38,8 @@
 					<view class="name">店铺佣金(￥)</view>
 				</view>
 			</view>
-		</view>
-		<view class="card-box">
+		</view> -->
+		<view class="card-box" style="margin-top: -80upx;">
 			<image class="card-img" mode="aspectFit" src="../../static/card.png"></image>
 			<view class="info">
 				<view class="name">{{detail.bank | fill('----')}}</view>
@@ -50,7 +50,7 @@
 		</view>
 		<view class="ic-box">
 			<list-cell image="money-3" title="提现" @eventClick="navTo('/pages/money/withdraw')"></list-cell>
-			<list-cell image="money-1" title="充值" @eventClick="navTo('/pages/set/set')"></list-cell>
+			<list-cell image="money-1" title="充值" @eventClick="navTo('/pages/money/invest')"></list-cell>
 			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
 			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
 		</view>
