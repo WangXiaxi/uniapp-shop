@@ -124,7 +124,7 @@
 			this.tabCurrentIndex = +options.state;
 			this.loadData()
 		},
-	
+
 		methods: {
 			afterOrder(id) {
 				uni.navigateTo({
@@ -267,8 +267,14 @@
 						}
 					}
 				})
+			},
+			// 立即支付
+			payOrder(item) {
+				uni.navigateTo({
+					url: `/pages/money/pay?type=pay&finalLastSum=${item.order_amount}&id=${item.id}`
+				})
 			}
-		},
+		}
 	}
 </script>
 

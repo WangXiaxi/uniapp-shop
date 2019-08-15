@@ -92,6 +92,12 @@
 			this.id = option.id
 			this.loadData()
 		},
+		onBackPress(options) {
+			if (this.$api.prePage()) {
+				this.$api.prePage().loadData('refresh')
+			}
+			return false;
+		},
 		methods: {
 			afterOrder(id) {
 				uni.navigateTo({
@@ -108,11 +114,10 @@
 					url
 				})
 			},
+			
 			loadData(source) {
 				if (source === 'refresh') {
-					if (this.$api.prePage(3)) {
-						this.$api.prePage(3).loadData('refresh')
-					}
+					this.parPageRefresh = true
 				}
 				this.pageLoading = true
 				orderModel.getOrderDetail({

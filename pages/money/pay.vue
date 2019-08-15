@@ -40,9 +40,8 @@
 				</label>
 			</view>
 		</view>
-
-		<button class="mix-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
-
+		<button class="mix-btn" v-if="type === 'pay'" @click="confirmPay" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
+		<button class="mix-btn" v-else @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
 	</view>
 </template>
 
@@ -57,14 +56,20 @@
 			return {
 				btnLoading: false,
 				payType: 10,
-				detail: {}
+				detail: {},
+				type: ''
 			};
 		},
 		computed: {
 			...mapGetters(['params']),
 		},
 		onLoad(options) {
-			this.detail = JSON.parse(JSON.stringify(this.params))
+			if (options.type && options.type === 'pay') {
+				this.type = 'pay'
+				this.detail = JSON.parse(JSON.stringify(options))
+			} else {
+				this.detail = JSON.parse(JSON.stringify(this.params))
+			}
 			// this.getPaymentList() // 暂时写死支付方式
 		},
 
@@ -79,7 +84,50 @@
 			changePayType(type) {
 				this.payType = type;
 			},
-			//确认支付
+			payAction(id, payment_id) {
+				orderModel.doPay({
+					order_id: id,
+					payment_id
+				}).then(ress => {
+					console.log(ress, '支付')
+					uni.getProvider({
+						service: 'payment',
+						success: (service) => {
+							uni.requestPayment({
+								provider: service.provider[1],
+								orderInfo: JSON.stringify(ress.data),
+								success: () => {
+									this.btnLoading = false
+									uni.showModal({
+										title: '提示',
+										content: '是否已支付？',
+										success: (e) => {
+										}
+									})
+								},
+								fail: (error) => {
+									uni.showModal({
+										title: '提示',
+										content: JSON.stringify(error),
+										success: (e) => {
+										}
+									})
+									this.btnLoading = false
+								}
+							})
+						}
+					})
+				
+				}).catch(() => {
+					this.btnLoading = false
+				})
+			},
+			confirmPay() { // 订单支付
+				this.btnLoading = true
+				const { detail: { id }, payType } = this
+				this.payAction(id, 14)
+			},
+			// 立即支付 确认支付
 			confirm() {
 				const {
 					pay_revisit: revisit,
@@ -100,7 +148,6 @@
 					payment: this.payType
 				}
 				if (goodsList.length === 1) {
-					console.log(goodsList[0])
 					const {
 						count,
 						spec_array,
@@ -115,20 +162,7 @@
 				}
 				this.btnLoading = true
 				orderModel.confirmOrder(sendData).then(res => {
-					orderModel.doPay({ order_id: res.data }).then(res => {
-						console.log(res, 1000)
-						uni.requestPayment({
-							provider: 'wxpay',
-							orderInfo: res.data,
-							success: () => {
-								this.btnLoading = false
-							},
-							fail: () => {
-							}
-						})
-					}).catch(() => {
-						
-					})
+					this.payAction(res.data)
 				}).catch(() => {
 					this.btnLoading = false
 				})
