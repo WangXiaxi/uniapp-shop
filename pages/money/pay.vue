@@ -7,24 +7,23 @@
 
 		<view class="pay-type-list">
 
-			<view class="type-item b-b" @click="changePayType(10)">
-				<text class="icon yticon icon-weixinzhifu"></text>
-				<view class="con">
-					<text class="tit">微信支付</text>
-					<text>推荐使用微信支付</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#ea1212" :checked='payType == 10' />
-					</radio>
-				</label>
-			</view>
-			<view class="type-item b-b" @click="changePayType(12)">
+			<view class="type-item b-b" @click="changePayType(18)">
 				<text class="icon yticon icon-alipay"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#ea1212" :checked='payType == 12' />
+					<radio value="" color="#ea1212" :checked='payType == 18' />
+					</radio>
+				</label>
+			</view>
+			<view class="type-item b-b" @click="changePayType(14)">
+				<text class="icon yticon icon-weixinzhifu"></text>
+				<view class="con">
+					<text class="tit">微信支付</text>
+				</view>
+				<label class="radio">
+					<radio value="" color="#ea1212" :checked='payType == 14' />
 					</radio>
 				</label>
 			</view>
@@ -32,7 +31,7 @@
 				<text class="icon yticon icon-erjiye-yucunkuan"></text>
 				<view class="con">
 					<text class="tit">余额</text>
-					<!-- <text>可用余额 ¥198.5</text> -->
+					<text>可用余额 ¥{{userInfo.remain_balance | nf}}</text>
 				</view>
 				<label class="radio">
 					<radio value="" color="#ea1212" :checked='payType == 1' />
@@ -55,13 +54,13 @@
 		data() {
 			return {
 				btnLoading: false,
-				payType: 10,
+				payType: 18,
 				detail: {},
 				type: ''
 			};
 		},
 		computed: {
-			...mapGetters(['params']),
+			...mapGetters(['params', 'userInfo']),
 		},
 		onLoad(options) {
 			if (options.type && options.type === 'pay') {
@@ -70,16 +69,9 @@
 			} else {
 				this.detail = JSON.parse(JSON.stringify(this.params))
 			}
-			// this.getPaymentList() // 暂时写死支付方式
 		},
 
 		methods: {
-			// // 获取支付方式
-			// getPaymentList() {
-			// 	orderModel.getPaymentList().then(res => {
-			// 		console.log(res)
-			// 	})
-			// },
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
@@ -89,43 +81,68 @@
 					order_id: id,
 					payment_id
 				}).then(ress => {
-					console.log(ress, '支付')
-					uni.getProvider({
-						service: 'payment',
-						success: (service) => {
+					switch (payment_id) {
+						case 1: // 余额支付
+							uni.redirectTo({
+								url: '/pages/money/paySuccess?id=' + id
+							})
+							break
+						case 18: // 支付宝
 							uni.requestPayment({
-								provider: service.provider[1],
-								orderInfo: JSON.stringify(ress.data),
+								provider: 'alipay',
+								orderInfo: ress.data.url,
 								success: () => {
 									this.btnLoading = false
 									uni.showModal({
 										title: '提示',
 										content: '是否已支付？',
-										success: (e) => {
-										}
+										success: (e) => {}
 									})
 								},
 								fail: (error) => {
 									uni.showModal({
 										title: '提示',
-										content: JSON.stringify(error),
-										success: (e) => {
-										}
+										content: error.errMsg
 									})
 									this.btnLoading = false
 								}
 							})
-						}
-					})
-				
+							break
+						case 14: // 微信
+							uni.requestPayment({
+								provider: 'wxpay',
+								orderInfo: ress.data.url,
+								success: () => {
+									this.btnLoading = false
+									uni.showModal({
+										title: '提示',
+										content: '是否已支付？',
+										success: (e) => {}
+									})
+								},
+								fail: (error) => {
+									uni.showModal({
+										title: '提示',
+										content: error.errMsg
+									})
+									this.btnLoading = false
+								}
+							})
+							break
+					}
 				}).catch(() => {
 					this.btnLoading = false
 				})
 			},
 			confirmPay() { // 订单支付
 				this.btnLoading = true
-				const { detail: { id }, payType } = this
-				this.payAction(id, 14)
+				const {
+					detail: {
+						id
+					},
+					payType
+				} = this
+				this.payAction(id, payType)
 			},
 			// 立即支付 确认支付
 			confirm() {
@@ -162,7 +179,7 @@
 				}
 				this.btnLoading = true
 				orderModel.confirmOrder(sendData).then(res => {
-					this.payAction(res.data)
+					this.payAction(res.data, this.payType)
 				}).catch(() => {
 					this.btnLoading = false
 				})

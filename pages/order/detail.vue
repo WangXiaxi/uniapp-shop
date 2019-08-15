@@ -37,7 +37,7 @@
 				<view class="yunfei">运费：{{detail.real_freight | nf}}</view>
 				<view class="money" v-if="Number(detail.promotions)">vip积分抵扣：{{detail.promotions | nf}}</view>
 
-				<view class="real_pay">共{{detail.goods_num}}件商品，实付：<text>{{detail.real_amount | nf}}</text></view>
+				<view class="real_pay">共{{detail.goods_num}}件商品，实付：<text>{{detail.order_amount | nf}}</text></view>
 			</view>
 		</view>
 		<view class="order-info">
@@ -62,7 +62,7 @@
 		<view style="height: 100upx;"></view>
 		<view class="action-box" v-if="!(!detail.isCancel && !detail.isGoPay && !detail.isRefund && !detail.isConfirm)">
 			<button v-if="detail.isCancel" class="action-btn" @click="cancelOrder(id)">取消订单</button>
-			<button v-if="detail.isGoPay" class="action-btn recom" @click="payOrder(id)">立即支付</button>
+			<button v-if="detail.isGoPay" class="action-btn recom" @click="payOrder(detail)">立即支付</button>
 			<button v-if="detail.isRefund" class="action-btn recom" @click="afterOrder(id)">申请售后</button>
 			<button v-if="detail.isConfirm" class="action-btn recom" @click="sureOrder(id)">确认收货</button>
 		</view>
@@ -88,12 +88,11 @@
 			}
 		},
 		onLoad(option) {
-			console.log(option)
 			this.id = option.id
 			this.loadData()
 		},
 		onBackPress(options) {
-			if (this.$api.prePage()) {
+			if (this.$api.prePage() && this.parPageRefresh) {
 				this.$api.prePage().loadData('refresh')
 			}
 			return false;
@@ -174,6 +173,12 @@
 							})
 						}
 					}
+				})
+			},
+			// 立即支付
+			payOrder(item) {
+				uni.navigateTo({
+					url: `/pages/money/pay?type=pay&finalLastSum=${item.order_amount}&id=${item.id}`
 				})
 			},
 			//确认收货

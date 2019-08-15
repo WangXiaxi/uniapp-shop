@@ -1,5 +1,5 @@
 {
-    "name" : "uni-app-haha",
+    "name" : "忆杭网",
     "appid" : "__UNI__1E98D49",
     "description" : "",
     "versionName" : "1.0.0",
@@ -57,7 +57,8 @@
                 "payment" : {
                     "weixin" : {
                         "appid" : "wx8fb88710a894aa32"
-                    }
+                    },
+                    "alipay" : {}
                 },
                 "push" : {}
             }
