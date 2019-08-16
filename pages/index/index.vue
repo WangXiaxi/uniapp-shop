@@ -7,7 +7,7 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item)">
+				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item.goods_id)">
 					<image :src="item.src" />
 				</swiper-item>
 			</swiper>
@@ -127,16 +127,16 @@
 				<text class="tit">分类精选</text>
 				<text class="tit2">Competitive Products For You</text>
 			</view>
-			<text class="yticon icon-you"></text>
+			<navigator url="/pages/category/category" open-type="switchTab" class="yticon icon-you"></navigator>
 		</view>
-		<view class="hot-floor" v-for="(items, indexs) in catGoods" :key="indexs">
+		<view class="hot-floor" v-for="(items, indexs) in catGoods" :key="indexs" @click="navToDetailList(items)">
 			<view class="floor-img-box">
 				<image class="floor-img" :src="`${url_image}/${items.cat_pic}`"
 				 mode="scaleToFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
-					<view v-for="(item, index) in items.goods" :key="index" class="floor-item" @click="navToDetailPage(item)">
+					<view v-for="(item, index) in items.goods.data" :key="index" class="floor-item" @click.stop="navToDetailPage(item.id)">
 						<image :src="`${url_image}/${item.img}`" mode="aspectFill"></image>
 						<text class="title clamp">{{item.name}}</text>
 						<text class="price">￥{{item.sell_price}}</text>
@@ -158,7 +158,7 @@
 				<text class="tit">猜你喜欢</text>
 				<text class="tit2">Guess You Like It</text>
 			</view>
-			<text class="yticon icon-you"></text>
+			<navigator url="/pages/category/category" open-type="switchTab" class="yticon icon-you"></navigator>
 		</view>
 
 		<view class="guess-section">
@@ -195,7 +195,6 @@
 		},
 
 		onLoad() {
-
 			this.loadData();
 		},
 		methods: {
@@ -232,17 +231,23 @@
 				this.swiperCurrent = index;
 				this.titleNViewBackground = this.carouselList[index].background;
 			},
-			//详情页
-			navToDetailPage(item) {
-				if (!item.goods_id) return
+			navToDetailList(item) {
+				if (!item.id) return
 				uni.navigateTo({
-					url: `/pages/product/product?id=${item.goods_id}`
+					url: `/pages/product/list?id=${item.id}`
+				})
+			},
+			//详情页
+			navToDetailPage(id) {
+				if (!id) return
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
 				})
 			},
 		},
 		// #ifndef MP
 		// 标题栏input搜索框点击
-		onNavigationBarSearchInputClicked: async function(e) {
+		onNavigationBarSearchInputClicked(e) {
 			uni.navigateTo({
 				url: '/pages/search/search'
 			})

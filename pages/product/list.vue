@@ -58,11 +58,15 @@
 		},
 
 		onLoad(options) {
-			// #ifdef H5
-			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight + 'px';
-			// #endif
 			this.cateId = options.id;
 			this.loadData();
+		},
+		onShow() {
+			// #ifdef H5
+			setTimeout(() => {
+				this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight + 'px';
+			}, 100)
+			// #endif
 		},
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移
