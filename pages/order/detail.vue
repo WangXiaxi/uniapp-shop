@@ -169,7 +169,7 @@
 									this.$api.prePage().loadData('refresh')
 								}
 							}).catch(() => {
-								uni.hideLoading()
+								// uni.hideLoading()
 							})
 						}
 					}
@@ -203,7 +203,7 @@
 									this.$api.prePage().loadData('refresh')
 								}
 							}).catch(() => {
-								uni.hideLoading()
+								// uni.hideLoading()
 							})
 						}
 					}

@@ -189,13 +189,17 @@
 				}
 				this.btnLoading = true
 				orderModel.confirmOrder(sendData).then(res => {
-					this.payAction(res.data, this.payType)
+					if (res.data.type == 1) {
+						this.payAction(res.data.order_id, this.payType)
+					} else {
+						this.btnLoading = false
+						uni.redirectTo({
+							url: '/pages/money/paySuccess?id=' + res.data.order_id
+						})
+					}
 				}).catch(() => {
 					this.btnLoading = false
 				})
-				// uni.redirectTo({
-				// 	url: '/pages/money/paySuccess'
-				// })
 			},
 		}
 	}

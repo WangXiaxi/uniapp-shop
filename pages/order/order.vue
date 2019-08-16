@@ -209,7 +209,7 @@
 								this.$api.msg('删除订单成功！')
 								this.loadData('refresh')
 							}).catch(() => {
-								uni.hideLoading()
+								// uni.hideLoading()
 							})
 						}
 					}
@@ -234,7 +234,7 @@
 								this.$api.msg('取消订单成功！')
 								this.loadData('refresh')
 							}).catch(() => {
-								uni.hideLoading()
+								// uni.hideLoading()
 							})
 						}
 					}
@@ -259,7 +259,7 @@
 								this.$api.msg('确认收货成功！')
 								this.loadData('refresh')
 							}).catch(() => {
-								uni.hideLoading()
+								// uni.hideLoading()
 							})
 						}
 					}

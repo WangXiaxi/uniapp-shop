@@ -43,6 +43,7 @@
 		},
 		// 标题栏input搜索框点击
 		onNavigationBarSearchInputConfirmed() {
+			if(!this.search.trim()) return
 			this.setSearchText(this.search)
 			uni.navigateTo({
 				url: `/pages/search/searchList?search=${this.search}`
@@ -50,8 +51,9 @@
 		},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {
-			const index = e.index;
+			const index = e.index
 			if (index === 0) {
+				if(!this.search.trim()) return
 				this.setSearchText(this.search)
 				uni.navigateTo({
 					url: `/pages/search/searchList?search=${this.search}`

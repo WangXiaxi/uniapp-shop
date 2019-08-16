@@ -14,7 +14,7 @@
 					<empty v-if="tabItem.orderList.length === 0"></empty>
 					<!-- 订单列表 -->
 					<view v-for="(item,index) in tabItem.orderList" :key="index" class="order-item">
-						<view @click="navTo(`/pages/order/detail?id=${item.id}`)" class="goods-box-single">
+						<view @click="navTo(`/pages/order/detail?id=${item.order_goods_id}`)" class="goods-box-single">
 							<image class="goods-img" :src="item.image" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{item.name}}</text>
