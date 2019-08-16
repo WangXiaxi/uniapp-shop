@@ -8,7 +8,9 @@
 	import mineModel from './api/mine/index.js'
 	export default {
 		data() {
-			version: '1.0'
+			return {
+				version: '1.0'
+			}
 		},
 		methods: {
 			AndroidCheckUpdate: function() {
