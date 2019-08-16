@@ -252,6 +252,7 @@
 
 	.top-part {
 		position: relative;
+		z-index: 1;
 		width: 100%;
 		height: 320upx;
 		text-align: center;
