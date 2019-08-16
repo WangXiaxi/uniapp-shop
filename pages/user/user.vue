@@ -38,11 +38,11 @@
 
 			<view class="tj-sction">
 				<view class="tj-item" @click="navTo('/pages/money/money')">
-					<text class="num">{{ userInfo.remain_balance || '0.00' }}</text>
+					<text class="num">{{ userInfo.remain_balance | nf }}</text>
 					<text>账户余额</text>
 				</view>
 				<view class="tj-item" @click="navTo('/pages/money/vipsDetails')">
-					<text class="num">{{ userInfo.revisit || '0.00' }}</text>
+					<text class="num">{{ userInfo.revisit | nf }}</text>
 					<text>VIP消费</text>
 				</view>
 				<view class="tj-item" @click="navTo('/pages/collect/index')">
@@ -109,13 +109,13 @@
 				url_base_image,
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
-				moving: false,
+				moving: false
 			}
 		},
 		onLoad(option) {
-			if (!option.isload) {
-				this.getUserInfo()
-			}
+		},
+		onShow() {
+			this.getUserInfo()
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {

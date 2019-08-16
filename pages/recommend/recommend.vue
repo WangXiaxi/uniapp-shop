@@ -148,6 +148,9 @@
 </script>
 
 <style lang='scss'>
+	.placeholder {
+		display: block !important;
+	}
 	.pick-tip {
 		background: #d874fd;
 		border-radius: 24upx;
@@ -167,7 +170,7 @@
 		}
 	}
 	.content, page {
-		background: #f5f5f5;
+		background: #FFFFFF;
 		position: relative;
 		z-index: 1;
 	}
