@@ -115,7 +115,7 @@
 		onLoad(option) {
 		},
 		onShow() {
-			this.getUserInfo()
+			if (this.hasLogin) this.getUserInfo()
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {

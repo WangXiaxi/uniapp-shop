@@ -311,7 +311,13 @@
 					goods_num,
 					type
 				}
-				if (!goods_num) return this.$api.msg('购买数量必须大于0！') 
+				if (!goods_num) return this.$api.msg('购买数量必须大于0！')
+				if (!this.hasLogin) {
+					uni.navigateTo({
+						url: '/pages/public/login'
+					})
+					return
+				}
 				this.btnLoading = true
 				switch (typeAct) {
 					case 1: // 加入购物车

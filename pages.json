@@ -405,6 +405,12 @@
 				"navigationBarTitleText": "会员通知"
 			}
         }
+        ,{
+            "path" : "pages/phoneView/phoneView",
+            "style" : {
+				"navigationBarTitleText": "免费通话"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

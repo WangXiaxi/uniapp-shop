@@ -36,10 +36,12 @@
 				<image src="/static/temp/c7.png"></image>
 				<text>家居厨卫</text>
 			</view>
-			<view class="cate-item">
+			<navigator url="/pages/phoneView/phoneView" class="cate-item">
+
 				<image src="/static/temp/c8.png"></image>
-				<text>速食生鲜</text>
-			</view>
+				<text>免费通话</text>
+			</navigator>
+
 		</view>
 
 		<!-- <view class="ad-1">
@@ -180,6 +182,10 @@
 	import {
 		url_image
 	} from '../../common/config/index.js'
+	import {
+		mapGetters,
+		mapActions
+	} from 'vuex'
 	export default {
 		components: {
 			uniLoadMore
@@ -211,6 +217,9 @@
 		//加载更多
 		onReachBottom() {
 			this.loadData();
+		},
+		computed: {
+			...mapGetters(['hasLogin'])
 		},
 		methods: {
 			/**
@@ -307,6 +316,12 @@
 				// 	index
 				// });
 				// #endif
+				if (!this.hasLogin) {
+					uni.navigateTo({
+						url: '/pages/public/login'
+					})
+					return false
+				}
 				uni.navigateTo({
 					url: '/pages/message/message'
 				})
@@ -317,7 +332,8 @@
 </script>
 
 <style lang="scss">
-	page, .container {
+	page,
+	.container {
 		background: #f5f5f5;
 		position: relative;
 		z-index: 1;
