@@ -81,7 +81,7 @@
 		data() {
 			return {
 				url_base_image,
-				keyworld: ' ',
+				keyworld: '',
 				loadingType: 'more', //加载更多状态
 				list: [],
 				page: 0,
@@ -148,9 +148,6 @@
 </script>
 
 <style lang='scss'>
-	.placeholder {
-		display: block !important;
-	}
 	.pick-tip {
 		background: #d874fd;
 		border-radius: 24upx;

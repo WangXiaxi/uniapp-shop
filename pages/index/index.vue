@@ -7,7 +7,7 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
+				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item)">
 					<image :src="item.src" />
 				</swiper-item>
 			</swiper>
@@ -20,14 +20,14 @@
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<view class="cate-item">
+			<navigator url="/pages/user/user" open-type="switchTab" class="cate-item">
 				<image src="/static/temp/c3.png"></image>
-				<text>环球美食</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c5.png"></image>
-				<text>个护美妆</text>
-			</view>
+				<text>个人中心</text>
+			</navigator>
+			<navigator url="/pages/category/category" open-type="switchTab" class="cate-item">
+				<image src="/static/temp/c3.png"></image>
+				<text>商品分类</text>
+			</navigator>
 			<view class="cate-item">
 				<image src="/static/temp/c6.png"></image>
 				<text>营养保健</text>
@@ -47,7 +47,7 @@
 		</view>
 
 		<!-- 秒杀楼层 -->
-		<view class="seckill-section m-t">
+		<!-- <view class="seckill-section m-t">
 			<view class="s-header">
 				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>
 				<text class="tip">8点场</text>
@@ -65,18 +65,18 @@
 					</view>
 				</view>
 			</scroll-view>
-		</view>
+		</view> -->
 
 		<!-- 团购楼层 -->
-		<view class="f-header m-t">
+		<!-- <view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
 				<text class="tit">精品团购</text>
 				<text class="tit2">Boutique Group Buying</text>
 			</view>
 			<text class="yticon icon-you"></text>
-		</view>
-		<view class="group-section">
+		</view> -->
+		<!-- <view class="group-section">
 			<swiper class="g-swiper" :duration="500">
 				<swiper-item class="g-swiper-item" v-for="(item, index) in goodsList" :key="index" v-if="index%2 === 0" @click="navToDetailPage(item)">
 					<view class="g-item left">
@@ -116,7 +116,7 @@
 				</swiper-item>
 
 			</swiper>
-		</view>
+		</view> -->
 
 
 
@@ -129,17 +129,17 @@
 			</view>
 			<text class="yticon icon-you"></text>
 		</view>
-		<view class="hot-floor">
+		<view class="hot-floor" v-for="(items, indexs) in catGoods" :key="indexs">
 			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg"
+				<image class="floor-img" :src="`${url_image}/${items.cat_pic}`"
 				 mode="scaleToFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
-					<view v-for="(item, index) in goodsList" :key="index" class="floor-item" @click="navToDetailPage(item)">
-						<image :src="item.image" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
+					<view v-for="(item, index) in items.goods" :key="index" class="floor-item" @click="navToDetailPage(item)">
+						<image :src="`${url_image}/${item.img}`" mode="aspectFill"></image>
+						<text class="title clamp">{{item.name}}</text>
+						<text class="price">￥{{item.sell_price}}</text>
 					</view>
 					<view class="more">
 						<text>查看全部</text>
@@ -148,44 +148,8 @@
 				</view>
 			</scroll-view>
 		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409984228&di=dee176242038c2d545b7690b303d65ea&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F5ef4da9f17faaf4612f0d5046f4161e556e9bbcfdb5b-rHjf00_fw658"
-				 mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view v-for="(item, index) in goodsList" :key="index" class="floor-item" @click="navToDetailPage(item)">
-						<image :src="item.image3" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409794730&di=12b840ec4f5748ef06880b85ff63e34e&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01dc03589ed568a8012060c82ac03c.jpg%40900w_1l_2o_100sh.jpg"
-				 mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view v-for="(item, index) in goodsList" :key="index" class="floor-item" @click="navToDetailPage(item)">
-						<image :src="item.image2" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
+
+
 
 		<!-- 猜你喜欢 -->
 		<view class="f-header m-t">
@@ -220,10 +184,12 @@
 
 		data() {
 			return {
+				url_image,
 				titleNViewBackground: '',
 				swiperCurrent: 0,
 				swiperLength: 0,
-				carouselList: [],
+				carouselList: [], // 轮播
+				catGoods: [], // 分类精选
 				goodsList: []
 			};
 		},
@@ -250,6 +216,13 @@
 					this.titleNViewBackground = carouselList[0].background;
 					this.carouselList = carouselList;
 				})
+
+				mineModel.getHomeCatList({
+					ydui: true
+				}).then(res => {
+					this.catGoods = res.data
+				})
+
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
 			},
@@ -261,10 +234,9 @@
 			},
 			//详情页
 			navToDetailPage(item) {
-				//测试数据没有写id，用title代替
-				let id = item.title;
+				if (!item.goods_id) return
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?id=${item.goods_id}`
 				})
 			},
 		},
