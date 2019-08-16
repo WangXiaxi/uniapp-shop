@@ -175,7 +175,8 @@
 				const { share_qrcode } = this.userInfo
 				if (!share_qrcode) return _.$api.msg('您当前没有二维码！')
 				uni.showLoading({
-					title: '请稍后'
+					title: '请稍后',
+					mask: true
 				})
 				const context = uni.createCanvasContext('codeCanvas', this)
 				uni.downloadFile({

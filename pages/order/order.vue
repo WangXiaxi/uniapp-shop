@@ -11,7 +11,7 @@
 			<swiper-item class="tab-content" v-for="(tabItem,tabIndex) in navList" :key="tabIndex">
 				<scroll-view class="list-scroll-content" scroll-y @scrolltolower="loadData">
 					<!-- 空白页 -->
-					<empty v-if="tabItem.loaded === true && tabItem.orderList.length === 0"></empty>
+					<empty v-if="tabItem.orderList.length === 0"></empty>
 
 					<!-- 订单列表 -->
 					<view v-for="(item,index) in tabItem.orderList" :key="index" class="order-item">
@@ -141,12 +141,7 @@
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];
-
-				if (source === 'tabChange' && navItem.loaded === true) {
-					//tab切换只有第一次需要加载数据
-					return;
-				}
-				if (source === 'refresh') {
+				if (source === 'tabChange' || source === 'refresh') {
 					navItem.page = 0;
 					navItem.total = 0;
 					navItem.orderList = [];
@@ -180,7 +175,6 @@
 						k.num = num
 						return k
 					}));
-					this.$set(navItem, 'loaded', true);
 					navItem.total = res.data.totalPage;
 					navItem.loadingType = page >= navItem.total ? 'nomore' : 'more';
 					if (source === 'refresh') {
@@ -205,7 +199,8 @@
 					success: (e) => {
 						if (e.confirm) {
 							uni.showLoading({
-								title: '请稍后'
+								title: '请稍后',
+								mask: true
 							})
 							orderModel.orderDel({
 								id
@@ -228,7 +223,8 @@
 					success: (e) => {
 						if (e.confirm) {
 							uni.showLoading({
-								title: '请稍后'
+								title: '请稍后',
+								mask: true
 							})
 							orderModel.updateOrderStatus({
 								op: 'cancel',
@@ -252,7 +248,8 @@
 					success: (e) => {
 						if (e.confirm) {
 							uni.showLoading({
-								title: '请稍后'
+								title: '请稍后',
+								mask: true
 							})
 							orderModel.updateOrderStatus({
 								op: 'confirm',

@@ -93,10 +93,8 @@
 								orderInfo: ress.data.url,
 								success: () => {
 									this.btnLoading = false
-									uni.showModal({
-										title: '提示',
-										content: '是否已支付？',
-										success: (e) => {}
+									uni.redirectTo({
+										url: '/pages/money/paySuccess?id=' + id
 									})
 								},
 								fail: (error) => {
@@ -110,14 +108,25 @@
 							break
 						case 14: // 微信
 							uni.requestPayment({
-								provider: 'wxpay',
-								orderInfo: ress.data.url,
+								provider:"wxpay",
+								timeStamp:ress.data.timestamp,
+								nonceStr:ress.data.noncestr,
+								package:ress.data.package,
+								signType:"MD5",
+								paySign:ress.data.paySign,
+								orderInfo:{
+									appid:ress.data.appid,
+									noncestr:ress.data.noncestr,
+									package:"Sign=WXPay",
+									partnerid:ress.data.partnerid,
+									prepayid:ress.data.prepayid,
+									timestamp:ress.data.timestamp,
+									sign:ress.data.paySign,
+								},
 								success: () => {
 									this.btnLoading = false
-									uni.showModal({
-										title: '提示',
-										content: '是否已支付？',
-										success: (e) => {}
+									uni.redirectTo({
+										url: '/pages/money/paySuccess?id=' + id
 									})
 								},
 								fail: (error) => {

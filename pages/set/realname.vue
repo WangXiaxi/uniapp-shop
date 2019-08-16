@@ -133,7 +133,8 @@
 					success: (data) => {
 						const tempFilePaths = data.tempFilePaths;
 						uni.showLoading({
-							title: '请稍后'
+							title: '请稍后',
+							mask: true
 						})
 						mineModel.uploadRealNamePhoto(tempFilePaths[0]).then(res => {
 							uni.hideLoading()

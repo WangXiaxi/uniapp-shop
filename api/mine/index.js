@@ -59,6 +59,10 @@ class MineModel extends Request {
 	delMessage(params = {}) {
 		return this.post('/service/delMessage', { ...params })
 	}
+	// 删除消息
+	version(params = {}) {
+		return this.get('/service/getAppVersion', { ...params })
+	}
 	/**
 	 * 验证表单
 	 */

@@ -87,7 +87,8 @@
 			},
 			createdCanvas() {
 				uni.showLoading({
-					title: '请稍后'
+					title: '请稍后',
+					mask: true
 				})
 				const _ = this
 				stockModel.getStocksInfo().then(res => {

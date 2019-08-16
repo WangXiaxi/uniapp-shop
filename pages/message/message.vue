@@ -56,7 +56,8 @@
 					success: (e) => {
 						if (e.confirm) {
 							uni.showLoading({
-								title: '请稍后'
+								title: '请稍后',
+								mask: true
 							})
 							mineModel.delMessage({
 								id

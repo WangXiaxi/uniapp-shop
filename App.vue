@@ -5,15 +5,65 @@
 	import {
 		mapMutations
 	} from 'vuex';
+	import mineModel from './api/mine/index.js'
 	export default {
+		data() {
+			version: '1.0'
+		},
 		methods: {
+			AndroidCheckUpdate: function() {
+				var _this = this;
+				mineModel.version().then(res => {
+					if (res.data !== this.version) {
+						uni.showModal({
+							title: '提示',
+							content: '检测到有新版本，是否更新？',
+							success: (e) => {
+								if (e.confirm) {
+									uni.showLoading({
+										title: '请稍后',
+										mask: true
+									})
+									var dtask = plus.downloader.createDownload("http://xxxx.com/app.apk", {}, function(d, status) {
+										// 下载完成  
+										if (status == 200) {
+											plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, {}, function(error) {
+												uni.showToast({
+													title: '安装失败',
+													mask: false,
+													duration: 1500
+												});
+											})
+										} else {
+											uni.hideLoading();
+											uni.showToast({
+												title: '更新失败',
+												mask: false,
+												duration: 1500
+											});
+										}
+									});
+									dtask.start();
+								}
+							}
+						})
+						
+					}
+				})
+			}
 		},
-		onLaunch: function() {
+		onLaunch() {
+			uni.getSystemInfo({
+				success: (res) => {
+					//检测当前平台，如果是安卓则启动安卓更新  
+					if (res.platform == "android") {
+						this.AndroidCheckUpdate()
+					}
+				}
+			})
 		},
-		onShow: function() {
-		},
-		onHide: function() {
-		},
+		onShow: function() {},
+		onHide: function() {},
 	}
 </script>
 
@@ -350,6 +400,7 @@
 	video {
 		box-sizing: border-box;
 	}
+
 	/* 骨架屏替代方案 */
 	.Skeleton {
 		background: #f3f3f3;
@@ -439,10 +490,11 @@
 		color: #999999;
 		line-height: 1.6;
 	}
-	
+
 	.uni-input-wrapper {
 		display: flex;
 	}
+
 	/* 空白页 */
 	.empty {
 		position: fixed;
@@ -456,24 +508,25 @@
 		flex-direction: column;
 		align-items: center;
 		background: #fff;
-	
+
 		image {
 			width: 240upx;
 			height: 160upx;
 			margin-bottom: 30upx;
 		}
-	
+
 		.empty-tips {
 			display: flex;
 			font-size: $font-sm+2upx;
 			color: $font-color-disabled;
-	
+
 			.navigator {
 				color: $uni-color-primary;
 				margin-left: 16upx;
 			}
 		}
 	}
+
 	.add-btn {
 		display: flex;
 		align-items: center;
