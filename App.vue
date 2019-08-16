@@ -27,6 +27,7 @@
 										mask: true
 									})
 									var dtask = plus.downloader.createDownload("http://xxxx.com/app.apk", {}, function(d, status) {
+										uni.hideLoading();
 										// 下载完成  
 										if (status == 200) {
 											plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, {}, function(error) {
@@ -37,7 +38,6 @@
 												});
 											})
 										} else {
-											uni.hideLoading();
 											uni.showToast({
 												title: '更新失败',
 												mask: false,
