@@ -85,13 +85,13 @@
 				const sendData = { curname, amount, password, transType: 'revisit' }
 				this.btnLoading = true
 				moneyModel.trans2user(sendData).then(res => {
-					this.btnLoading = false
 					this.$api.msg('转账操作成功！', 1500)
 					this.getUserInfo()
 					if (this.$api.prePage()) {
 						this.$api.prePage().loadData('refresh')
 					}
 					setTimeout(() => {
+						this.btnLoading = false
 						uni.navigateBack()
 					}, 1500)
 				}).catch(() => {

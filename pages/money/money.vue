@@ -54,7 +54,7 @@
 			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
 			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
 		</view>
-		<view class="descript">将遵循杭州义桥网络科技有限公司</view> <!-- <text class="text">《冰酒协议》</text> -->
+		<view class="descript">杭州义桥网络科技有限公司</view> <!--将遵循 <text class="text">《冰酒协议》</text> -->
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>

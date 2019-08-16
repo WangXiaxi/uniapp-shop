@@ -98,7 +98,7 @@
 
 <style lang="scss">
 	page {
-		background: #f5f5f5;
+		background: #FFFFFF;
 		position: relative;
 		z-index: 1;
 	}

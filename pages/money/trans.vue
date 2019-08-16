@@ -85,10 +85,10 @@
 				const sendData = { curname, amount, password, transType: 'balance' }
 				this.btnLoading = true
 				moneyModel.trans2user(sendData).then(res => {
-					this.btnLoading = false
 					this.$api.msg('转账操作成功！', 1500)
 					this.getUserInfo()
 					setTimeout(() => {
+						this.btnLoading = false
 						uni.navigateBack()
 					}, 1500)
 				}).catch(() => {

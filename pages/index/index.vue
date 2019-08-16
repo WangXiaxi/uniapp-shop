@@ -30,7 +30,7 @@
 			</navigator>
 			<view class="cate-item">
 				<image src="/static/temp/c6.png"></image>
-				<text>营养保健</text>
+				<text>食品保健</text>
 			</view>
 			<view class="cate-item">
 				<image src="/static/temp/c7.png"></image>
@@ -317,6 +317,12 @@
 </script>
 
 <style lang="scss">
+	page, .container {
+		background: #f5f5f5;
+		position: relative;
+		z-index: 1;
+	}
+
 	/* #ifdef MP */
 	.mp-search-box {
 		position: absolute;

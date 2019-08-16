@@ -90,7 +90,7 @@
 
 <style lang="scss">
 	page {
-		background: #f5f5f5;
+		background: #FFFFFF;
 		position: relative;
 		z-index: 1;
 	}
@@ -103,7 +103,6 @@
 			padding: 32upx;
 			display: flex;
 			border-bottom: 1upx solid #F2F2F2;
-
 			.img {
 				width: 64upx;
 				height: 64upx;

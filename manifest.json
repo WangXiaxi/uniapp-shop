@@ -55,10 +55,10 @@
             /* ios打包配置 */
             "sdkConfigs" : {
                 "payment" : {
-                    "alipay" : {},
                     "weixin" : {
                         "appid" : "wx8fb88710a894aa32"
-                    }
+                    },
+                    "alipay" : {}
                 },
                 "push" : {}
             },
