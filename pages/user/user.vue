@@ -204,6 +204,7 @@
 										success: (res) => {
 											uni.previewImage({
 												urls: [res.tempFilePath],
+												indicator: 'none',
 												success: () => {
 													uni.hideLoading()
 												}

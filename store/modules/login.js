@@ -23,9 +23,12 @@ const login = {
 	},
 	mutations: {
 		login(state, token) {
-			state.hasLogin = true
-			state.token = token
-			uni.setStorageSync('token', token) // 缓存用户登陆状态
+			return new Promise((resolve, reject) => {
+				state.hasLogin = true
+				state.token = token
+				uni.setStorageSync('token', token) // 缓存用户登陆状态
+				resolve(token)
+			})
 		},
 		logout(state) {
 			state.hasLogin = false

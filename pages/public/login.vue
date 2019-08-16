@@ -92,10 +92,10 @@
 				loginModel.initValidate(rules, messages)
 				if (!loginModel.WxValidate.checkForm(sendData)) return
 				this.loading = true
-				loginModel.login(sendData).then(result => {
+				loginModel.login(sendData).then(async result => {
 					this.loginInfo = ''
 					this.password = ''
-					this.login(result.data.userToken)
+					await this.login(result.data.userToken)
 					const a = this.getGoodsFavoriteIds()
 					const b = this.getUserInfo()
 					Promise.all([a, b]).then(res => {
