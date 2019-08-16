@@ -76,8 +76,21 @@
 							break
 						case 14: // 微信
 							uni.requestPayment({
-								provider: 'wxpay',
-								orderInfo: ress.data.url,
+								provider:"wxpay",
+								timeStamp:ress.data.timestamp,
+								nonceStr:ress.data.noncestr,
+								package:ress.data.package,
+								signType:"MD5",
+								paySign:ress.data.sign,
+								orderInfo:{
+									appid:ress.data.appid,
+									noncestr:ress.data.noncestr,
+									package:ress.data.package,
+									partnerid:ress.data.partnerid,
+									prepayid:ress.data.prepayid,
+									timestamp:ress.data.timestamp,
+									sign:ress.data.sign,
+								},
 								success: () => {
 									this.btnLoading = false
 									uni.redirectTo({

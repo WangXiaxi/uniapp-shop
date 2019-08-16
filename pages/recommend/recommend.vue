@@ -167,6 +167,7 @@
 		}
 	}
 	.content, page {
+		background: #f5f5f5;
 		position: relative;
 		z-index: 1;
 	}
