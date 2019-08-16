@@ -186,10 +186,10 @@
 						uni.downloadFile({
 							url: `${url_base_image}/upload/qrcode/${share_qrcode}`,
 							success: (ress) => {
-								context.drawImage(ress.tempFilePath, 132, 350, 100)
+								context.drawImage(ress.tempFilePath, 132, 450, 100)
 								context.setFontSize(30)
 								context.setFillStyle('white')
-								context.fillText('长按图片保存', 290, 900)
+								context.fillText('长按图片保存', 290, 1000)
 								context.draw(false, () => {
 									uni.canvasToTempFilePath({
 										x: 0,

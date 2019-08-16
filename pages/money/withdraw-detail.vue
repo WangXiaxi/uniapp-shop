@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="content">
 		<!-- 空白页 -->
 		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
 		<view v-else>
@@ -83,6 +83,12 @@
 <style lang="scss">
 	page {
 		background: #f5f5f5;
+		position: relative;
+		z-index: 1;
+	}
+	.content {
+		position: relative;
+		z-index: 1;
 	}
 	.fr {
 		float: right;

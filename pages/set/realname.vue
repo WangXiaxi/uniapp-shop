@@ -1,8 +1,8 @@
 <template>
 	<view class="content">
 		<view class="status" v-if="formData.status == '0'">系统审核中</view>
-		<view class="status success" v-if="formData.status == '1'">审核已通过</view>
-		<view class="status red" v-if="formData.status == '2'">系统已拒绝</view>
+		<view class="status success" v-if="formData.status == '2'">审核已通过</view>
+		<view class="status red" v-if="formData.status == '-1'">系统已拒绝</view>
 		
 		<view class="row b-b">
 			<text class="tit">真实姓名</text>
@@ -35,8 +35,8 @@
 			<view class="tips"><text>1.</text>格式为jpg/jpeg/png，且大小不得超过8MB！</view>
 			<view class="tips"><text>2.</text>请认真仔细填写个人信息，审核通过后不可修改。</view>
 		</view>
-		<button v-if="!disabled && formData.status !== '2'" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
-		<button v-if="!disabled && formData.status === '2'" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">重新提交</button>
+		<button v-if="!disabled && formData.status !== '-1'" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">提交</button>
+		<button v-if="!disabled && formData.status === '-1'" class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">重新提交</button>
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
@@ -115,7 +115,7 @@
 					if(res.data.id) {
 						res.data.real_name = res.data.name
 						Object.assign(this.formData, res.data)
-						if (res.data.status == '2') {
+						if (res.data.status == '-1') {
 							this.disabled = false
 						}
 					} else {

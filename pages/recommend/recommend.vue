@@ -166,7 +166,10 @@
 			margin-right: 10upx;
 		}
 	}
-
+	.content, page {
+		position: relative;
+		z-index: 1;
+	}
 	.user-info-box {
 		display: flex;
 		align-items: center;

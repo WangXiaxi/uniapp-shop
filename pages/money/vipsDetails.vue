@@ -1,23 +1,25 @@
 <template>
 	<!-- 空白页 -->
-	<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
-	<view v-else>
-		<view class="list">
-			<view class="item" v-for="(item, index) in list" :key="index">
-				<image class="img" :src="icon[2]"></image>
-				<view class="mian-info">
-					<view class="top">
-						<text class="type">{{item.type === '0'? '增加' : '减少' }}</text>
-						<text class="detail" v-if="item.note">({{ item.note | fill }})</text>
+	<view class="content">
+		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
+		<view v-else>
+			<view class="list">
+				<view class="item" v-for="(item, index) in list" :key="index">
+					<image class="img" :src="icon[2]"></image>
+					<view class="mian-info">
+						<view class="top">
+							<text class="type">{{item.type === '0'? '增加' : '减少' }}</text>
+							<text class="detail" v-if="item.note">({{ item.note | fill }})</text>
+						</view>
+						<view class="time">{{item.time}}</view>
 					</view>
-					<view class="time">{{item.time}}</view>
-				</view>
-				<view class="price-info">
-					<view class="price" :class="{red : item.type === '1'}">{{item.value}}</view>
+					<view class="price-info">
+						<view class="price" :class="{red : item.type === '1'}">{{item.value}}</view>
+					</view>
 				</view>
 			</view>
+			<uni-load-more :status="loadingType"></uni-load-more>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
 	</view>
 </template>
 
@@ -95,6 +97,15 @@
 </script>
 
 <style lang="scss">
+	page {
+		background: #f5f5f5;
+		position: relative;
+		z-index: 1;
+	}
+	.content {
+		position: relative;
+		z-index: 1;
+	}
 	.list {
 		.item {
 			padding: 32upx;
