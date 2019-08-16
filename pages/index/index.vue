@@ -42,9 +42,9 @@
 			</view>
 		</view>
 
-		<view class="ad-1">
+		<!-- <view class="ad-1">
 			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view>
+		</view> -->
 
 		<!-- 秒杀楼层 -->
 		<!-- <view class="seckill-section m-t">
@@ -131,8 +131,7 @@
 		</view>
 		<view class="hot-floor" v-for="(items, indexs) in catGoods" :key="indexs" @click="navToDetailList(items)">
 			<view class="floor-img-box">
-				<image class="floor-img" :src="`${url_image}/${items.cat_pic}`"
-				 mode="scaleToFill"></image>
+				<image class="floor-img" :src="`${url_image}/${items.cat_pic}`" mode="scaleToFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
@@ -162,39 +161,55 @@
 		</view>
 
 		<view class="guess-section">
-			<view v-for="(item, index) in goodsList" :key="index" class="guess-item" @click="navToDetailPage(item)">
+			<view v-for="(item, index) in goodsList" :key="index" class="guess-item" @click="navToDetailPage(item.id)">
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="`${url_image}/${item.img}`" mode="aspectFill"></image>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
-				<text class="price">￥{{item.price}}</text>
+				<text class="title clamp">{{item.name}}</text>
+				<text class="price">￥{{item.sell_price}}</text>
 			</view>
 		</view>
-
+		<uni-load-more :status="loadingType"></uni-load-more>
 
 	</view>
 </template>
 
 <script>
 	import mineModel from '../../api/mine/index.js'
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 	import {
 		url_image
 	} from '../../common/config/index.js'
 	export default {
-
+		components: {
+			uniLoadMore
+		},
 		data() {
 			return {
 				url_image,
+				loadingType: 'more', //加载更多状态
 				titleNViewBackground: '',
 				swiperCurrent: 0,
 				swiperLength: 0,
 				carouselList: [], // 轮播
 				catGoods: [], // 分类精选
-				goodsList: []
+				goodsList: [],
+				page: 0,
+				pages: 0 // 总页数
 			};
 		},
 
 		onLoad() {
+			this.loadDataDe();
+			this.loadData();
+		},
+		//下拉刷新
+		onPullDownRefresh() {
+			this.loadDataDe();
+			this.loadData('refresh');
+		},
+		//加载更多
+		onReachBottom() {
 			this.loadData();
 		},
 		methods: {
@@ -202,7 +217,8 @@
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
-			async loadData() {
+			loadDataDe() {
+				// 轮播
 				mineModel.getBannerList({
 					ydui: true
 				}).then(res => {
@@ -215,16 +231,43 @@
 					this.titleNViewBackground = carouselList[0].background;
 					this.carouselList = carouselList;
 				})
-
+				// 精品分类
 				mineModel.getHomeCatList({
 					ydui: true
 				}).then(res => {
 					this.catGoods = res.data
 				})
 
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
 			},
+			loadData(type = 'add', loading) {
+				//没有更多直接返回
+				if (type === 'add') {
+					if (this.loadingType === 'nomore') {
+						return;
+					}
+					this.page = this.page + 1;
+					this.loadingType = 'loading';
+				} else {
+					this.loadingType = 'loading';
+				}
+
+				if (type === 'refresh') {
+					this.page = 1;
+					this.goodsList = [];
+				}
+				mineModel.getRecomProductList({
+					ydui: true,
+					page: this.page,
+					limit: 10
+				}).then(res => {
+					this.goodsList.push(...res.data.data)
+					this.pages = res.data.totalPage
+					uni.stopPullDownRefresh();
+					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
+					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
+				}).catch(() => {})
+			},
+
 			//轮播图切换修改背景色
 			swiperChange(e) {
 				const index = e.detail.current;

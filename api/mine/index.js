@@ -71,6 +71,10 @@ class MineModel extends Request {
 	getHomeCatList(params = {}) {
 		return this.get('/service/getHomeCatList', { ...params })
 	}
+	// 获取推荐
+	getRecomProductList(params = {}) {
+		return this.get('/service/getRecomProductList', { ...params })
+	}
 	/**
 	 * 验证表单
 	 */
