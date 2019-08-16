@@ -127,13 +127,13 @@
 					by
 				}).then(res => {
 					const {
-						goods,
+						data,
 						totalPage,
 						curPage
 					} = res.data;
 					this.pages = totalPage;
 					this.page = curPage;
-					this.goodsList = this.goodsList.concat(goods.map(c => {
+					this.goodsList = this.goodsList.concat(data.map(c => {
 						c.img = `${url_image}/${c.img}`
 						return c
 					}));

@@ -3,6 +3,7 @@
  */
 let url_config = ''
 let url_base_img = ''
+export const version = '1.0'
 
 // #ifndef H5
 if (process.env.NODE_ENV === 'development') {
@@ -10,8 +11,8 @@ if (process.env.NODE_ENV === 'development') {
 	url_config = 'http://test.hzyh.ehanone.com'
 } else {
 	// 生产环境
-	url_config = 'http://test.hzyh.ehanone.com'
-	// url_config = 'http://hzyh.ehanone.com'
+	// url_config = 'http://test.hzyh.ehanone.com'
+	url_config = 'http://hzyh.ehanone.com'
 }
 // #endif
 
@@ -20,8 +21,8 @@ if (process.env.NODE_ENV === 'development') {
 	url_base_img = 'http://test.hzyh.ehanone.com'
 } else {
 	// 生产环境
-	url_base_img = 'http://test.hzyh.ehanone.com'
-	// url_base_img = 'http://hzyh.ehanone.com'
+	// url_base_img = 'http://test.hzyh.ehanone.com'
+	url_base_img = 'http://hzyh.ehanone.com'
 }
 
 export const url_base = url_config

@@ -79,7 +79,7 @@
 			<view class="history-section icon">
 				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
 				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/message/message')"></list-cell>
-				<list-cell image="home-1" title="关于我们"></list-cell>
+				<!-- <list-cell image="home-1" title="关于我们"></list-cell> -->
 			</view>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">

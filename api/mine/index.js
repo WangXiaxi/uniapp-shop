@@ -63,6 +63,10 @@ class MineModel extends Request {
 	version(params = {}) {
 		return this.get('/service/getAppVersion', { ...params })
 	}
+	// 获取轮播图
+	getBannerList(params = {}) {
+		return this.get('/service/getBannerList', { ...params })
+	}
 	/**
 	 * 验证表单
 	 */

@@ -128,19 +128,19 @@
 				}).then(res => {
 					if (!res.data) {
 						res.data = {
-							goods: [],
+							data: [],
 							totalPage: 0,
 							curPage: 0
 						}
 					}
 					const {
-						goods,
+						data,
 						totalPage,
 						curPage
 					} = res.data;
 					this.pages = totalPage;
 					this.page = curPage;
-					this.goodsList = this.goodsList.concat(goods.map(c => {
+					this.goodsList = this.goodsList.concat(data.map(c => {
 						c.img = `${url_image}/${c.img}`
 						return c
 					}));

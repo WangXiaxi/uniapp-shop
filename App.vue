@@ -6,17 +6,19 @@
 		mapMutations
 	} from 'vuex';
 	import mineModel from './api/mine/index.js'
+	import {
+		url_base_image,
+		version
+	} from './common/config/index.js'
+	
 	export default {
 		data() {
-			return {
-				version: '1.0'
-			}
 		},
 		methods: {
-			AndroidCheckUpdate: function() {
+			AndroidCheckUpdate() {
 				var _this = this;
 				mineModel.version().then(res => {
-					if (res.data !== this.version) {
+					if (res.data !== version) {
 						uni.showModal({
 							title: '提示',
 							content: '检测到有新版本，是否更新？',
@@ -26,30 +28,49 @@
 										title: '请稍后',
 										mask: true
 									})
-									var dtask = plus.downloader.createDownload("http://xxxx.com/app.apk", {}, function(d, status) {
-										uni.hideLoading();
-										// 下载完成  
-										if (status == 200) {
-											plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, {}, function(error) {
+									var dtask = plus.downloader.createDownload(url_base_image + '/public/app/app_' + res.data + '.apk', {},
+										function(d, status) {
+											uni.hideLoading();
+											// 下载完成  
+											if (status == 200) {
+												plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, {}, function(error) {
+													uni.showToast({
+														title: '安装失败',
+														mask: false,
+														duration: 1500
+													});
+												})
+											} else {
 												uni.showToast({
-													title: '安装失败',
+													title: '更新失败',
 													mask: false,
 													duration: 1500
 												});
-											})
-										} else {
-											uni.showToast({
-												title: '更新失败',
-												mask: false,
-												duration: 1500
-											});
-										}
-									});
+											}
+										});
 									dtask.start();
 								}
 							}
 						})
-						
+
+					}
+				})
+			},
+			IosCheckUpdate() {
+				var _this = this;
+				mineModel.version().then(res => {
+					if (res.data !== version) {
+						uni.showModal({
+							title: '提示',
+							content: '检测到有新版本，请前往 App Store 更新',
+							success: (e) => {
+								if (e.confirm) {
+									var url = 'itms-apps://itunes.apple.com';
+									plus.runtime.openURL(url)
+								}
+							}
+						})
+
 					}
 				})
 			}
@@ -58,8 +79,11 @@
 			uni.getSystemInfo({
 				success: (res) => {
 					//检测当前平台，如果是安卓则启动安卓更新  
-					if (res.platform == "android") {
+					if (res.platform == 'android') {
 						this.AndroidCheckUpdate()
+					}
+					if (res.platform == 'ios') {
+						this.IosCheckUpdate()
 					}
 				}
 			})
