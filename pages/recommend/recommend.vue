@@ -52,8 +52,8 @@
 								<view class="num text">{{item.team_sum | fill(0)}}</view>
 							</view>
 						</view>
-						<image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navTo(`/pages/recommend/register?data=${JSON.stringify(item)}`)"></image>
-						<image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navTo(`/pages/recommend/add?data=${JSON.stringify(item)}`)"></image>
+						<image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navToMore(item)"></image>
+						<image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navToAdd(item)"></image>
 					</view>
 				</view>
 			</view>
@@ -137,6 +137,16 @@
 			},
 			handleSearch() { // 搜索操作
 				this.loadData('refresh');
+			},
+			navToMore(item) {
+				uni.navigateTo({
+					url: `/pages/recommend/register?data=${JSON.stringify(item)}`
+				})
+			},
+			navToAdd(item) {
+				uni.navigateTo({
+					url: `/pages/recommend/add?data=${JSON.stringify(item)}`
+				})
 			},
 			navTo(url) {
 				uni.navigateTo({
