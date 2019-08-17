@@ -20,26 +20,25 @@
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<navigator url="/pages/user/user" open-type="switchTab" class="cate-item">
-				<image src="/static/temp/c3.png"></image>
-				<text>个人中心</text>
+			<navigator url="/pages/product/list?id=102&title=中外美酒" class="cate-item">
+				<image src="/static/icon/zwmj.png"></image>
+				<text>中外美酒</text>
 			</navigator>
-			<navigator url="/pages/category/category" open-type="switchTab" class="cate-item">
-				<image src="/static/temp/c3.png"></image>
-				<text>商品分类</text>
+			<navigator url="/pages/product/list?id=219&title=名优特产" class="cate-item">
+				<image src="/static/icon/mytc.png"></image>
+				<text>名优特产</text>
 			</navigator>
-			<view class="cate-item">
-				<image src="/static/temp/c6.png"></image>
-				<text>食品保健</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c7.png"></image>
-				<text>家居厨卫</text>
-			</view>
+			<navigator url="/pages/product/list?id=246&title=精品茗茶" class="cate-item">
+				<image src="/static/icon/jpmc.png"></image>
+				<text>精品茗茶</text>
+			</navigator>
 			<navigator url="/pages/phoneView/phoneView" class="cate-item">
-
-				<image src="/static/temp/c8.png"></image>
+				<image src="/static/icon/yhtx.png"></image>
 				<text>忆杭通讯</text>
+			</navigator>
+			<navigator url="/pages/aboutus/aboutus" class="cate-item">
+				<image src="/static/icon/gywm.png"></image>
+				<text>关于我们</text>
 			</navigator>
 
 		</view>

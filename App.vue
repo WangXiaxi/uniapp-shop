@@ -25,13 +25,8 @@
 							content: '检测到有新版本，是否更新？',
 							success: (e) => {
 								if (e.confirm) {
-									uni.showLoading({
-										title: '请稍后',
-										mask: true
-									})
 									var dtask = plus.downloader.createDownload(url_base_image + '/public/app/app_' + res.data + '.apk', {},
 										function(d, status) {
-											uni.hideLoading();
 											// 下载完成  
 											if (status == 200) {
 												plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, {}, function(error) {

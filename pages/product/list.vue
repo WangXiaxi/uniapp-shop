@@ -58,6 +58,11 @@
 		},
 
 		onLoad(options) {
+			if (options.title) {
+				uni.setNavigationBarTitle({
+					title: options.title
+				})
+			}
 			this.cateId = options.id;
 			this.loadData();
 		},
