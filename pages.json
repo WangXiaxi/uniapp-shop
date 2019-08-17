@@ -408,7 +408,19 @@
         ,{
             "path" : "pages/phoneView/phoneView",
             "style" : {
-				"navigationBarTitleText": "免费通话"
+				"navigationBarTitleText": "忆杭通讯"
+			}
+        }
+        ,{
+            "path" : "pages/news/news",
+            "style" : {
+				"navigationBarTitleText": "咨询"
+			}
+        }
+        ,{
+            "path" : "pages/aboutus/aboutus",
+            "style" : {
+				"navigationBarTitleText": "关于我们"
 			}
         }
     ],

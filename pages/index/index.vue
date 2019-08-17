@@ -39,7 +39,7 @@
 			<navigator url="/pages/phoneView/phoneView" class="cate-item">
 
 				<image src="/static/temp/c8.png"></image>
-				<text>免费通话</text>
+				<text>忆杭通讯</text>
 			</navigator>
 
 		</view>

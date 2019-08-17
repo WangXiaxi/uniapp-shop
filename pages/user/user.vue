@@ -79,7 +79,7 @@
 			<view class="history-section icon">
 				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
 				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/message/message')"></list-cell>
-				<!-- <list-cell image="home-1" title="关于我们"></list-cell> -->
+				<list-cell image="home-1" title="关于我们" @eventClick="navTo('/pages/aboutus/aboutus', false)"></list-cell>
 			</view>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">
@@ -230,8 +230,8 @@
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view
 			 */
-			navTo(url) {
-				if (!this.hasLogin) {
+			navTo(url, type = true) {
+				if (!this.hasLogin && type) {
 					url = '/pages/public/login';
 				}
 				uni.navigateTo({
