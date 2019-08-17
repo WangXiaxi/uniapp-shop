@@ -18,6 +18,10 @@ class LoginModel extends Request {
 	getMobileCode(params) {
 		return this.post('/service/getMobileCode', params)
 	}
+	// 获取 验证码 注册
+	getRegMobileCode(params) {
+		return this.post('/service/getRegMobileCode', params)
+	}
 	// 手机号找回密码提交
 	findPassWordByMobile(params) {
 		return this.post('/service/findPassWordByMobile', params)
@@ -33,6 +37,10 @@ class LoginModel extends Request {
 	// 修改密码
 	changePassword(params) {
 		return this.post('/service/changePassword', params)
+	}
+	// 获取系统注册配置接口
+	getRegOption(params) {
+		return this.get('/service/getRegOption', params)
 	}
 	/**
 	 * 验证表单
