@@ -3,7 +3,7 @@
  */
 let url_config = ''
 let url_base_img = ''
-export const version = '1.0'
+export const version = '1.0.1'
 
 // #ifndef H5
 if (process.env.NODE_ENV === 'development') {
