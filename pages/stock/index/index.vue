@@ -169,13 +169,13 @@
 			color: #fff;
 			position: relative;
 			padding-top: 60upx;
-			z-index: 1;
+			z-index: 2;
 			font-size: 28upx;
 		}
 
 		.num {
 			position: relative;
-			z-index: 1;
+			z-index: 2;
 			margin-top: 30upx;
 			color: #fff;
 			font-size: 60upx;
@@ -183,6 +183,7 @@
 
 		.bg {
 			position: absolute;
+			z-index: 1;
 			left: 0;
 			top: 0;
 			width: 100%;

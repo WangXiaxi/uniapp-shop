@@ -22,13 +22,13 @@
 		<!-- 商品 -->
 		<view class="goods-section">
 			<!-- 商品列表 -->
-			<view class="goods-box-single" v-for="(goodsItem, goodsIndex) in detail.goods" :key="goodsIndex">
+			<view @click="navTo(`/pages/product/product?id=${goodsItem.goods_id}`)" class="goods-box-single" v-for="(goodsItem, goodsIndex) in detail.goods" :key="goodsIndex">
 				<image class="goods-img" :src="goodsItem.img" mode="aspectFill"></image>
 				<view class="right">
 					<text class="title clamp">{{goodsItem.goods_array.name}}</text>
 					<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
 					<text class="price">{{goodsItem.goods_price}}</text>
-					<view class="eval-btn" v-if="goodsItem.comments_status === '0'"  @click="navToEvaluate(goodsItem.comments)">去评价</view>
+					<view class="eval-btn" v-if="goodsItem.comments_status === '0'"  @click.stop="navToEvaluate(goodsItem.comments)">去评价</view>
 					<view class="eval-btn grey" v-if="goodsItem.comments_status === '1'">已评价</view>
 				</view>
 			</view>

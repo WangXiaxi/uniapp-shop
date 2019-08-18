@@ -131,9 +131,7 @@
 				// 	index
 				// });
 				// #endif
-				uni.navigateTo({
-					url: '/pages/message/message'
-				})
+				this.navTo('/pages/message/message')
 			}
 		},
 		// #endif
