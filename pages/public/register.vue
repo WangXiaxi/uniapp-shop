@@ -33,7 +33,8 @@
 			<text class="tit">邀请人</text>
 			<input class="input" type="text" v-model="formData.parent_name" placeholder="请输入邀请人用户名" placeholder-class="placeholder" />
 		</view>
-		<button class="add-btn" :loading="loading" :disabled="loading" @click="confirm" v-if="registerType !== '2'">提交</button>
+		<label class="xieyi-section"><checkbox :checked="isRead === 'true'" @click="changeRead" />我已阅读<text @click.stop="toRegist('/pages/xieyi/xieyi')">《用户协议》</text></label>
+		<button class="add-btn" :loading="loading" :disabled="loading || isRead === 'false'" @click="confirm" v-if="registerType !== '2'">提交</button>
 	</view>
 </template>
 
@@ -52,6 +53,7 @@
 	export default {
 		data() {
 			return {
+				isRead: 'true',
 				sendMessage: '发送验证码',
 				sending: false,
 				registerType: '0',
@@ -129,6 +131,14 @@
 			})
 		},
 		methods: {
+			changeRead() {
+				this.isRead = this.isRead === 'false' ? 'true' : 'false'
+			},
+			toRegist(url) {
+				uni.navigateTo({
+					url
+				})
+			},
 			// 发送验证码
 			sendCode() {
 				const {
@@ -293,5 +303,18 @@
 	.code-image {
 		width: 260upx;
 		height: 90upx;
+	}
+	.xieyi-section {
+		width: 100%;
+		margin-top: 20upx;
+		margin-left: 30upx;
+		font-size: $font-sm+2upx;
+		color: $font-color-base;
+		display: flex;
+		align-items: center;
+		text {
+			color: $font-color-spec;
+			margin-left: 10upx;
+		}
 	}
 </style>

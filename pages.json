@@ -423,6 +423,12 @@
 				"navigationBarTitleText": "关于我们"
 			}
         }
+        ,{
+            "path" : "pages/xieyi/xieyi",
+            "style" : {
+				"navigationBarTitleText": "用户协议"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

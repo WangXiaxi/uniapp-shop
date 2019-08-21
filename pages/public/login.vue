@@ -19,8 +19,9 @@
 					<input type="password" v-model="password" placeholder="6位以上不含特殊字符的数字、字母组合" placeholder-class="input-empty"
 					 password @confirm="toLogin" />
 				</view>
+				<label class="xieyi-section"><checkbox :checked="isRead === 'true'" @click="changeRead" />我已阅读<text @click.stop="toRegist('/pages/xieyi/xieyi')">《用户协议》</text></label>
 			</view>
-			<button class="confirm-btn" :loading="loading" :disabled="loading" @click="toLogin">登录</button>
+			<button class="confirm-btn" :loading="loading" :disabled="loading || isRead === 'false'" @click="toLogin">登录</button>
 			<view class="forget-section" @click="toRegist('/pages/public/forword')">
 				忘记密码?
 			</view>
@@ -42,6 +43,7 @@
 	export default {
 		data() {
 			return {
+				isRead: 'true',
 				loading: false,
 				loginInfo: '',
 				password: '',
@@ -70,6 +72,9 @@
 		methods: {
 			...mapMutations(['login']),
 			...mapActions(['getGoodsFavoriteIds', 'getUserInfo']),
+			changeRead() {
+				this.isRead = this.isRead === 'false' ? 'true' : 'false'
+			},
 			navBack() {
 				uni.navigateBack()
 			},
@@ -217,10 +222,9 @@
 		background: $page-color-light;
 		height: 120upx;
 		border-radius: 4px;
-		margin-bottom: 50upx;
 
-		&:last-child {
-			margin-bottom: 0;
+		&:first-child {
+			margin-bottom: 50upx;
 		}
 
 		.tit {
@@ -271,7 +275,18 @@
 		font-size: $font-sm+2upx;
 		color: $font-color-base;
 		text-align: center;
-
+		text {
+			color: $font-color-spec;
+			margin-left: 10upx;
+		}
+	}
+	.xieyi-section {
+		width: 100%;
+		margin-top: 20upx;
+		font-size: $font-sm+2upx;
+		color: $font-color-base;
+		display: flex;
+		align-items: center;
 		text {
 			color: $font-color-spec;
 			margin-left: 10upx;
