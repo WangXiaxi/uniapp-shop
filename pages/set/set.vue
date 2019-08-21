@@ -31,7 +31,12 @@
 			<text class="cell-tit">我的收货地址</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-
+		
+		<view class="list-cell m-t b-b" @click="navTo('/pages/xieyi/xieyi')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">用户协议</text>
+			<text class="cell-more yticon icon-you"></text>
+		</view>
+		<view class="cell-bottom" >客服电话：400-0571-775</view>
 		<!-- <view class="list-cell">
 			<text class="cell-tit">检查更新</text>
 			<text class="cell-tip">当前版本 1.0.0</text>
@@ -110,6 +115,12 @@
 </script>
 
 <style lang='scss'>
+	.cell-bottom {
+		color: #666;
+		font-size: 30upx;
+		text-align: center;
+		margin-top: 40upx;
+	}
 	.face {
 		display: block;
 		width: 102upx;
