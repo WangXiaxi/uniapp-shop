@@ -75,9 +75,13 @@ class MineModel extends Request {
 	getRecomProductList(params = {}) {
 		return this.get('/service/getRecomProductList', { ...params })
 	}
-	// 获取外链
+	// 获取外链 协议
 	getRegAgreement(params = {}) {
 		return this.get('/service/getRegAgreement', { ...params })
+	}
+	// 获取外链 关于我们
+	getAboutUs(params = {}) {
+		return this.get('/service/getAboutUs', { ...params })
 	}
 	/**
 	 * 验证表单
