@@ -22,14 +22,20 @@
 		<!-- 商品 -->
 		<view class="goods-section">
 			<!-- 商品列表 -->
-			<view @click="navTo(`/pages/product/product?id=${goodsItem.goods_id}`)" class="goods-box-single" v-for="(goodsItem, goodsIndex) in detail.goods" :key="goodsIndex">
-				<image class="goods-img" :src="goodsItem.img" mode="aspectFill"></image>
-				<view class="right">
-					<text class="title clamp">{{goodsItem.goods_array.name}}</text>
-					<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
-					<text class="price">{{goodsItem.goods_price}}</text>
-					<view class="eval-btn" v-if="goodsItem.comments_status === '0'"  @click.stop="navToEvaluate(goodsItem.comments)">去评价</view>
-					<view class="eval-btn grey" v-if="goodsItem.comments_status === '1'">已评价</view>
+			<view class="big-good" v-for="(goods, index) in detail.mapGood" :key="index">
+				<view @click="navTo(`/pages/product/product?id=${goodsItem.goods_id}`)" class="goods-box-single" v-for="(goodsItem, goodsIndex) in goods"
+				 :key="goodsIndex">
+					<image class="goods-img" :src="goodsItem.img" mode="aspectFill"></image>
+					<view class="right">
+						<text class="title clamp">{{goodsItem.goods_array.name}}</text>
+						<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
+						<text class="price">{{goodsItem.goods_price}}</text>
+						<view class="eval-btn" v-if="goodsItem.comments_status === '0'" @click.stop="navToEvaluate(goodsItem.comments)">去评价</view>
+						<view class="eval-btn grey" v-if="goodsItem.comments_status === '1'">已评价</view>
+					</view>
+				</view>
+				<view class="logis-box" v-if="goods[0] && goods[0].delivery_code !== 'nonex'">
+					<view class="logis-btn" @click="toggleSpec(goods[0].delivery_id, goods[0].delivery_code)">查看物流</view>
 				</view>
 			</view>
 			<view class="order-js">
@@ -67,6 +73,14 @@
 			<button v-if="detail.isConfirm" class="action-btn recom" @click="sureOrder(id)">确认收货</button>
 		</view>
 		<mix-loading v-if="pageLoading"></mix-loading>
+		<!-- 规格-模态层弹窗 -->
+		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec">
+			<!-- 遮罩层 -->
+			<view class="mask"></view>
+			<view class="layer attr-content" @click.stop="stopPrevent">
+				
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -84,7 +98,8 @@
 			return {
 				pageLoading: false,
 				id: '',
-				detail: {}
+				detail: {},
+				specClass: 'none'
 			}
 		},
 		onLoad(option) {
@@ -98,6 +113,22 @@
 			return false;
 		},
 		methods: {
+			getFreightDetail(id, code) {
+				orderModel.getFreightDetail({ id, code })
+			},
+			//规格弹窗开关
+			toggleSpec(id, code) {
+				if (this.specClass === 'show') {
+					this.specClass = 'hide'
+					setTimeout(() => {
+						this.specClass = 'none'
+					}, 250)
+				} else if (this.specClass === 'none') {
+					this.specClass = 'show'
+					this.getFreightDetail(id, code)
+				}
+			},
+			stopPrevent() {},
 			afterOrder(id) {
 				uni.navigateTo({
 					url: `/pages/order/after?id=${id}`
@@ -113,7 +144,7 @@
 					url
 				})
 			},
-			
+
 			loadData(source) {
 				if (source === 'refresh') {
 					this.parPageRefresh = true
@@ -125,6 +156,7 @@
 					this.pageLoading = false
 					let num = 0
 					const comments = res.data.comment ? res.data.comment : []
+					const arr = {}
 					res.data.goods = res.data.goods.map(c => {
 						c.img = `${url_image}/${c.img}`
 						c.goods_array = JSON.parse(c.goods_array)
@@ -139,8 +171,16 @@
 								id: data.id
 							}
 						}
-					
+						if (!c.delivery_code) c.delivery_code = 'none'
+						if (arr[c.delivery_code]) {
+							arr[c.delivery_code].push(c)
+						} else {
+							arr[c.delivery_code] = [c]
+						}
 						return c
+					})
+					res.data.mapGood = Object.keys(arr).map(c => {
+						return arr[c]
 					})
 					res.data.goods_num = num
 					this.detail = res.data
@@ -214,6 +254,115 @@
 </script>
 
 <style lang="scss">
+	/*  弹出层 */
+	.popup {
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 99;
+
+		&.show {
+			display: block;
+
+			.mask {
+				animation: showPopup 0.2s linear both;
+			}
+
+			.layer {
+				animation: showLayer 0.2s linear both;
+			}
+		}
+
+		&.hide {
+			.mask {
+				animation: hidePopup 0.2s linear both;
+			}
+
+			.layer {
+				animation: hideLayer 0.2s linear both;
+			}
+		}
+
+		&.none {
+			display: none;
+		}
+
+		.mask {
+			position: fixed;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.layer {
+			position: fixed;
+			z-index: 99;
+			bottom: 0;
+			width: 100%;
+			min-height: 40vh;
+			border-radius: 10upx 10upx 0 0;
+			background-color: #fff;
+
+			.btn {
+				height: 66upx;
+				line-height: 66upx;
+				border-radius: 100upx;
+				background: $uni-color-primary;
+				font-size: $font-base + 2upx;
+				color: #fff;
+				margin: 30upx auto 20upx;
+			}
+
+			.action-btn-group {
+				margin: 30upx auto 20upx;
+			}
+		}
+
+		@keyframes showPopup {
+			0% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+
+		@keyframes hidePopup {
+			0% {
+				opacity: 1;
+			}
+
+			100% {
+				opacity: 0;
+			}
+		}
+
+		@keyframes showLayer {
+			0% {
+				transform: translateY(120%);
+			}
+
+			100% {
+				transform: translateY(0%);
+			}
+		}
+
+		@keyframes hideLayer {
+			0% {
+				transform: translateY(0);
+			}
+
+			100% {
+				transform: translateY(120%);
+			}
+		}
+	}
+
 	page {
 		background: $page-color-base;
 		padding-bottom: 160upx;
@@ -373,6 +522,30 @@
 		}
 	}
 
+	.big-good+.big-good {
+		margin-top: 40upx;
+		border-top: 1upx solid #dedede;
+	}
+
+	.logis-box {
+		overflow: hidden;
+		padding: 0 0 0;
+		margin-bottom: -20upx;
+	}
+
+	.logis-btn {
+		float: right;
+		width: 200upx;
+		padding: 10upx 20upx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: $base-color;
+		border: 1upx solid $base-color;
+		border-radius: 30upx;
+		font-size: 28upx;
+	}
+
 	.goods-box-single {
 		display: flex;
 		padding: 20upx 0;
@@ -392,12 +565,13 @@
 			overflow: hidden;
 
 			.eval-btn {
+				background: #fff9f9;
+				color: #ea1212;
 				padding: 10upx 20upx;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				color: $base-color;
-				border: 1upx solid $base-color;
+				border: 1upx solid #f7bcc8;
 				border-radius: 30upx;
 				font-size: 28upx;
 				position: absolute;
@@ -406,6 +580,7 @@
 
 				&.grey {
 					border-color: #dedede;
+					background: #FFFFFF;
 					color: #999;
 				}
 			}

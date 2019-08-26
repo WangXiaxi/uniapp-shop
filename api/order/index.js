@@ -56,6 +56,10 @@ class OrderModel extends Request {
 	getRefundsDetail(params) {
 		return this.get('/service/getRefundsDetail',  { ...params })
 	}
+	// 获取售后详情
+	getFreightDetail(params) {
+		return this.get('/service/getFreightDetail',  { ...params })
+	}
 	// 申请售后提交
 	updateRefunds(params) {
 		return this.post('/service/updateRefunds',  { ...params })

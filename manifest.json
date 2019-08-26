@@ -15,7 +15,8 @@
             "delay" : 0
         },
         "modules" : {
-            "Payment" : {}
+            "Payment" : {},
+            "Contacts" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -51,7 +52,16 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            "ios" : {},
+            "ios" : {
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "开启后，您可以上传照片作为头像等功能",
+                    "NSCameraUsageDescription" : "开启后，您可以使用摄像头进行扫码、拍照等功能",
+                    "NSPhotoLibraryAddUsageDescription" : "开启后，您可以保存照片到相册",
+                    "NSMicrophoneUsageDescription" : "开启后，您可以使用语音搜索功能",
+                    "NSContactsUsageDescription" : "开启后，您可以快速拨打服务中心电话",
+                    "NSLocationWhenInUseUsageDescription" : "开启后，您可以获得附近的商家"
+                }
+            },
             /* ios打包配置 */
             "sdkConfigs" : {
                 "payment" : {
@@ -120,3 +130,5 @@
         }
     }
 }
+/* ios打包配置 */
+
