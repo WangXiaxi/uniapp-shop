@@ -89,6 +89,14 @@
 								<view class="stat">{{item.station}}</view>
 							</view>
 						</view>
+						<view class="piont-item" v-for="(item, index) in curFreight" :key="index">
+							<view class="point"></view>
+							<view class="line"></view>
+							<view class="info">
+								<view class="time">{{item.time}}</view>
+								<view class="stat">{{item.station}}</view>
+							</view>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -111,7 +119,8 @@
 				pageLoading: false,
 				id: '',
 				detail: {},
-				specClass: 'none'
+				specClass: 'none',
+				curFreight: [{ time: '2019-05-24', station: '哈很舒服活生生的，东方闪电风格是否帝国时代' }, { time: '2019-05-24', station: '哈很舒服活生生的，东方闪电风格是否帝国时代' }]
 			}
 		},
 		onLoad(option) {
@@ -266,6 +275,19 @@
 </script>
 
 <style lang="scss">
+	.layer-body {
+		.title {
+			font-size: 36upx;
+			line-height: 80upx;
+			padding-left: 30upx;
+		}
+		.piont-item {
+			width: 60upx;
+			height: 60upx;
+			position: relative;
+			margin-bottom: 120upx;
+		}
+	}
 	/*  弹出层 */
 	.popup {
 		position: fixed;
