@@ -83,6 +83,10 @@ class MineModel extends Request {
 	getAboutUs(params = {}) {
 		return this.get('/service/getAboutUs', { ...params })
 	}
+	// 获取电话
+	getPhoneWhitelist(params = {}) {
+		return this.get('/service/getPhoneWhitelist', { ...params })
+	}
 	/**
 	 * 验证表单
 	 */

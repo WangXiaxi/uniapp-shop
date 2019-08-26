@@ -78,7 +78,19 @@
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
-				
+				<view class="layer-body">
+					<view class="title">物流信息</view>
+					<view class="point-box">
+						<view class="piont-item" v-for="(item, index) in curFreight" :key="index">
+							<view class="point"></view>
+							<view class="line"></view>
+							<view class="info">
+								<view class="time">{{item.time}}</view>
+								<view class="stat">{{item.station}}</view>
+							</view>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
