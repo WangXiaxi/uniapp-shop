@@ -34,7 +34,7 @@
 						<view class="eval-btn grey" v-if="goodsItem.comments_status === '1'">已评价</view>
 					</view>
 				</view>
-				<view class="logis-box" v-if="goods[0] && goods[0].delivery_code !== 'nonex'">
+				<view class="logis-box" v-if="goods[0] && goods[0].delivery_code !== 'none'">
 					<view class="logis-btn" @click="toggleSpec(goods[0].delivery_id, goods[0].delivery_code)">查看物流</view>
 				</view>
 			</view>
@@ -81,15 +81,7 @@
 				<view class="layer-body">
 					<view class="title">物流信息</view>
 					<view class="point-box">
-						<view class="piont-item" v-for="(item, index) in curFreight" :key="index">
-							<view class="point"></view>
-							<view class="line"></view>
-							<view class="info">
-								<view class="time">{{item.time}}</view>
-								<view class="stat">{{item.station}}</view>
-							</view>
-						</view>
-						<view class="piont-item" v-for="(item, index) in curFreight" :key="index">
+						<view class="piont-item" :class="{ act: index === 0 }" v-for="(item, index) in curFreight" :key="index">
 							<view class="point"></view>
 							<view class="line"></view>
 							<view class="info">
@@ -120,7 +112,7 @@
 				id: '',
 				detail: {},
 				specClass: 'none',
-				curFreight: [{ time: '2019-05-24', station: '哈很舒服活生生的，东方闪电风格是否帝国时代' }, { time: '2019-05-24', station: '哈很舒服活生生的，东方闪电风格是否帝国时代' }]
+				curFreight: []
 			}
 		},
 		onLoad(option) {
@@ -135,7 +127,10 @@
 		},
 		methods: {
 			getFreightDetail(id, code) {
-				orderModel.getFreightDetail({ id, code })
+				orderModel.getFreightDetail({ id, code }).then(res => {
+					this.specClass = 'show'
+					this.curFreight = res.data
+				}).catch(() => {})
 			},
 			//规格弹窗开关
 			toggleSpec(id, code) {
@@ -145,7 +140,6 @@
 						this.specClass = 'none'
 					}, 250)
 				} else if (this.specClass === 'none') {
-					this.specClass = 'show'
 					this.getFreightDetail(id, code)
 				}
 			},
@@ -280,12 +274,78 @@
 			font-size: 36upx;
 			line-height: 80upx;
 			padding-left: 30upx;
+			padding-bottom: 30upx;
 		}
 		.piont-item {
-			width: 60upx;
-			height: 60upx;
+			width: 36upx;
+			height: 36upx;
 			position: relative;
 			margin-bottom: 120upx;
+			margin-left: 40upx;
+			&:last-child {
+				.line {
+					display: none;
+				}
+			}
+			&.act {
+				.info {
+					.time {
+						color: #007AFF;
+					}
+					.stat {
+						color: #007AFF;
+					}
+				}
+				.line {
+					background: #007AFF;
+				}
+				.point {
+					border: 4upx solid #007AFF;
+					&:before {
+						background: #007AFF;
+					}
+				}
+			}
+			
+			.info {
+				position: absolute;
+				left: 60upx;
+				top: -10upx;
+				width: 620upx;
+				.time {
+					color: #999999;
+					font-size: 28upx;
+				}
+				.stat {
+					font-size: 28upx;
+					color: #787878;
+				}
+			}
+			.line {
+				width: 2upx;
+				height: 126upx;
+				background: #DCDFE6;
+				position: absolute;
+				left: 17upx;
+				top: 34upx;
+			}
+			.point {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 36upx;
+				height: 36upx;
+				position: absolute;
+				border-radius: 50%;
+				border: 4upx solid #DCDFE6;
+				&:before {
+					content: ' ';
+					width: 20upx;
+					height: 20upx;
+					background: #DCDFE6;
+					border-radius: 50%;
+				}
+			}
 		}
 	}
 	/*  弹出层 */
