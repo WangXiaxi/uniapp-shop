@@ -82,7 +82,9 @@
 				}
 				this.currentId = item.id;
 				let index = this.slist.findIndex(sitem => sitem.parent_id === item.id);
-				this.tabScrollTop = this.slist[index].top;
+				this.$nextTick(() => {
+					this.tabScrollTop = this.slist[index].top;
+				})
 			},
 			//右侧栏滚动
 			asideScroll(e) {
