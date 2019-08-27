@@ -64,6 +64,10 @@
 				<view>配送方式</view>
 				<view>{{detail.delivery}}</view>
 			</view>
+			<view class="item" v-if="detail.checkcode">
+				<view>自提码</view>
+				<view>{{detail.checkcode}}</view>
+			</view>
 		</view>
 		<view style="height: 100upx;"></view>
 		<view class="action-box" v-if="!(!detail.isCancel && !detail.isGoPay && !detail.isRefund && !detail.isConfirm)">
@@ -80,7 +84,7 @@
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="layer-body">
 					<view class="title">物流信息</view>
-					<view class="point-box">
+					<scroll-view scroll-with-animation scroll-y class="point-box">
 						<view class="piont-item" :class="{ act: index === 0 }" v-for="(item, index) in curFreight" :key="index">
 							<view class="point"></view>
 							<view class="line"></view>
@@ -89,7 +93,7 @@
 								<view class="stat">{{item.station}}</view>
 							</view>
 						</view>
-					</view>
+					</scroll-view>
 				</view>
 			</view>
 		</view>
@@ -129,7 +133,7 @@
 			getFreightDetail(id, code) {
 				orderModel.getFreightDetail({ id, code }).then(res => {
 					this.specClass = 'show'
-					this.curFreight = res.data
+					this.curFreight = res.data.data
 				}).catch(() => {})
 			},
 			//规格弹窗开关
@@ -270,6 +274,9 @@
 
 <style lang="scss">
 	.layer-body {
+		.point-box {
+			max-height: 60vh;
+		}
 		.title {
 			font-size: 36upx;
 			line-height: 80upx;
@@ -280,8 +287,9 @@
 			width: 36upx;
 			height: 36upx;
 			position: relative;
-			margin-bottom: 120upx;
+			margin-bottom: 122upx;
 			margin-left: 40upx;
+			background: #FFFFFF;
 			&:last-child {
 				.line {
 					display: none;

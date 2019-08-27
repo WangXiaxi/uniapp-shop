@@ -44,7 +44,7 @@
 <script>
 	import mineModel from '../../api/mine/index.js'
 	import mixLoading from '../../components/mix-loading/mix-loading.vue'
-
+	import { IdentityCodeValid } from '../../utils/isIDCardNo.js'
 	import {
 		url_base_image
 	} from '../../common/config/index.js'
@@ -150,6 +150,7 @@
 				const { rules, messages, formData } = this
 				mineModel.initValidate(rules, messages)
 				if (!mineModel.WxValidate.checkForm(formData)) return
+				if (!IdentityCodeValid(formData.id_num)) return this.$api.msg('请检查身份证输入是否正确！')
 				this.btnLoading = true
 				mineModel.realNameSave(formData).then(res => {
 					this.$api.msg('实名认证操作成功！', 1500)

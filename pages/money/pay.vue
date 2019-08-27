@@ -100,7 +100,7 @@
 								fail: (error) => {
 									uni.showModal({
 										title: '提示',
-										content: error.errMsg
+										content: '支付失败！'
 									})
 									this.btnLoading = false
 								}
@@ -133,7 +133,7 @@
 								fail: (error) => {
 									uni.showModal({
 										title: '提示',
-										content: error.errMsg
+										content: '支付失败！'
 									})
 									this.btnLoading = false
 								}
@@ -190,6 +190,8 @@
 				this.btnLoading = true
 				orderModel.confirmOrder(sendData).then(res => {
 					if (res.data.type == 1) {
+						this.type = 'pay'
+						this.detail.id = res.data.order_id
 						this.payAction(res.data.order_id, this.payType)
 					} else {
 						this.btnLoading = false

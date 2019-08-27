@@ -38,7 +38,7 @@
 <script>
 	import mpvueCityPicker from '@/components/ydui-citypicker/mpvueCityPicker.vue'
 	import moneyModel from '../../api/money/index.js'
-	
+	import { CheckBankNo } from '../../utils/isBankCard.js'
 	const fields = {
 		id: '',
 		province: '',
@@ -186,6 +186,7 @@
 				}
 				moneyModel.initValidate(rules, messages)
 				if (!moneyModel.WxValidate.checkForm(sendData)) return
+				if (!CheckBankNo(card_num)) return this.$api.msg('请检查银行卡输入是否正确！')
 				this.btnLoading = true
 				moneyModel.editBankInfo(sendData).then(res => {
 					this.$api.msg(`银行卡${this.formData.id? '修改': '添加'}成功`);
