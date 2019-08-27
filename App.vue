@@ -66,7 +66,7 @@
 							content: '检测到有新版本，请前往 App Store 更新',
 							success: (e) => {
 								if (e.confirm) {
-									var url = 'itms-apps://itunes.apple.com';
+									var url = 'itms-apps://itunes.apple.com/cn/app/id1474572172';
 									plus.runtime.openURL(url)
 								}
 							}

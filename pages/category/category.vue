@@ -68,6 +68,7 @@
 						}
 						return cur
 					})
+					this.currentId = this.flist[0].id
 					this.pageLoading = false
 				}).catch(() => {
 					this.pageLoading = false
