@@ -145,7 +145,7 @@
 					<view v-for="(item,index) in specArray" :key="index" class="attr-list">
 						<text>{{item.name}}</text>
 						<view class="item-list">
-							<text v-for="(childItem, childIndex) in item.values" :key="childIndex" class="tit" :class="{selected: childItem.selected}"
+							<text v-for="(childItem, childIndex) in item.values" :key="childIndex" class="tit" :class="{selected: childItem.selected, disabled: childItem.disabled }"
 							 @click="selectSpec(childItem, item.values)">
 								{{childItem.name}}
 							</text>
@@ -216,7 +216,8 @@
 				favoriteBoolean: false,
 				// shareList: [],
 				imgList: [],
-				desc: ''
+				desc: '',
+				skusNeed: [] // 库存为0的skus No
 			}
 		},
 		async onLoad(options) {
@@ -262,21 +263,30 @@
 					if (spec_array) { // 存在说明有规格
 						this.type = 'products' // 有规格说明是商品
 						this.isCheck = false
+						
+						const skusNeed = []
+						// 规格对应价格等
+						const skuss = skus.map(c => {
+							c.spec_array = JSON.parse(c.spec_array)
+							if(c.store_nums != 0) {
+								skusNeed.push(JSON.parse(JSON.stringify(c)))
+							}
+							return c
+						})
+						this.skusNeed = skusNeed
+						this.skus = skuss
 						const specObj = JSON.parse(spec_array)
 						this.specArray = Object.keys(specObj).map(c => {
 							specObj[c].values = specObj[c].value.split(',').map(j => {
 								return {
+									disabled: skuss.findIndex(k => k.spec_array.findIndex(n => n.value === j) > -1 && k.store_nums != 0) === -1,
 									selected: false,
 									name: j
 								}
 							})
 							return specObj[c]
 						})
-						// 规格对应价格等
-						this.skus = skus.map(c => {
-							c.spec_array = JSON.parse(c.spec_array)
-							return c
-						})
+						
 					}
 					this.pageLoading = false
 				}).catch(() => {
@@ -350,6 +360,7 @@
 
 			//选择规格
 			selectSpec(cur, parent) {
+				if (cur.disabled) return
 				// 设置选中
 				parent.forEach(c => {
 					c.selected = c.name === cur.name
@@ -416,6 +427,13 @@
 			favorite: {
 				handler(v) {
 					this.judFavorite(v)
+				}
+			},
+			specSelected: {
+				handler(v) {
+					console.log(v)
+					console.log(this.skusNeed)
+					console.log(this.specArray)
 				}
 			}
 		},
@@ -825,7 +843,9 @@
 				font-size: $font-base;
 				color: $font-color-dark;
 			}
-
+			.disabled {
+				color: #ccc;
+			}
 			.selected {
 				background: #fbebee;
 				color: $uni-color-primary;
