@@ -20,7 +20,7 @@
 			AndroidCheckUpdate() {
 				var _this = this;
 				mineModel.version({ type: 1 }).then(res => {
-					if (Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, '')) || res.data !== versionAnd) {
+					if (res.data !== versionAnd && Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, ''))) {
 						uni.showModal({
 							title: '提示',
 							content: '检测到有新版本，是否更新？',
