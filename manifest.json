@@ -122,8 +122,8 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/service" : {
-                    "target" : "http://localhost:12306",
-                    // "target" : "http://test.hzyh.ehanone.com",
+                    // "target" : "http://localhost:12306",
+                    "target" : "http://hzyh.ehanone.com",
                     "changeOrigin" : true,
                     "secure" : false
                 }

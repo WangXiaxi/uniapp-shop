@@ -154,7 +154,7 @@
 					<view class="attr-num">
 						<text class="num-tit">数量</text>
 						<uni-number-box class="step" :min="1" :max="Number(detail.store_nums)" :value="goods_num>Number(detail.store_nums)?Number(detail.store_nums):goods_num"
-						 :isMax="goods_num>=Number(detail.store_nums)?true:false" :isMin="goods_num===1" @eventChange="numberChange"></uni-number-box>
+						 :isMax="goods_num>=Number(detail.store_nums)?true:false" :isMin="goods_num<=1" @eventChange="numberChange"></uni-number-box>
 					</view>
 				</scroll-view>
 				<view class="action-btn-group" :class="{ spec: !!showBtn }">
@@ -464,9 +464,7 @@
 					this.specArray.forEach(c => {
 						if(v.findIndex(k => k.id === c.id) > -1) {
 							c.values.forEach(j => {
-								console.log(j.disabled)
 								j.disabled = this.skus.findIndex(m => m.spec_array.findIndex(n => n.value === j.name) > -1 && m.store_nums != 0) === -1
-								console.log(j.disabled)
 							})
 							return
 						}

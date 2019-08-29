@@ -8,10 +8,11 @@
 	import mineModel from './api/mine/index.js'
 	import {
 		url_base_image,
-		versionIos,
-		versionAnd
 	} from './common/config/index.js'
-	
+
+	const versionIos = '1.2.0'
+	const versionAnd = '1.2.0'
+
 	export default {
 		data() {
 			return {}
@@ -77,6 +78,7 @@
 				})
 			}
 		},
+		
 		onLaunch() {
 			uni.getSystemInfo({
 				success: (res) => {
