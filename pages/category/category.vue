@@ -9,7 +9,7 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(titem.id)" v-if="titem.parent_id === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
+					<view @click="navToList(titem.id,titem.name)" v-if="titem.parent_id === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
 						<image :src="titem.cat_pic" @error="onImageError(titem)"></image>
 						<text>{{titem.name}}</text>
 					</view>
@@ -112,9 +112,9 @@
 				})
 				this.sizeCalcState = true;
 			},
-			navToList(id) {
+			navToList(id,title) {
 				uni.navigateTo({
-					url: `/pages/product/list?id=${id}`
+					url: `/pages/product/list?id=${id}&title=${title}`
 				})
 			}
 		}

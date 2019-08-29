@@ -14,7 +14,7 @@
 						<view class="time">{{item.time}}</view>
 					</view>
 					<view class="price-info">
-						<view class="price" :class="{red : item.type === '1'}">{{item.value}}</view>
+						<view class="price" :class="{red : item.type === '0'}">{{item.value}}</view>
 					</view>
 				</view>
 			</view>

@@ -2,8 +2,8 @@
     "name" : "忆杭网",
     "appid" : "__UNI__C88D11E",
     "description" : "浙江依杭网络科技有限公司旗下商城app",
-    "versionName" : "1.1.0",
-    "versionCode" : 110,
+    "versionName" : "1.2.0",
+    "versionCode" : 115,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -122,7 +122,8 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/service" : {
-                    "target" : "http://test.hzyh.ehanone.com",
+                    "target" : "http://localhost:12306",
+                    // "target" : "http://test.hzyh.ehanone.com",
                     "changeOrigin" : true,
                     "secure" : false
                 }

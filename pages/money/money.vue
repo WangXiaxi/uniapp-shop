@@ -5,41 +5,54 @@
 			<view class="tit">余额<text>(￥)</text></view>
 			<view class="num">{{userInfo.remain_balance | nf }}</view>
 		</view>
-		<!-- <view class="center-part">
+		<view class="center-part">
 			<view class="type-list">
 				<view class="type" :class="{ act: type === 0 }" @click="changeType(0)">市场</view>
 				<view class="type" :class="{ act: type === 1 }" @click="changeType(1)">商城</view>
+				<view class="type" :class="{ act: type === 2 }" @click="changeType(2)" v-if="userInfo.is_agent">店铺</view>
 			</view>
 			<view class="money-box" v-if="type === 0">
 				<view class="item">
-					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
-					<view class="name">分享佣金(￥)</view>
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.invited | fill('0.00')}}</view>
+					<view class="name">分享佣金</view>
 				</view>
 				<view class="item">
-					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.manage | fill('0.00')}}</view>
 
-					<view class="name">管理佣金(￥)</view>
+					<view class="name">管理佣金</view>
 				</view>
 				<view class="item">
-					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.divi | fill('0.00')}}</view>
 
-					<view class="name">分红(%)</view>
+					<view class="name">分红</view>
 				</view>
 			</view>
 			<view class="money-box" v-if="type === 1">
 				<view class="item">
-					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.sale | fill('0.00')}}</view>
 
-					<view class="name">零售佣金(￥)</view>
+					<view class="name">零售佣金</view>
 				</view>
 				<view class="item">
-					<view class="num">{{userInfo.dtdtdt | fill('0.00')}}</view>
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.cash | fill('0.00')}}</view>
 
-					<view class="name">店铺佣金(￥)</view>
+					<view class="name">返现佣金</view>
 				</view>
 			</view>
-		</view> -->
-		<view class="card-box" style="margin-top: -80upx;">
+			<view class="money-box" v-if="type === 2 && userInfo.is_agent">
+				<view class="item">
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.sub | fill('0.00')}}</view>
+
+					<view class="name">店铺补贴</view>
+				</view>
+				<view class="item">
+					<view class="num">{{userInfo.total_reward && userInfo.total_reward.share | fill('0.00')}}</view>
+
+					<view class="name">店铺分红</view>
+				</view>
+			</view>
+		</view>
+		<view class="card-box">
 			<image class="card-img" mode="aspectFit" src="../../static/card.png"></image>
 			<view class="info">
 				<view class="name">{{detail.bank | fill('----')}}</view>
@@ -54,7 +67,7 @@
 			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
 			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
 		</view>
-		<view class="descript">杭州义桥网络科技有限公司</view> <!--将遵循 <text class="text">《冰酒协议》</text> -->
+		<view class="descript">Power by 忆杭网 Copyright © 2019</view> <!--将遵循 <text class="text">《冰酒协议》</text> -->
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
@@ -77,7 +90,7 @@
 		data() {
 			return {
 				pageLoading: false,
-				type: 0, // 0 市场 1 商城
+				type: 0, // 0 市场 1 商城 2 店铺
 				detail: {}
 			}
 		},
