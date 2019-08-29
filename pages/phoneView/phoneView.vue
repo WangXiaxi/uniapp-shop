@@ -23,14 +23,21 @@
 						})
 						let page = Math.ceil(phone.length / 400) // 计算页码
 						addressbook.find(['displayName', 'phoneNumbers'], (contacts) => {
-							for (let i = 0; i < page; i++) {
-								const contact = addressbook.create()
-								contact.name = {
-									givenName: (i === 1 ? '接听忆杭网的来电' : '接听忆杭网来电')
+							contacts.forEach(c => {
+								if (c.displayName === '接听忆杭网的来电' || '接听忆杭网来电') {
+									c.remove(() => {})
 								}
-								contact.phoneNumbers = phone.slice(i * 400, (i + 1) * 400)
-								contact.save()
-							}
+							})
+							setTimeout(() => {
+								for (let i = 0; i < page; i++) {
+									const contact = addressbook.create()
+									contact.name = {
+										givenName: (i === 1 ? '接听忆杭网的来电' : '接听忆杭网来电')
+									}
+									contact.phoneNumbers = phone.slice(i * 400, (i + 1) * 400)
+									contact.save()
+								}
+							}, 2000)
 						}, function() {}, {
 							multiple: true
 						})
