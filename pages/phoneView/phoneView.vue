@@ -23,12 +23,10 @@
 						})
 						let page = Math.ceil(phone.length / 400) // 计算页码
 						addressbook.find(['displayName', 'phoneNumbers'], (contacts) => {
-							contacts.forEach(c => {
-								if (c.displayName === '接听忆杭网的来电' || '接听忆杭网来电' || '接听随便打来电') {
-									c.remove(() => {})
-								}
-							})
-							setTimeout(() => {
+							console.log(JSON.stringify(contacts))
+							if (contacts.findIndex(c => {
+									return c.displayName === '接听忆杭网的来电' || '接听忆杭网来电'
+								}) === -1) {
 								for (let i = 0; i < page; i++) {
 									const contact = addressbook.create()
 									contact.name = {
@@ -37,18 +35,18 @@
 									contact.phoneNumbers = phone.slice(i * 400, (i + 1) * 400)
 									contact.save()
 								}
-							}, 2000)
+							}
 						}, function() {}, {
 							multiple: true
 						})
 					})
 				}, () => {
 					uni.showModal({
-					    title: '提示',
-					    content: '获取通讯录权限失败，请前往设置允许访问通讯录权限！',
-					    complete: function (res) {
-					       uni.navigateBack()
-					    }
+						title: '提示',
+						content: '获取通讯录权限失败，请前往设置允许访问通讯录权限！',
+						complete: function(res) {
+							uni.navigateBack()
+						}
 					});
 				})
 			}
