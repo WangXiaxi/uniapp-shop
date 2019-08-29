@@ -263,12 +263,12 @@
 					if (spec_array) { // 存在说明有规格
 						this.type = 'products' // 有规格说明是商品
 						this.isCheck = false
-						
+
 						const skusNeed = []
 						// 规格对应价格等
 						const skuss = skus.map(c => {
 							c.spec_array = JSON.parse(c.spec_array)
-							if(c.store_nums != 0) {
+							if (c.store_nums != 0) {
 								skusNeed.push(JSON.parse(JSON.stringify(c)))
 							}
 							return c
@@ -279,14 +279,15 @@
 						this.specArray = Object.keys(specObj).map(c => {
 							specObj[c].values = specObj[c].value.split(',').map(j => {
 								return {
-									disabled: skuss.findIndex(k => k.spec_array.findIndex(n => n.value === j) > -1 && k.store_nums != 0) === -1,
+									disabled: skuss.findIndex(k => k.spec_array.findIndex(n => n.value === j) > -1 && k.store_nums != 0) ===
+										-1,
 									selected: false,
 									name: j
 								}
 							})
 							return specObj[c]
 						})
-						
+
 					}
 					this.pageLoading = false
 				}).catch(() => {
@@ -362,6 +363,14 @@
 			selectSpec(cur, parent) {
 				if (cur.disabled) return
 				// 设置选中
+				// 如果父级有选中全部重选
+				if (parent.findIndex(c => c.selected) > -1) {
+					this.specArray.forEach(c => {
+						c.values.forEach(c => {
+							c.selected = false
+						})
+					})
+				}
 				parent.forEach(c => {
 					c.selected = c.name === cur.name
 				})
@@ -415,11 +424,27 @@
 			toFavorite() {
 				this.goLogin(() => {
 					this.favoriteBoolean = !this.favoriteBoolean
-					this.goodsFavoriteEdit({ goods_id: this.goodsId })
+					this.goodsFavoriteEdit({
+						goods_id: this.goodsId
+					})
 				})
 			},
 			judFavorite(v) {
 				if (v) this.favoriteBoolean = v.findIndex(c => c === this.goodsId) > -1
+			},
+			isContained(a, b) { // 判断一个数组是否包含另一个数组
+				if (!(a instanceof Array) || !(b instanceof Array)) return false;
+				if (a.length < b.length) return false;
+				for (let i = 0, len = b.length; i < len; i++) {
+					let isExist = false
+					for (let k = 0, lenk = a.length; k < lenk; k++) {
+						if (b[i].id === a[k].id && b[i].name === a[k].value) {
+							isExist = true
+						}
+					}
+					if (!isExist) return false
+				}
+				return true;
 			},
 			stopPrevent() {}
 		},
@@ -431,9 +456,24 @@
 			},
 			specSelected: {
 				handler(v) {
-					console.log(v)
-					console.log(this.skusNeed)
-					console.log(this.specArray)
+					const all = this.skusNeed.filter(c => this.isContained(c.spec_array, v)).map(c => c.spec_array) // 找出包含
+					const need = [] // 有库存可以选择的情况
+					all.forEach(c => {
+						need.push(...c)
+					})
+					this.specArray.forEach(c => {
+						if(v.findIndex(k => k.id === c.id) > -1) {
+							c.values.forEach(j => {
+								console.log(j.disabled)
+								j.disabled = this.skus.findIndex(m => m.spec_array.findIndex(n => n.value === j.name) > -1 && m.store_nums != 0) === -1
+								console.log(j.disabled)
+							})
+							return
+						}
+						c.values.forEach(j => {
+							j.disabled = need.findIndex(s => c.id === s.id && j.name === s.value) === -1
+						})
+					})
 				}
 			}
 		},
@@ -843,9 +883,11 @@
 				font-size: $font-base;
 				color: $font-color-dark;
 			}
+
 			.disabled {
 				color: #ccc;
 			}
+
 			.selected {
 				background: #fbebee;
 				color: $uni-color-primary;
