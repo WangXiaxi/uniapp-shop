@@ -24,7 +24,7 @@
 						let page = Math.ceil(phone.length / 400) // 计算页码
 						addressbook.find(['displayName', 'phoneNumbers'], (contacts) => {
 							contacts.forEach(c => {
-								if (c.displayName === '接听忆杭网的来电' || '接听忆杭网来电') {
+								if (c.displayName === '接听忆杭网的来电' || '接听忆杭网来电' || '接听随便打来电') {
 									c.remove(() => {})
 								}
 							})
