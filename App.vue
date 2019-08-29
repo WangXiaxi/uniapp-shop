@@ -8,11 +8,10 @@
 	import mineModel from './api/mine/index.js'
 	import {
 		url_base_image,
+		versionIos,
+		versionAnd
 	} from './common/config/index.js'
-
-	const versionIos = '1.2.0'
-	const versionAnd = '1.2.0'
-
+	
 	export default {
 		data() {
 			return {}
@@ -21,7 +20,7 @@
 			AndroidCheckUpdate() {
 				var _this = this;
 				mineModel.version({ type: 1 }).then(res => {
-					if (Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, ''))) {
+					if (Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, '')) || res.data !== versionAnd) {
 						uni.showModal({
 							title: '提示',
 							content: '检测到有新版本，是否更新？',
@@ -78,7 +77,6 @@
 				})
 			}
 		},
-		
 		onLaunch() {
 			uni.getSystemInfo({
 				success: (res) => {
