@@ -32,7 +32,7 @@
 				<image src="/static/icon/jpmc.png"></image>
 				<text>精品茗茶</text>
 			</navigator>
-			<navigator url="/pages/phoneView/phoneView" class="cate-item">
+			<navigator url="/pages/phoneView/index" class="cate-item">
 				<image src="/static/icon/yhtx.png"></image>
 				<text>忆杭通讯</text>
 			</navigator>

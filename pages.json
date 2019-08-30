@@ -428,7 +428,14 @@
             "style" : {
 				"navigationBarTitleText": "用户协议"
 			}
-        }
+        },
+		{
+		    "path" : "pages/phoneView/index",
+		    "style" : {
+				"navigationBarTitleText": "正在拨号",
+				"navigationBarBackgroundColor": "#F7F7F7"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
