@@ -4,6 +4,7 @@ import login from './modules/login'
 import cart from './modules/cart'
 import params from './modules/params'
 import search from './modules/search'
+import loginPhone from './modules/loginPhone'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ const store = new Vuex.Store({
 		login,
 		cart,
 		params,
-		search
+		search,
+		loginPhone
 	}
 })
 

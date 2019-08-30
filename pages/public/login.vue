@@ -71,7 +71,7 @@
 		computed: {},
 		methods: {
 			...mapMutations(['login']),
-			...mapActions(['getGoodsFavoriteIds', 'getUserInfo']),
+			...mapActions(['getGoodsFavoriteIds', 'getUserInfo', 'loginPhone']),
 			changeRead() {
 				this.isRead = this.isRead === 'false' ? 'true' : 'false'
 			},
@@ -104,6 +104,7 @@
 					const a = this.getGoodsFavoriteIds()
 					const b = this.getUserInfo()
 					Promise.all([a, b]).then(res => {
+						this.loginPhone()
 						this.loading = false
 						if (this.$api.prePage()) {
 							uni.navigateBack()

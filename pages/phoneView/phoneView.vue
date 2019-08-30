@@ -23,7 +23,6 @@
 						})
 						let page = Math.ceil(phone.length / 400) // 计算页码
 						addressbook.find(['displayName', 'phoneNumbers'], (contacts) => {
-							console.log(JSON.stringify(contacts))
 							if (contacts.findIndex(c => {
 									return c.displayName === '接听忆杭网的来电' || '接听忆杭网来电'
 								}) === -1) {
