@@ -1,12 +1,14 @@
 <template>
 	<view>
 		<content-one></content-one>
+		<content-two></content-two>
+		<content-three></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
 			<image class="le" src="../../static/icon/ipone_mo.png"></image>
 			<!-- <image class="le" src="../../static/icon/ipone_mo.png"></image> -->
 			<view class="cen">
-				<image class="phone_main" src="../../static/icon/ipone_main.png"></image>
+				<image class="phone_main" src="../../static/icon/phone_main.png"></image>
 			</view>
 			<image class="ri" src="../../static/icon/iphone_pre.png"></image>
 		</view>
@@ -15,9 +17,13 @@
 
 <script>
 	import contentOne from './components/content-one.vue'
+	import contentTwo from './components/content-two.vue'
+	import contentThree from './components/content-three.vue'
 	export default {
 		components: {
-			contentOne
+			contentOne,
+			contentTwo,
+			contentThree
 		},
 		data() {
 			return {
@@ -52,8 +58,20 @@
 			height: 120upx;
 			background: rgba(234,18,18,1);
 			box-shadow: 0 0 20upx 0 rgba(234, 18, 18, 0.1);
-			margin: -120upx 100upx 0;
+			margin: 0 146upx;
+			position: relative;
+			top: -60upx;
 			border-radius: 50%;
+			.phone_main {
+				width: 120upx;
+				height: 240upx;
+				position: relative;
+				top: 0;
+				transition: all 0.3s;
+				&.act {
+					top: 120upx;
+				}
+			}
 		}
 		.ri {
 			width: 56upx;
