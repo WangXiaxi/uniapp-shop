@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<content-one></content-one>
+		<!-- <content-one></content-one> -->
 		<content-two></content-two>
 		<content-three></content-three>
 		<!-- 键盘页面 -->
