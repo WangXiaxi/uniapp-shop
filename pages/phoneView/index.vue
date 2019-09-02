@@ -1,16 +1,17 @@
 <template>
 	<view>
-		<!-- <content-one></content-one> -->
-		<!-- <content-two :contactsCopy="contacts" :contactItemsCopy="contactItems"></content-two> -->
-		<content-three></content-three>
+		<content-one v-if="page === 1"></content-one>
+		<content-two v-if="page === 2" :contactsCopy="contacts"></content-two>
+		<content-three v-if="page === 3" :contactsCopy="contacts"></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
-			<image class="le" src="../../static/icon/ipone_mo.png"></image>
-			<!-- <image class="le" src="../../static/icon/ipone_mo.png"></image> -->
-			<view class="cen">
-				<image class="phone_main" src="../../static/icon/phone_main.png"></image>
+			<image class="le" src="../../static/icon/ipone_mo_2.png" v-if="page === 1"></image>
+			<image @click="changePage(1)" class="le" src="../../static/icon/ipone_mo.png" v-if="page !== 1"></image>
+			<view  @click="changePage(3)" class="cen">
+				<image class="phone_main" src="../../static/icon/phone_main.png" :class="{ act: page === 3 }"></image>
 			</view>
-			<image class="ri" src="../../static/icon/iphone_pre.png"></image>
+			<image class="ri" src="../../static/icon/iphone_pre.png" v-if="page === 2"></image>
+			<image @click="changePage(2)" class="ri" src="../../static/icon/ipone_pre_2.png" v-if="page !== 2"></image>
 		</view>
 	</view>
 </template>
@@ -30,7 +31,8 @@
 			return {
 				contacts: [],
 				contactItems: [],
-				isShow: false
+				isShow: false,
+				page: 1
 			}
 		},
 		onLoad() {
@@ -38,6 +40,13 @@
 			this.initContacts()
 		},
 		methods: {
+			changePage(page) {
+				if (page === 3 && this.page === 3) { // 拨打电话操作
+					this.$refs.pageThree.dial()
+					return
+				}
+				this.page = page
+			},
 			initContacts: function() { //获取手机通讯录
 				plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, (addressbook) => { // 可通过addressbook进行通讯录操作
 					addressbook.find(["displayName", "phoneNumbers"], (contacts) => {
@@ -152,7 +161,7 @@
 				top: 0;
 				transition: all 0.3s;
 				&.act {
-					top: 120upx;
+					top: -120upx;
 				}
 			}
 		}

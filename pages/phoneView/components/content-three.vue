@@ -28,6 +28,9 @@
 			}
 		},
 		methods: {
+			dial() { // 拨号操作
+				console.log(this.number)
+			},
 			addNum(val) {
 				this.number = `${this.number}${val}`
 			},
