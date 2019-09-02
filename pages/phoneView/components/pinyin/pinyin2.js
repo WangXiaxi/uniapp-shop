@@ -8,7 +8,7 @@ export default {
       var val = l1.substr(i, 1)
       var name = this.arraySearch(val, pinyin)
       if (reg.test(val)) {
-        I1 += val
+        I1 += this.ucfirst(val)
       } else if (name !== false) {
         I1 += name
       }

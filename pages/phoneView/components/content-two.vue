@@ -103,7 +103,8 @@
 			},
 			
 			onSelectClick: function(contact) {
-				
+				this.setParams(contact)
+				this.navTo('/pages/phoneView/detail/detail')
 			},
 			onSearchInput: function(value) {
 				this.setParams(this.contacts)
@@ -139,6 +140,7 @@
 			z-index: 2;
 		}
 		.search {
+			color: #666666;
 			margin: 0;
 			height: 68upx;
 			background: #E6E6E6;

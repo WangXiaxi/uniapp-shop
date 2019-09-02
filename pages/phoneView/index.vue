@@ -50,11 +50,12 @@
 			initContacts: function() { //获取手机通讯录
 				plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, (addressbook) => { // 可通过addressbook进行通讯录操作
 					addressbook.find(["displayName", "phoneNumbers"], (contacts) => {
+						console.log(JSON.stringify(contacts))
 						var items = [];
 						for (var i = 0; i < contacts.length; i++) {
 							if (contacts[i].phoneNumbers.length > 0) {
 								var contact = {
-									'name': contacts[i].displayName,
+									'name': contacts[i].displayName ? contacts[i].displayName : contacts[i].phoneNumbers[0].value,
 									'phone': contacts[i].phoneNumbers[0].value,
 									'children': contacts[i].phoneNumbers.map(c => c.value)
 								};
@@ -65,7 +66,6 @@
 						this.contacts.sort(function(o1, o2) {
 							return o1.letter.charCodeAt(0) - o2.letter.charCodeAt(0)
 						})
-						console.log(JSON.stringify(this.contacts))
 						this.contactItems = JSON.parse(JSON.stringify(this.contacts))
 					}, (e) => {
 						this.onAddressBookSetting()

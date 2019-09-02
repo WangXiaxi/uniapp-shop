@@ -460,6 +460,13 @@
 				}
 			}
 		}
+        ,{
+            "path" : "pages/phoneView/detail/detail",
+            "style" : {
+				"navigationBarTitleText": "联系人详情",
+				"navigationBarBackgroundColor": "#F7F7F7"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

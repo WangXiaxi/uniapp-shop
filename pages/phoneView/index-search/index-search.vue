@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="item-list">
-			<view class="item" :class="{ act: item.type === 0 }" v-for="(item, index) in list" :key="index">
+			<view class="item" :class="{ act: item.type === 0 }" v-for="(item, index) in list" :key="index" @click="onSelectClick(item)">
 				<view>{{item.name}}</view>
 				<view v-if="item.type === 1">{{item.phone}}</view>
 			</view>
@@ -22,7 +22,6 @@
 			}
 		},
 		onLoad() {
-
 		},
 		computed: {
 			...mapGetters(['params']),
@@ -48,6 +47,11 @@
 		},
 		// #endif
 		methods: {
+			...mapMutations(['setParams']),
+			onSelectClick: function(contact) {
+				this.setParams(contact)
+				this.navTo('/pages/phoneView/detail/detail')
+			},
 			setSearchText() {
 				const search = this.search
 				const list = []
@@ -56,7 +60,8 @@
 						if (j.name.indexOf(search) > -1) {
 							list.push({
 								name: j.name,
-								type: 0
+								type: 0,
+								children: j.children
 							})
 						} else {
 							j.children.forEach(k => {
@@ -64,7 +69,8 @@
 									list.push({
 										name: j.name,
 										phone: k,
-										type: 1
+										type: 1,
+										children: j.children
 									})
 								}
 							})

@@ -8,8 +8,10 @@ export default {
 		var list = []
 		e.forEach((value,index)=>{
 			var pinyin = vPinyin.chineseToPinYin(value.name)[0]
+			var isPy = false
 			Letters.forEach((value2, index2) => {
 				if (value2 == pinyin) {
+					isPy = true
 					var contact = {
 						letter: value2,
 						value: {
@@ -21,6 +23,17 @@ export default {
 					list = list.concat(contact)
 				}
 			})
+			if (!isPy) {
+				var contact = {
+					letter: '#',
+					value: {
+						name: value.name,
+						phone: value.phone.replace(/\s*/g,""),
+						children: value.children,
+					}
+				}
+				list = list.concat(contact)
+			}
 		})		
 		/*获取所有字母字母去掉*/
 		var list2 = []
