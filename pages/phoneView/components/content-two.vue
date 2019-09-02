@@ -2,7 +2,7 @@
 	<view class="content-two">
 		<view class="input-search">
 			<image class="ic" src="../../static/icon/ipone_searh.png"></image>
-			<input class="search" v-model="search" @input="onSearchInput" placeholder="搜索" placeholder-class="placeholder" />
+			<input class="search" v-model="search" placeholder="搜索" placeholder-class="placeholder" />
 		</view>
 		<view class="mobile-list">
 			<scroll-view class="contact-scroll" scroll-y :scroll-into-view="scrollViewId">
@@ -35,6 +35,12 @@
 	import pinyin from './pinyin/pinyin3.js'
 	const platform = uni.getSystemInfoSync().platform
 	export default {
+		props: {
+			contactsCopy: {
+				type: Array,
+				default: []
+			}
+		},
 		data() {
 			return {
 				scrollViewId: 'we',
@@ -44,21 +50,13 @@
 				barHeight: 0,
 				letter: '',
 				isSearch: false,
-				isShow: false,
-				contacts: [{
-					letter: 'A',
-					contacts: [{
-						name: '王小星',
-						phone: '15058559293'
-					}]
-				}]
+				contactItems: [],
+				contacts: []
 			}
 		},
 		created() {
 			const res = uni.getSystemInfoSync();
 			this.barHeight = res.windowHeight / 27;
-			//初始通讯录
-			this.initContacts()
 		},
 		methods: {
 			/*
@@ -90,77 +88,7 @@
 					}
 				}
 			},
-			initContacts: function() { //获取手机通讯录
-				plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, (addressbook) => { // 可通过addressbook进行通讯录操作
-					addressbook.find(["displayName", "phoneNumbers"], (contacts) => {
-						var items = [];
-						for (var i = 0; i < contacts.length; i++) {
-							if (contacts[i].phoneNumbers.length > 0) {
-								var contact = {
-									'name': contacts[i].displayName,
-									'phone': contacts[i].phoneNumbers[0].value,
-								};
-								items.push(contact);
-							}
-						}
-						this.contacts = pinyin.paixu(items)
-						this.contacts.sort(function(o1, o2) {
-							return o1.letter.charCodeAt(0) - o2.letter.charCodeAt(0)
-						})
-						this.contactItems = JSON.parse(JSON.stringify(this.contacts))
-					}, (e) => {
-						this.onAddressBookSetting()
-					});
-				}, (e) => {
-					this.onAddressBookSetting()
-				});
-			},
-			onAddressBookSetting: function() {
-				if (this.isShow) {
-					return
-				}
-				this.isShow = true
-				uni.showModal({
-					title: '提示',
-					content: 'APP通讯录权限没有开启，是否开启？',
-					success(res) {
-						if (res.confirm) {
-							if (platform == 'ios') {
-								var UIApplication = plus.ios.import("UIApplication");
-								var NSURL2 = plus.ios.import("NSURL");
-								var setting2 = NSURL2.URLWithString("app-settings:");
-								var application2 = UIApplication.sharedApplication();
-								application2.openURL(setting2);
-								plus.ios.deleteObject(setting2);
-								plus.ios.deleteObject(NSURL2);
-								plus.ios.deleteObject(application2);
-							} else {
-								var main = plus.android.runtimeMainActivity();
-								var bulid = plus.android.importClass("android.os.Build");
-								var Intent = plus.android.importClass('android.content.Intent');
-								if (bulid.VERSION.SDK_INT >= 9) {
-									var intent = new Intent('android.settings.APPLICATION_DETAILS_SETTINGS');
-									var Uri = plus.android.importClass('android.net.Uri');
-									var uri = Uri.fromParts("package", main.getPackageName(), null);
-									intent.setData(uri);
-									intent.putExtra('android.content.Intent.setFlags', Intent.FLAG_ACTIVITY_NEW_TASK);
-								} else if (bulid.VERSION.SDK_INT <= 8) {
-									var intent = new Intent(Intent.ACTION_VIEW);
-									intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-									intent.putExtra("com.android.settings.ApplicationPkgName", main.getPackageName());
-									intent.putExtra('android.content.Intent.setFlags', Intent.FLAG_ACTIVITY_NEW_TASK);
-								}
-								main.startActivity(intent);
-								this.isShow = false
-							}
-						} else {
-							uni.navigateBack({
-								delta: 1
-							})
-						}
-					}
-				})
-			},
+			
 			onSelectClick: function(contact) {
 				uni.showActionSheet({
 					itemList: ['电话联系'],
@@ -173,8 +101,8 @@
 					}
 				})
 			},
-			onSearchInput: function(e) {
-				var searchVal = e.detail.value
+			onSearchInput: function(value) {
+				var searchVal = value
 				this.isSearch = true
 				if (searchVal == '') {
 					this.contacts = JSON.parse(JSON.stringify(this.contactItems))
@@ -213,6 +141,18 @@
 					}, 200)
 				}
 			}
+		},
+		watch: {
+			search(v) {
+				this.onSearchInput(v)
+			},
+			contactsCopy: {
+				handler: function(v) {
+					this.contacts = JSON.parse(JSON.stringify(v))
+					this.contactItems = JSON.parse(JSON.stringify(v))
+				},
+				immediate: true
+			}
 		}
 	}
 </script>
@@ -228,6 +168,7 @@
 			background: #E6E6E6;
 			border-radius: 40upx;
 			padding: 0 62upx;
+			font-size: 32upx;
 		}
 		.ic {
 			position: absolute;
@@ -273,7 +214,7 @@
 	.indexBar-item {
 		flex: 1;
 		width: 60upx;
-		height: 60upx;
+		height: 40upx;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -290,8 +231,8 @@
 		background: rgba(0, 0, 0, 0.5);
 		width: 100upx;
 		height: 100upx;
+		margin: auto auto;
 		border-radius: 10upx;
-		margin: auto;
 		color: #fff;
 		line-height: 100upx;
 		text-align: center;

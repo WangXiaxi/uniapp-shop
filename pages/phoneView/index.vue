@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- <content-one></content-one> -->
-		<content-two></content-two>
+		<!-- <content-two :contactsCopy="contacts" :contactItemsCopy="contactItems"></content-two> -->
 		<content-three></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
@@ -19,6 +19,7 @@
 	import contentOne from './components/content-one.vue'
 	import contentTwo from './components/content-two.vue'
 	import contentThree from './components/content-three.vue'
+	import pinyin from './components/pinyin/pinyin3.js'
 	export default {
 		components: {
 			contentOne,
@@ -27,7 +28,86 @@
 		},
 		data() {
 			return {
-				number: '150'
+				contacts: [],
+				contactItems: [],
+				isShow: false
+			}
+		},
+		onLoad() {
+			//初始通讯录
+			this.initContacts()
+		},
+		methods: {
+			initContacts: function() { //获取手机通讯录
+				plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, (addressbook) => { // 可通过addressbook进行通讯录操作
+					addressbook.find(["displayName", "phoneNumbers"], (contacts) => {
+						var items = [];
+						for (var i = 0; i < contacts.length; i++) {
+							if (contacts[i].phoneNumbers.length > 0) {
+								var contact = {
+									'name': contacts[i].displayName,
+									'phone': contacts[i].phoneNumbers[0].value,
+								};
+								items.push(contact);
+							}
+						}
+						this.contacts = pinyin.paixu(items)
+						this.contacts.sort(function(o1, o2) {
+							return o1.letter.charCodeAt(0) - o2.letter.charCodeAt(0)
+						})
+						this.contactItems = JSON.parse(JSON.stringify(this.contacts))
+					}, (e) => {
+						this.onAddressBookSetting()
+					});
+				}, (e) => {
+					this.onAddressBookSetting()
+				});
+			},
+			onAddressBookSetting: function() {
+				if (this.isShow) {
+					return
+				}
+				this.isShow = true
+				uni.showModal({
+					title: '提示',
+					content: 'APP通讯录权限没有开启，是否开启？',
+					success(res) {
+						if (res.confirm) {
+							if (platform == 'ios') {
+								var UIApplication = plus.ios.import("UIApplication");
+								var NSURL2 = plus.ios.import("NSURL");
+								var setting2 = NSURL2.URLWithString("app-settings:");
+								var application2 = UIApplication.sharedApplication();
+								application2.openURL(setting2);
+								plus.ios.deleteObject(setting2);
+								plus.ios.deleteObject(NSURL2);
+								plus.ios.deleteObject(application2);
+							} else {
+								var main = plus.android.runtimeMainActivity();
+								var bulid = plus.android.importClass("android.os.Build");
+								var Intent = plus.android.importClass('android.content.Intent');
+								if (bulid.VERSION.SDK_INT >= 9) {
+									var intent = new Intent('android.settings.APPLICATION_DETAILS_SETTINGS');
+									var Uri = plus.android.importClass('android.net.Uri');
+									var uri = Uri.fromParts("package", main.getPackageName(), null);
+									intent.setData(uri);
+									intent.putExtra('android.content.Intent.setFlags', Intent.FLAG_ACTIVITY_NEW_TASK);
+								} else if (bulid.VERSION.SDK_INT <= 8) {
+									var intent = new Intent(Intent.ACTION_VIEW);
+									intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+									intent.putExtra("com.android.settings.ApplicationPkgName", main.getPackageName());
+									intent.putExtra('android.content.Intent.setFlags', Intent.FLAG_ACTIVITY_NEW_TASK);
+								}
+								main.startActivity(intent);
+								this.isShow = false
+							}
+						} else {
+							uni.navigateBack({
+								delta: 1
+							})
+						}
+					}
+				})
 			}
 		}
 	}
@@ -37,10 +117,12 @@
 	page {
 		background: #FFFFFF;
 	}
+	
 	.key-panel {
 		position: fixed;
 		z-index: 100;
 		box-shadow: 0 0 30upx 0 rgba(0, 0, 0, 0.1);
+		background: #FFFFFF;
 		border-radius: 10upx;
 		bottom: 40upx;
 		left: 24upx;
@@ -56,11 +138,12 @@
 		.cen {
 			width: 120upx;
 			height: 120upx;
+			overflow: hidden;
 			background: rgba(234,18,18,1);
 			box-shadow: 0 0 20upx 0 rgba(234, 18, 18, 0.1);
 			margin: 0 146upx;
 			position: relative;
-			top: -60upx;
+			top: -40upx;
 			border-radius: 50%;
 			.phone_main {
 				width: 120upx;
