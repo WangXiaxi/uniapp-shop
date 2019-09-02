@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="item-list">
-			<view class="item" v-for="(item, index) in list" :key="index">
+			<view class="item" :class="{ act: item.type === 0 }" v-for="(item, index) in list" :key="index">
 				<view>{{item.name}}</view>
 				<view v-if="item.type === 1">{{item.phone}}</view>
 			</view>
@@ -88,6 +88,9 @@
 			color: #aaa;
 			font-size: 28upx;
 			line-height: 50upx;
+			&.act {
+				line-height: 100upx;
+			}
 		}
 	}
 </style>
