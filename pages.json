@@ -435,6 +435,30 @@
 				"navigationBarTitleText": "正在拨号",
 				"navigationBarBackgroundColor": "#F7F7F7"
 			}
+		},
+		{
+			"path": "pages/phoneView/index-search/index-search",
+			"style": {
+				"app-plus": {
+					"scrollIndicator": "none",
+					"titleNView": {
+						"titleColor": "#999",
+						"searchInput": {
+							"backgroundColor": "rgba(231, 231, 231,.7)",
+							"borderRadius": "16px",
+							"placeholder": "请输入号码或姓名查询",
+							"disabled": false,
+							"placeholderColor": "#606266",
+							"autoFocus": true
+						},
+						"buttons": [{
+							"text": " 取消 ",
+							"fontSize": "15",
+							"color": "#999"
+						}]
+					}
+				}
+			}
 		}
     ],
 	"globalStyle": {

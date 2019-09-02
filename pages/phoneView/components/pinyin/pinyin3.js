@@ -15,6 +15,7 @@ export default {
 						value: {
 							name: value.name,
 							phone: value.phone.replace(/\s*/g,""),
+							children: value.children,
 						}
 					}
 					list = list.concat(contact)

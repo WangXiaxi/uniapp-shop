@@ -2,7 +2,7 @@
 	<view class="content-two">
 		<view class="input-search">
 			<image class="ic" src="../../static/icon/ipone_searh.png"></image>
-			<input class="search" v-model="search" placeholder="搜索" placeholder-class="placeholder" />
+			<view class="search" @click="onSearchInput()">搜索</view>
 		</view>
 		<view class="mobile-list">
 			<scroll-view class="contact-scroll" scroll-y :scroll-into-view="scrollViewId">
@@ -33,12 +33,19 @@
 
 <script>
 	import pinyin from './pinyin/pinyin3.js'
+	import {
+		mapGetters,
+		mapActions,
+		mapMutations
+	} from 'vuex'
 	const platform = uni.getSystemInfoSync().platform
 	export default {
 		props: {
 			contactsCopy: {
 				type: Array,
-				default: []
+				default: () => {
+					return []
+				}
 			}
 		},
 		data() {
@@ -59,6 +66,12 @@
 			this.barHeight = res.windowHeight / 27;
 		},
 		methods: {
+			...mapMutations(['setParams']),
+			navTo(url) {
+				uni.navigateTo({
+					url
+				})
+			},
 			/*
 			 * 滑动的侧边选择器
 			 */
@@ -90,56 +103,11 @@
 			},
 			
 			onSelectClick: function(contact) {
-				uni.showActionSheet({
-					itemList: ['电话联系'],
-					success: (e) => {
-						if (e.tapIndex == 0) {
-							uni.makePhoneCall({
-								phoneNumber: contact.phone
-							});
-						}
-					}
-				})
+				
 			},
 			onSearchInput: function(value) {
-				var searchVal = value
-				this.isSearch = true
-				if (searchVal == '') {
-					this.contacts = JSON.parse(JSON.stringify(this.contactItems))
-					this.isSearch = false
-				} else {
-					var showList = []
-					var list = []
-					list = JSON.parse(JSON.stringify(this.contactItems))
-					list.forEach((item, index1) => {
-						var contacts = []
-						item.contacts.forEach((contact, index2) => {
-							for (var i = 0; i < searchVal.length; i++) {
-								if (contact.name.indexOf(searchVal[i]) != -1) {
-									var contain = false;
-									contacts.find(function(val) {
-										if (val.phone == contact.phone) {
-											contain = true;
-										}
-									});
-									if (!contain) {
-										contacts.push(contact);
-									}
-								}
-							}
-						})
-						if (contacts.length > 0) {
-							var contacts = {
-								letter: item.letter,
-								contacts: contacts
-							}
-							showList = showList.concat(contacts)
-						}
-					})
-					setTimeout(() => {
-						this.contacts = JSON.parse(JSON.stringify(showList))
-					}, 200)
-				}
+				this.setParams(this.contacts)
+				this.navTo('/pages/phoneView/index-search/index-search')
 			}
 		},
 		watch: {
@@ -162,6 +130,14 @@
 		background: #f7f7f7;
 		padding: 10upx 24upx;
 		position: relative;
+		.bg {
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
+		}
 		.search {
 			margin: 0;
 			height: 68upx;
@@ -169,6 +145,7 @@
 			border-radius: 40upx;
 			padding: 0 62upx;
 			font-size: 32upx;
+			line-height: 68upx;
 		}
 		.ic {
 			position: absolute;

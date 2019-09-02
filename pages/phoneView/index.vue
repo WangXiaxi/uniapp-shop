@@ -1,8 +1,8 @@
 <template>
-	<view>
+	<view class="content">
 		<content-one v-if="page === 1"></content-one>
 		<content-two v-if="page === 2" :contactsCopy="contacts"></content-two>
-		<content-three v-if="page === 3" :contactsCopy="contacts"></content-three>
+		<content-three v-if="page === 3" :contacts="contacts"></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
 			<image class="le" src="../../static/icon/ipone_mo_2.png" v-if="page === 1"></image>
@@ -56,6 +56,7 @@
 								var contact = {
 									'name': contacts[i].displayName,
 									'phone': contacts[i].phoneNumbers[0].value,
+									'children': contacts[i].phoneNumbers.map(c => c.value)
 								};
 								items.push(contact);
 							}
@@ -64,6 +65,7 @@
 						this.contacts.sort(function(o1, o2) {
 							return o1.letter.charCodeAt(0) - o2.letter.charCodeAt(0)
 						})
+						console.log(JSON.stringify(this.contacts))
 						this.contactItems = JSON.parse(JSON.stringify(this.contacts))
 					}, (e) => {
 						this.onAddressBookSetting()
@@ -126,7 +128,9 @@
 	page {
 		background: #FFFFFF;
 	}
-	
+	.content {
+		height: 100%;
+	}
 	.key-panel {
 		position: fixed;
 		z-index: 100;
