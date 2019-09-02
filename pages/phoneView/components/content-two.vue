@@ -1,7 +1,8 @@
 <template>
 	<view class="content-two">
 		<view class="input-search">
-			<input class="search" v-model="search" @input="onSearchInput" />
+			<image class="ic" src="../../static/icon/ipone_searh.png"></image>
+			<input class="search" v-model="search" @input="onSearchInput" placeholder="搜索" placeholder-class="placeholder" />
 		</view>
 		<view class="mobile-list">
 			<scroll-view class="contact-scroll" scroll-y :scroll-into-view="scrollViewId">
@@ -9,7 +10,7 @@
 					<view class="divider" :id="item.letter"> <text class="divider-text">{{item.letter}}</text> </view>
 					<view class="item" hover-class="hover" :hover-start-time="20" v-for="(contact,index) in item.contacts" :key="index"
 					 @click='onSelectClick(contact)'>
-						<image class="portrait" src="https://download.cheshangji.cn/app/46aeda5af72f44ba818423c6cb54799a.png" mode="aspectFill"></image>
+						<image class="portrait" src="../../static/icon/gywm.png"></image>
 						<view class="name">{{contact.name}}</view>
 					</view>
 				</view>
@@ -31,6 +32,8 @@
 </template>
 
 <script>
+	import pinyin from './pinyin/pinyin3.js'
+	const platform = uni.getSystemInfoSync().platform
 	export default {
 		data() {
 			return {
@@ -50,6 +53,12 @@
 					}]
 				}]
 			}
+		},
+		created() {
+			const res = uni.getSystemInfoSync();
+			this.barHeight = res.windowHeight / 27;
+			//初始通讯录
+			this.initContacts()
 		},
 		methods: {
 			/*
@@ -210,7 +219,24 @@
 
 <style lang="scss">
 	.input-search {
-		background: #f7ff7f7;
+		background: #f7f7f7;
+		padding: 10upx 24upx;
+		position: relative;
+		.search {
+			margin: 0;
+			height: 68upx;
+			background: #E6E6E6;
+			border-radius: 40upx;
+			padding: 0 62upx;
+		}
+		.ic {
+			position: absolute;
+			width: 28upx;
+			height: 28upx;
+			z-index: 1;
+			left: 48upx;
+			top: 30upx;
+		}
 	}
 
 
@@ -291,7 +317,7 @@
 
 	.divider {
 		width: 100%;
-		background-color: #F0F0F0;
+		background-color: #f7f7f7;
 		padding: 5upx 0;
 		color: #000;
 	}
@@ -311,9 +337,10 @@
 	}
 
 	.portrait {
-		width: 80upx;
-		height: 80upx;
+		width: 100upx;
+		height: 100upx;
 		padding: 15upx;
+		margin-right: 10upx;
 	}
 
 	.name {
