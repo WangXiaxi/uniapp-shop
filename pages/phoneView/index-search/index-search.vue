@@ -67,7 +67,7 @@
 							})
 						} else {
 							j.children.forEach(k => {
-								if (k.indexOf(search) > -1) {
+								if (k.replace(/\s/g, '').indexOf(search) > -1) {
 									list.push({
 										name: j.name,
 										phone: k,

@@ -1,8 +1,8 @@
 <template>
 	<view class="content">
-		<content-one v-if="page === 1"></content-one>
-		<content-two v-if="page === 2" :contactsCopy="contacts"></content-two>
-		<content-three v-if="page === 3" :contacts="contacts"></content-three>
+		<content-one class="cont" :class="{ act: page === 1 }"></content-one>
+		<content-two class="cont" :class="{ act: page === 2 }" :contactsCopy="contacts"></content-two>
+		<content-three class="cont" :class="{ act: page === 3 }" :contacts="contacts"></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
 			<image class="le" src="../../static/icon/ipone_mo_2.png" v-if="page === 1"></image>
@@ -21,6 +21,11 @@
 	import contentTwo from './components/content-two.vue'
 	import contentThree from './components/content-three.vue'
 	import pinyin from './components/pinyin/pinyin3.js'
+	import {
+		mapGetters,
+		mapActions,
+		mapMutations
+	} from 'vuex'
 	export default {
 		components: {
 			contentOne,
@@ -37,9 +42,11 @@
 		},
 		onLoad() {
 			//初始通讯录
+			this.getTokenPhone()
 			this.initContacts()
 		},
 		methods: {
+			...mapActions(['getTokenPhone']),
 			changePage(page) {
 				if (page === 3 && this.page === 3) { // 拨打电话操作
 					this.$refs.pageThree.dial()
@@ -127,6 +134,12 @@
 <style lang="scss">
 	page {
 		background: #FFFFFF;
+	}
+	.cont {
+		display: none;
+		&.act {
+			display: block;
+		}
 	}
 	.content {
 		height: 100%;

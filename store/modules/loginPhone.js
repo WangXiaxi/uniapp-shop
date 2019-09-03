@@ -6,24 +6,45 @@
  */
 import phoneModel from '../../api/phone/index.js'
 
-const tokenPhoneStorage  = uni.getStorageSync('tokenPhone')
-
 const login = {
 	state: {
-		tokenPhone: tokenPhoneStorage ? tokenPhoneStorage : ''
+		tokenPhone: '',
+		isLoginPhone: false
 	},
 	getters: {
 
 	},
 	mutations: {
-
+		setTokenPhone(state, data) {
+			state.tokenPhone = data
+		}
 	},
 	actions: {
 		// 注册并登陆 phone
-		async loginPhone({ commit }) { // 注册并登陆手机
-			const { mobile } = uni.getStorageSync('userInfo')
-			phoneModel.getToken({ mobile }).then(res => {
-				console.log(res)
+		async loginPhone({
+			commit
+		}) { // 注册并登陆手机
+			const {
+				mobile
+			} = uni.getStorageSync('userInfo')
+			await phoneModel.register({
+				mobile
+			})
+			this.isLoginPhone = true
+		},
+		// 注册并登陆 phone
+		getTokenPhone({
+			commit
+		}) { // 注册并登陆手机
+			commit('setTokenPhone', '')
+			const {
+				mobile
+			} = uni.getStorageSync('userInfo')
+			return phoneModel.getCallToken({
+				mobile
+			}).then(res => {
+				commit('setTokenPhone', res.data.data)
+				return res
 			})
 		}
 	}

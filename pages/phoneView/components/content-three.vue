@@ -43,7 +43,7 @@
 				this.contacts.forEach(c => {
 					c.contacts.forEach(j => {
 						j.children.forEach(k => {
-							if (k.indexOf(number) > -1) {
+							if (k.replace(/\s/g, '').indexOf(number) > -1) {
 								list.push({
 									name: j.name,
 									phone: k

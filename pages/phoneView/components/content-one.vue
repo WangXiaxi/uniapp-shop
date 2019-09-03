@@ -17,43 +17,59 @@
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				list: []
+			}
+		}
+	}
 </script>
 
 <style lang="scss">
-	.content-one { // 通话记录
+	.content-one {
+		// 通话记录
 		padding-top: 32upx;
 		margin: 0 24upx;
+
 		.item {
 			height: 100upx;
 			margin-bottom: 32upx;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+
 			.header {
 				width: 100upx;
 				height: 100upx;
 			}
+
 			.info {
 				flex: 1;
 				margin-left: 24upx;
+
 				.name {
 					font-size: 30upx;
 					color: #000000;
 				}
+
 				.mobile {
 					margin-top: 20upx;
 					display: flex;
 					align-items: center;
 					color: #EA1212;
 					font-size: 28upx;
+
 					.date {
 						color: #999999;
 						margin-left: 10upx;
 					}
+
 					.trans {
 						width: 16upx;
 						height: 16upx;
 						margin-left: 6upx;
+
 						&.act {
 							transform: rotate(180deg);
 						}
