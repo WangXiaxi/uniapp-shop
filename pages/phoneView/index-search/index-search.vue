@@ -18,10 +18,12 @@
 		data() {
 			return {
 				list: [],
-				search: ''
+				search: '',
+				curData: []
 			}
 		},
 		onLoad() {
+			this.curData = JSON.parse(JSON.stringify(this.params))
 		},
 		computed: {
 			...mapGetters(['params']),
@@ -55,7 +57,7 @@
 			setSearchText() {
 				const search = this.search
 				const list = []
-				this.params.forEach(c => {
+				this.curData.forEach(c => {
 					c.contacts.forEach(j => {
 						if (j.name.indexOf(search) > -1) {
 							list.push({

@@ -32,7 +32,7 @@
 				contacts: [],
 				contactItems: [],
 				isShow: false,
-				page: 1
+				page: 3
 			}
 		},
 		onLoad() {

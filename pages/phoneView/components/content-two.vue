@@ -82,6 +82,7 @@
 			setCur(e) {
 				this.hidden = true;
 				this.letter = e.target.id
+				this.scrollViewId = this.letter
 			},
 			tStart() {
 				this.hidden = false

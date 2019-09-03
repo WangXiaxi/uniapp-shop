@@ -12,7 +12,7 @@
 						<view class="name">{{userInfo.username}}</view>
 						<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
 						<view class="pick-tip" v-if="!userInfo.is_agent">
-							<image src="/static/icon/shop.png" class="shop"></image>{{userInfo.agent_text}}社区店
+							<image src="/static/icon/shop.png" class="shop"></image>{{userInfo.agent_text}}
 						</view>
 					</view>
 					<view class="tips">
