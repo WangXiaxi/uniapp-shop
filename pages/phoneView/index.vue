@@ -39,6 +39,16 @@
 				page: 3
 			}
 		},
+		// #ifndef MP
+		onNavigationBarButtonTap(e) {
+			const index = e.index;
+			if (index === 0) {
+				uni.navigateTo({
+					url: '/pages/phoneView/money/money'
+				})
+			}
+		},
+		// #endif
 		onLoad() {
 			//初始通讯录
 			this.getTokenPhone()

@@ -379,61 +379,75 @@
 					}
 				}
 			}
-		}
-	    ,{
-            "path" : "pages/order/evaluate",
-            "style" : {
+		}, {
+			"path": "pages/order/evaluate",
+			"style": {
 				"navigationBarTitleText": "立即评价"
 			}
-        }
-        ,{
-            "path" : "pages/eval/eval",
-            "style" : {
+		}, {
+			"path": "pages/eval/eval",
+			"style": {
 				// "enablePullDownRefresh": true,
 				"navigationBarTitleText": "我的评价"
 			}
-        }
-		,{
-		    "path" : "pages/order/after",
-		    "style" : {
+		}, {
+			"path": "pages/order/after",
+			"style": {
 				"navigationBarTitleText": "申请售后"
 			}
-		}
-        ,{
-            "path" : "pages/message/message",
-            "style" : {
+		}, {
+			"path": "pages/message/message",
+			"style": {
 				"navigationBarTitleText": "会员通知"
 			}
-        }
-        ,{
-            "path" : "pages/phoneView/phoneView",
-            "style" : {
+		}, {
+			"path": "pages/phoneView/phoneView",
+			"style": {
 				"navigationBarTitleText": "忆杭通讯"
 			}
-        }
-        ,{
-            "path" : "pages/news/news",
-            "style" : {
+		}, {
+			"path": "pages/news/news",
+			"style": {
 				"navigationBarTitleText": "咨询"
 			}
-        }
-        ,{
-            "path" : "pages/aboutus/aboutus",
-            "style" : {
+		}, {
+			"path": "pages/aboutus/aboutus",
+			"style": {
 				"navigationBarTitleText": "关于我们"
 			}
-        }
-        ,{
-            "path" : "pages/xieyi/xieyi",
-            "style" : {
+		}, {
+			"path": "pages/xieyi/xieyi",
+			"style": {
 				"navigationBarTitleText": "用户协议"
 			}
-        },
+		},
 		{
-		    "path" : "pages/phoneView/index",
-		    "style" : {
+			"path": "pages/phoneView/index",
+			"style": {
 				"navigationBarTitleText": "正在拨号",
-				"navigationBarBackgroundColor": "#F7F7F7"
+				"navigationBarBackgroundColor": "#F7F7F7",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"width": "70px",
+							"text": "话费充值",
+							"fontSize": "15",
+							"color": "#666666"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/phoneView/money/money",
+			"style": {
+				"navigationBarTitleText": "话费充值",
+				"navigationBarBackgroundColor": "#EA1212",
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"titleNView": {
+						"buttons": []
+					}
+				}
 			}
 		},
 		{
@@ -459,20 +473,19 @@
 					}
 				}
 			}
-		}
-        ,{
-            "path" : "pages/phoneView/detail/detail",
-            "style" : {
+		}, {
+			"path": "pages/phoneView/detail/detail",
+			"style": {
 				"navigationBarTitleText": "联系人详情",
 				"navigationBarBackgroundColor": "#F7F7F7"
 			}
-        }
-        ,{
-            "path" : "pages/phoneView/ring/ring",
-            "style" : {
+		}, {
+			"path": "pages/phoneView/ring/ring",
+			"style": {
 				"titleNView": false
+
 			}
-        }
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
