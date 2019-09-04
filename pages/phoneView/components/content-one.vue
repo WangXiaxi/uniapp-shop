@@ -3,13 +3,13 @@
 		<!-- 空白页 -->
 		<empty v-if="list.length === 0" text="暂无通话记录"></empty>
 		<view v-else class="mobile-list">
-			<view class="item" :class="{ act: item.status === '未接通' }" v-for="(item, index) in list" :key="index">
+			<view @click="dial" class="item" :class="{ act: item.status === '未接通' }" v-for="(item, index) in list" :key="index">
 				<image class="header" src="../../static/icon/gywm.png"></image>
 				<view class="info">
-					<view class="name">王晓欣</view>
+					<view class="name">{{item.answer_name}}</view>
 					<view class="mobile">
-						<view class="tell">{{item.calle164}}</view>
-						<view class="date">29/8 呼出</view>
+						<view class="tell">{{item.answer}}</view>
+						<view class="date">{{item.time}} 呼出</view>
 						<image class="trans" src="../../static/icon/phone_4.png"></image>
 					</view>
 				</view>
@@ -29,6 +29,9 @@
 		components: {
 			empty
 		},
+		props: {
+			
+		},
 		data() {
 			return {
 				list: []
@@ -38,12 +41,44 @@
 			...mapGetters(['tokenPhone'])
 		},
 		methods: {
+			dial() { // 拨号操作
+				const number = this.number
+					const list = []
+					this.contacts.forEach(c => {
+						c.contacts.forEach(j => {
+							j.children.forEach(k => {
+								if (k.indexOf(number) > -1) {
+									list.push({
+										name: j.name,
+										phone: k
+									})
+								}
+							})
+							
+						})
+					})
+					this.list = list
+			
+				if (this.list[0] && this.list[0].phone === this.number) {
+					const { name, phone } = this.list[0]
+					uni.navigateTo({
+						url: `/pages/phoneView/ring/ring?name=${name}&phone=${phone}`
+					})
+				} else {
+					uni.navigateTo({
+						url: `/pages/phoneView/ring/ring?name=${this.number}&phone=${this.number}`
+					})
+				}
+			},
 			getLogData() {
 				const {
 					mobile
 				} = uni.getStorageSync('userInfo')
 				phoneModel.getCallLog({ mobile }).then(res => {
-					this.list = res.data.json
+					this.list = res.data.map(c => {
+						c.time = c.time.slice(5, 16)
+						return c
+					})
 				})
 			}
 		},

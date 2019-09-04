@@ -29,7 +29,9 @@
 			const { mobile } = this.userInfo
 			phoneModel.callUser({ answer_name: name, answerer: phone, caller: mobile, token: this.tokenPhone }).then(res => {
 			}).catch((e) => {
-				this.goback()
+				setTimeout(() => {
+					this.goback()
+				}, 2000)
 			})
 		},
 		onShow() {

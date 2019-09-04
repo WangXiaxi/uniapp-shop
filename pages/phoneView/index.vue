@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<content-one class="cont" :class="{ act: page === 1 }"></content-one>
+		<content-one class="cont" :class="{ act: page === 1 }" :contacts="contacts"></content-one>
 		<content-two class="cont" :class="{ act: page === 2 }" :contactsCopy="contacts"></content-two>
 		<content-three ref="pageThree" class="cont" :class="{ act: page === 3 }" :contacts="contacts"></content-three>
 		<!-- 键盘页面 -->

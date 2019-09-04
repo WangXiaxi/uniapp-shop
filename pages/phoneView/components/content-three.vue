@@ -38,7 +38,6 @@
 		},
 		methods: {
 			dial() { // 拨号操作
-				console.log(24566)
 				if (this.list[0] && this.list[0].phone === this.number) {
 					const { name, phone } = this.list[0]
 					uni.navigateTo({
