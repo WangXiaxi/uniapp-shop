@@ -7,7 +7,7 @@
 		<view class="key-panel">
 			<image class="le" src="../../static/icon/ipone_mo_2.png" v-if="page === 1"></image>
 			<image @click="changePage(1)" class="le" src="../../static/icon/ipone_mo.png" v-if="page !== 1"></image>
-			<view  @click="changePage(3)" class="cen">
+			<view @click="changePage(3)" class="cen">
 				<image class="phone_main" src="../../static/icon/phone_main.png" :class="{ act: page === 3 }"></image>
 			</view>
 			<image class="ri" src="../../static/icon/iphone_pre.png" v-if="page === 2"></image>
@@ -43,20 +43,38 @@
 			//初始通讯录
 			this.getTokenPhone()
 			this.initContacts()
+			this.changeTitle()
 		},
 		methods: {
 			...mapActions(['getTokenPhone']),
+			changeTitle() {
+				let title = ''
+				switch (this.page) {
+					case 1:
+						title = '通话记录'
+						break
+					case 2:
+						title = '通讯录'
+						break
+					case 3:
+						title = '拨号'
+						break
+				}
+				uni.setNavigationBarTitle({
+					title
+				})
+			},
 			changePage(page) {
 				if (page === 3 && this.page === 3) { // 拨打电话操作
 					this.$refs.pageThree.dial()
 					return
 				}
 				this.page = page
+				this.changeTitle()
 			},
 			initContacts: function() { //获取手机通讯录
 				plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, (addressbook) => { // 可通过addressbook进行通讯录操作
 					addressbook.find(["displayName", "phoneNumbers"], (contacts) => {
-						console.log(JSON.stringify(contacts))
 						var items = [];
 						for (var i = 0; i < contacts.length; i++) {
 							if (contacts[i].phoneNumbers.length > 0) {
@@ -134,15 +152,19 @@
 	page {
 		background: #FFFFFF;
 	}
+
 	.cont {
 		display: none;
+
 		&.act {
 			display: block;
 		}
 	}
+
 	.content {
 		height: 100%;
 	}
+
 	.key-panel {
 		position: fixed;
 		z-index: 100;
@@ -156,31 +178,36 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
 		.le {
 			width: 56upx;
 			height: 56upx;
 		}
+
 		.cen {
 			width: 120upx;
 			height: 120upx;
 			overflow: hidden;
-			background: rgba(234,18,18,1);
+			background: rgba(234, 18, 18, 1);
 			box-shadow: 0 0 20upx 0 rgba(234, 18, 18, 0.5);
 			margin: 0 146upx;
 			position: relative;
 			top: -40upx;
 			border-radius: 50%;
+
 			.phone_main {
 				width: 120upx;
 				height: 240upx;
 				position: relative;
 				top: 0;
 				transition: all 0.3s;
+
 				&.act {
 					top: -120upx;
 				}
 			}
 		}
+
 		.ri {
 			width: 56upx;
 			height: 56upx;

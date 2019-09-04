@@ -2,7 +2,8 @@
 	<view class="content">
 		<image class="bg" mode="aspectFill" src="../../../static/bj-phone.png"></image>
 		<view class="iphone-box">
-			<view class="o">15058559592</view>
+			<view class="o" v-if="detail.name !== detail.phone">{{detail.name}}</view>
+			<view class="o">{{detail.phone}}</view>
 			<view class="des">正在接通中...</view>
 			<view class="dex">请注意接听电话</view>
 		</view>
@@ -18,13 +19,15 @@
 	export default {
 		data() {
 			return {
-				index: false
+				index: false,
+				detail: {}
 			}
 		},
 		computed: {
 			...mapGetters(['tokenPhone', 'userInfo'])
 		},
 		onLoad(options) {
+			this.detail = options
 			const { name, phone } = options
 			const { mobile } = this.userInfo
 			phoneModel.callUser({ answer_name: name, answerer: phone, caller: mobile, token: this.tokenPhone }).then(res => {

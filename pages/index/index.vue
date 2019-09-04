@@ -32,10 +32,10 @@
 				<image src="/static/icon/jpmc.png"></image>
 				<text>精品茗茶</text>
 			</navigator>
-			<navigator url="/pages/phoneView/index" class="cate-item">
+			<view @click="goPhoneNav" class="cate-item">
 				<image src="/static/icon/yhtx.png"></image>
 				<text>忆杭通讯</text>
-			</navigator>
+			</view>
 			<navigator url="/pages/aboutus/aboutus" class="cate-item">
 				<image src="/static/icon/gywm.png"></image>
 				<text>关于我们</text>
@@ -221,6 +221,18 @@
 			...mapGetters(['hasLogin'])
 		},
 		methods: {
+			goPhoneNav() {
+				if (!this.hasLogin) {
+					uni.navigateTo({
+						url: '/pages/public/login'
+					})
+					return false
+				}
+				uni.navigateTo({
+					url: '/pages/phoneView/index'
+				})
+
+			},
 			/**
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合

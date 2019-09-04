@@ -3,16 +3,16 @@
 		<view class="num" v-if="number.length > 0">{{number}}</view>
 		<view class="num no" v-else>请输入号码</view>
 		<scroll-view scroll-with-animation scroll-y class="item-list">
-			<view class="item" v-for="(item, index) in list" :key="index">
+			<view class="item" v-for="(item, index) in list" :key="index" @click="dialPhone(item)">
 				<view>{{item.phone}}</view>
 				<view>{{item.name}}</view>
 			</view>
 		</scroll-view>
 		<view class="key-main">
-			<view class="key-item" v-for="(item, index) in numberList" :key="index" @click="addNum(item)">{{item}}</view>
+			<view @touchend="addClass('')" @touchstart="addClass(item)" :class="{active: isAddClass === item}" class="key-item" v-for="(item, index) in numberList" :key="index" @click="addNum(item)">{{item}}</view>
 			<view class="key-item"></view>
-			<view class="key-item" @click="addNum(0)">{{0}}</view>
-			<view class="key-item" @click="dele()" @longtap="dele('all')">
+			<view @touchend="addClass('')" @touchstart="addClass('0')" :class="{active: isAddClass === '0'}" class="key-item" @click="addNum(0)">{{0}}</view>
+			<view @touchend="addClass('')" @touchstart="addClass('dele')" :class="{active: isAddClass === 'dele'}" class="key-item" @click="dele()" @longtap="dele('all')">
 				<image class="img" src="../../static/icon/ipone-close.png"></image>
 			</view>
 		</view>
@@ -33,13 +33,28 @@
 			return {
 				number: '',
 				numberList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-				list: []
+				list: [],
+				isAddClass: ''
 			}
 		},
 		methods: {
+			addClass(e) {
+				this.isAddClass = e
+			},
+			dialPhone(item) { // 拨号操作
+				if (item.phone.length < 5) {
+					return this.$api.msg('输入号码不正确！')
+				}
+				uni.navigateTo({
+					url: `/pages/phoneView/ring/ring?name=${item.name}&phone=${item.phone}`
+				})
+			},
 			dial() { // 拨号操作
 				if (this.list[0] && this.list[0].phone === this.number) {
-					const { name, phone } = this.list[0]
+					const {
+						name,
+						phone
+					} = this.list[0]
 					uni.navigateTo({
 						url: `/pages/phoneView/ring/ring?name=${name}&phone=${phone}`
 					})
@@ -63,13 +78,13 @@
 									})
 								}
 							})
-							
+
 						})
 					})
 					this.list = list
 				}, 50)
 			},
-			
+
 			addNum(val) {
 				this.number = `${this.number}${val}`
 				this.search()
@@ -142,7 +157,8 @@
 			float: left;
 
 			&.active {
-				background: #f7f7f7;
+				background: #f2f3f4;
+				border-radius: 5upx;
 			}
 
 			.img {

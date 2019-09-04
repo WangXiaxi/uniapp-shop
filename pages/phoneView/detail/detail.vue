@@ -5,7 +5,7 @@
 			<view class="name">{{params.name}}</view>
 		</view>
 		<view class="list">
-			<view class="item" v-for="(item, index) in params.children" :key="index" @click="dial()">
+			<view class="item" v-for="(item, index) in params.children" :key="index" @click="dial(item)">
 				<view class="text">{{item}}</view>
 				<image src="../../../static/icon/bohao.png"></image>
 			</view>
@@ -28,7 +28,11 @@
 			...mapGetters(['params']),
 		},
 		methods: {
-			dial(val) { // 拨号操作
+			dial(item) { // 拨号操作
+				console.log(item)
+				uni.navigateTo({
+					url: `/pages/phoneView/ring/ring?name=${this.params.name}&phone=${item}`
+				})
 			}
 		}
 	}
