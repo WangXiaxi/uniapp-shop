@@ -467,6 +467,12 @@
 				"navigationBarBackgroundColor": "#F7F7F7"
 			}
         }
+        ,{
+            "path" : "pages/phoneView/ring/ring",
+            "style" : {
+				"titleNView": false
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -98,12 +98,14 @@ export default class Request {
 							resolve(response.data)
 							break
 						case 'fail':
-							uni.showToast({
-								title: data.error,
-								duration: 1500,
-								mask: false,
-								icon: 'none'
-							})
+							if (!options.noMessage) {
+								uni.showToast({
+									title: data.error,
+									duration: 1500,
+									mask: false,
+									icon: 'none'
+								})
+							}
 							reject(response)
 							break
 						case 'token30401':

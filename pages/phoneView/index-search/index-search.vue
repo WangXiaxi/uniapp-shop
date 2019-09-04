@@ -31,15 +31,12 @@
 		// #ifndef MP
 		// 标题栏input搜索框变动
 		onNavigationBarSearchInputChanged(e) {
-			console.log(e.text)
 			this.search = e.text
 			if (!this.search.trim()) return
-			console.log(e.text, 2)
 			this.setSearchText(this.search)
 		},
 		// 标题栏input搜索框点击
-		onNavigationBarSearchInputConfirmed() {
-		},
+		onNavigationBarSearchInputConfirmed() {},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {
 			const index = e.index
@@ -50,8 +47,22 @@
 		// #endif
 		methods: {
 			...mapMutations(['setParams']),
-			onSelectClick: function(contact) {
-				this.setParams(contact)
+			navTo(url) {
+				uni.navigateTo({
+					url
+				})
+			},
+			onSelectClick(contact) {
+				const curData = this.curData
+				let data = {}
+				this.curData.forEach(c => {
+					c.contacts.forEach(j => {
+						if (j.name === contact.name) {
+							data = j
+						}
+					})
+				})
+				this.setParams(data)
 				this.navTo('/pages/phoneView/detail/detail')
 			},
 			setSearchText() {
@@ -63,16 +74,16 @@
 							list.push({
 								name: j.name,
 								type: 0,
-								children: j.children
+								// children: j.children
 							})
 						} else {
 							j.children.forEach(k => {
-								if (k.replace(/\s/g, '').indexOf(search) > -1) {
+								if (k.indexOf(search) > -1) {
 									list.push({
 										name: j.name,
 										phone: k,
 										type: 1,
-										children: j.children
+										// children: j.children
 									})
 								}
 							})
@@ -88,6 +99,7 @@
 <style lang="scss">
 	.item-list {
 		padding: 0 24upx;
+
 		.item {
 			flex-direction: column;
 			align-items: center;
@@ -96,6 +108,7 @@
 			color: #aaa;
 			font-size: 28upx;
 			line-height: 50upx;
+
 			&.act {
 				line-height: 100upx;
 			}

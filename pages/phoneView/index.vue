@@ -35,7 +35,6 @@
 		data() {
 			return {
 				contacts: [],
-				contactItems: [],
 				isShow: false,
 				page: 3
 			}
@@ -61,10 +60,11 @@
 						var items = [];
 						for (var i = 0; i < contacts.length; i++) {
 							if (contacts[i].phoneNumbers.length > 0) {
+								var value = contacts[i].phoneNumbers[0].value.replace(/\s/g, '')
 								var contact = {
-									'name': contacts[i].displayName ? contacts[i].displayName : contacts[i].phoneNumbers[0].value,
-									'phone': contacts[i].phoneNumbers[0].value,
-									'children': contacts[i].phoneNumbers.map(c => c.value)
+									'name': contacts[i].displayName ? contacts[i].displayName : value,
+									'phone': value,
+									'children': contacts[i].phoneNumbers.map(c => c.value.replace(/\s/g, ''))
 								};
 								items.push(contact);
 							}
@@ -73,7 +73,6 @@
 						this.contacts.sort(function(o1, o2) {
 							return o1.letter.charCodeAt(0) - o2.letter.charCodeAt(0)
 						})
-						this.contactItems = JSON.parse(JSON.stringify(this.contacts))
 					}, (e) => {
 						this.onAddressBookSetting()
 					});

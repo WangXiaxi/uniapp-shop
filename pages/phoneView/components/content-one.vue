@@ -1,14 +1,16 @@
 <template>
 	<view class="content-one">
-		<view class="mobile-list">
-			<view class="item">
+		<!-- 空白页 -->
+		<empty v-if="list.length === 0" text="暂无通话记录"></empty>
+		<view v-else class="mobile-list">
+			<view class="item" :class="{ act: item.status === '未接通' }" v-for="(item, index) in list" :key="index">
 				<image class="header" src="../../static/icon/gywm.png"></image>
 				<view class="info">
 					<view class="name">王晓欣</view>
 					<view class="mobile">
-						<view class="tell">15058559592 </view>
+						<view class="tell">{{item.calle164}}</view>
 						<view class="date">29/8 呼出</view>
-						<image class="trans act" src="../../static/icon/phone_4.png"></image>
+						<image class="trans" src="../../static/icon/phone_4.png"></image>
 					</view>
 				</view>
 			</view>
@@ -17,10 +19,39 @@
 </template>
 
 <script>
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
+	import phoneModel from '../../../api/phone/index.js'
+	import empty from '@/components/empty'
 	export default {
+		components: {
+			empty
+		},
 		data() {
 			return {
 				list: []
+			}
+		},
+		computed: {
+			...mapGetters(['tokenPhone'])
+		},
+		methods: {
+			getLogData() {
+				const {
+					mobile
+				} = uni.getStorageSync('userInfo')
+				phoneModel.getCallLog({ mobile }).then(res => {
+					this.list = res.data.json
+				})
+			}
+		},
+		watch: {
+			tokenPhone(val) {
+				if(val) {
+					this.getLogData()
+				}
 			}
 		}
 	}
@@ -38,7 +69,16 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-
+			&.act {
+				.info {
+					.name {
+						color: $base-color;
+					}
+					.mobile {
+						color: $base-color;
+					}
+				}
+			}
 			.header {
 				width: 100upx;
 				height: 100upx;
@@ -51,13 +91,13 @@
 				.name {
 					font-size: 30upx;
 					color: #000000;
+					margin-bottom: 20upx;
 				}
 
 				.mobile {
-					margin-top: 20upx;
 					display: flex;
 					align-items: center;
-					color: #EA1212;
+					color: #999999;
 					font-size: 28upx;
 
 					.date {

@@ -12,7 +12,7 @@ const login = {
 		isLoginPhone: false
 	},
 	getters: {
-
+		tokenPhone:  state => state.tokenPhone
 	},
 	mutations: {
 		setTokenPhone(state, data) {

@@ -39,22 +39,23 @@
 		methods: {
 			search() { // 搜索操作
 				const number = this.number
-				const list = []
-				this.contacts.forEach(c => {
-					c.contacts.forEach(j => {
-						j.children.forEach(k => {
-							if (k.replace(/\s/g, '').indexOf(number) > -1) {
-								list.push({
-									name: j.name,
-									phone: k
-								})
-							}
+				setTimeout(() => {
+					const list = []
+					this.contacts.forEach(c => {
+						c.contacts.forEach(j => {
+							j.children.forEach(k => {
+								if (k.indexOf(number) > -1) {
+									list.push({
+										name: j.name,
+										phone: k
+									})
+								}
+							})
+							
 						})
-						
 					})
-				})
-				console.log(JSON.stringify(list))
-				this.list = list
+					this.list = list
+				}, 50)
 			},
 			dial() { // 拨号操作
 				console.log(this.number)
@@ -66,7 +67,6 @@
 			dele(type = null) {
 				if (type === 'all') {
 					this.number = ''
-					this.list = []
 					return
 				}
 				if (this.number.length > 1) {
@@ -74,7 +74,6 @@
 					this.search()
 				} else {
 					this.number = ''
-					this.list = []
 				}
 			}
 		}
@@ -89,7 +88,7 @@
 
 	.item-list {
 		padding: 0 24upx;
-		height: calc(100% - 100upx - 750upx);
+		height: calc(100vh - 850upx);
 
 		.item {
 			border-bottom: 1px solid #f0f0f0;

@@ -9,16 +9,22 @@ import Request from '../../utils/request'
 class PhoneModel extends Request {
 	// 获取通话记录
 	getCallLog(params) {
-		return this.get('/service/getCallLog', params)
+		return this.get('/service/getCallLog', params, {
+			noMessage: true
+		})
 	}
 	// 注册
 	register(params) {
 		console.log(params)
-		return this.post('/service/registerCall', params)
+		return this.post('/service/registerCall', params, {
+			noMessage: true
+		})
 	}
 	// 获取token
 	getCallToken(params) {
-		return this.get('/service/getCallToken', params)
+		return this.get('/service/getCallToken', params, {
+			noMessage: true
+		})
 	}
 }
 
