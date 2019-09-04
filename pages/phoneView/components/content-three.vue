@@ -37,6 +37,19 @@
 			}
 		},
 		methods: {
+			dial() { // 拨号操作
+				console.log(24566)
+				if (this.list[0] && this.list[0].phone === this.number) {
+					const { name, phone } = this.list[0]
+					uni.navigateTo({
+						url: `/pages/phoneView/ring/ring?name=${name}&phone=${phone}`
+					})
+				} else {
+					uni.navigateTo({
+						url: `/pages/phoneView/ring/ring?name=${this.number}&phone=${this.number}`
+					})
+				}
+			},
 			search() { // 搜索操作
 				const number = this.number
 				setTimeout(() => {
@@ -57,9 +70,7 @@
 					this.list = list
 				}, 50)
 			},
-			dial() { // 拨号操作
-				console.log(this.number)
-			},
+			
 			addNum(val) {
 				this.number = `${this.number}${val}`
 				this.search()

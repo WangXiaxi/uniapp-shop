@@ -17,7 +17,7 @@ const login = {
 		userInfo: userInfoStorage ? userInfoStorage : {}
 	},
 	getters: {
-		hasLogin:  state => state.hasLogin,
+		hasLogin: state => state.hasLogin,
 		token: state => state.token,
 		userInfo: state => state.userInfo
 	},

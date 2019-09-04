@@ -2,7 +2,7 @@
 	<view class="content">
 		<content-one class="cont" :class="{ act: page === 1 }"></content-one>
 		<content-two class="cont" :class="{ act: page === 2 }" :contactsCopy="contacts"></content-two>
-		<content-three class="cont" :class="{ act: page === 3 }" :contacts="contacts"></content-three>
+		<content-three ref="pageThree" class="cont" :class="{ act: page === 3 }" :contacts="contacts"></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
 			<image class="le" src="../../static/icon/ipone_mo_2.png" v-if="page === 1"></image>
@@ -165,7 +165,7 @@
 			height: 120upx;
 			overflow: hidden;
 			background: rgba(234,18,18,1);
-			box-shadow: 0 0 20upx 0 rgba(234, 18, 18, 0.1);
+			box-shadow: 0 0 20upx 0 rgba(234, 18, 18, 0.5);
 			margin: 0 146upx;
 			position: relative;
 			top: -40upx;

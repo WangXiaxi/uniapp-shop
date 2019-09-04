@@ -9,7 +9,7 @@ import Request from '../../utils/request'
 class PhoneModel extends Request {
 	// 获取通话记录
 	getCallLog(params) {
-		return this.get('/service/getCallLog', params, {
+		return this.get('/service/getLocalCallLog', params, {
 			noMessage: true
 		})
 	}
@@ -25,6 +25,10 @@ class PhoneModel extends Request {
 		return this.get('/service/getCallToken', params, {
 			noMessage: true
 		})
+	}
+	// 获取token
+	callUser(params) {
+		return this.post('/service/callUser', params)
 	}
 }
 
