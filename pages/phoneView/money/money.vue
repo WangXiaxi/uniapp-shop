@@ -8,9 +8,9 @@
 					<view>{{userInfo.mobile}}</view>
 					<view>账户余额：{{detail.Money | nf}}元</view>
 					<view>到期时间：{{detail.Time | fill}}</view>
-					</view>
+				</view>
 			</view>
-			
+
 		</view>
 		<view class="form-box">
 			<view class="title">话费充值卡</view>
@@ -25,6 +25,7 @@
 		</view>
 		<view class="tips">1、卡号和卡密是唯一的，请仔细输入</view>
 		<button class="add-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">立即充值</button>
+		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>
 
@@ -35,15 +36,19 @@
 		mapMutations
 	} from 'vuex'
 	import phoneModel from '../../../api/phone/index.js'
+	import mixLoading from '../../../components/mix-loading/mix-loading.vue'
 	const formData = {
 		code: '',
 		pass: ''
 	}
-	
 	export default {
+		components: {
+			mixLoading
+		},
 		data() {
 			return {
 				detail: {},
+				pageLoading: false,
 				formData: JSON.parse(JSON.stringify(formData)),
 				btnLoading: false,
 				rules: {
@@ -72,8 +77,14 @@
 		},
 		methods: {
 			loadData() {
-				phoneModel.getCallBalance({ token: this.tokenPhone }).then(res => {
+				this.pageLoading = true
+				phoneModel.getCallBalance({
+					token: this.tokenPhone
+				}).then(res => {
 					this.detail = res.data.json
+					this.pageLoading = false
+				}).catch(() => {
+					this.pageLoading = false
 				})
 			},
 			confirm() {
@@ -99,7 +110,8 @@
 				phoneModel.rechangeCall(sendData).then(res => {
 					this.btnLoading = false
 					this.formData = JSON.parse(JSON.stringify(formData))
-					this.$api.msg('充值成功!')
+					this.$api.msg('恭喜您，充值成功！')
+					this.loadData()
 				}).catch(() => {
 					this.btnLoading = false
 				})
@@ -112,12 +124,14 @@
 	page {
 		background: #FFFFFF;
 	}
+
 	.tips {
 		color: #909399;
 		font-size: 26upx;
 		line-height: 60upx;
 		padding-left: 32upx;
 	}
+
 	.top-part {
 		position: relative;
 		width: 100%;
@@ -125,22 +139,26 @@
 		text-align: left;
 		padding-left: 32upx;
 		padding-top: 80upx;
+
 		.box {
 			position: relative;
 			z-index: 1;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+
 			image {
 				width: 120upx;
 				height: 120upx;
 			}
+
 			view {
 				flex: 1;
 				margin-left: 16upx;
 				color: #FFFFFF;
 				font-size: 36upx;
-				& + view {
+
+				&+view {
 					margin-top: 10upx;
 					font-size: 28upx;
 				}
@@ -155,6 +173,7 @@
 			height: 370upx;
 		}
 	}
+
 	.form-box {
 		margin-top: -90upx;
 		border-top-left-radius: 20upx;
@@ -164,11 +183,13 @@
 		z-index: 2;
 		position: relative;
 		padding: 20upx 32upx;
+
 		.title {
 			font-size: 32upx;
 			line-height: 60upx;
 		}
 	}
+
 	.row {
 		display: flex;
 		align-items: center;
@@ -176,30 +197,30 @@
 		padding: 0 0upx;
 		height: 90upx;
 		background: #fff;
-	
+
 		&.spec {
 			height: auto;
-	
+
 			.text-area {
 				height: 110upx;
 				padding: 20upx 0;
 				font-size: 30upx;
 			}
 		}
-	
+
 		.tit {
 			flex-shrink: 0;
 			width: 140upx;
 			font-size: 30upx;
 			color: $font-color-dark;
 		}
-	
+
 		.input {
 			flex: 1;
 			font-size: 30upx;
 			color: $font-color-dark;
 		}
-	
+
 		.icon-shouhuodizhi {
 			font-size: 36upx;
 			color: $font-color-light;
