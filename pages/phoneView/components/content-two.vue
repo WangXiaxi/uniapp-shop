@@ -19,8 +19,7 @@
 			<view class="indexBar-bg">
 				<view class="indexBar" catchtouchmove>
 					<view class="indexBar-box" @touchstart="tStart" @touchend="tEnd" @touchmove="tMove">
-						<view class="indexBar-item" v-for="(item, index) in contacts" :key="index" :id="item.letter" @touchstart="getCur"
-						 @touchend="setCur">
+						<view class="indexBar-item" v-for="(item, index) in contacts" :key="index" :id="item.letter" @touchstart="getCur" @click="clickT" @touchend="setCur">
 							{{item.letter}}
 						</view>
 					</view>
@@ -87,14 +86,15 @@
 			/*
 			 * 滑动的侧边选择器
 			 */
+			clickT() {
+				this.scrollViewId = 'id' + (this.letter === '#' ? 'xxx' : this.letter)
+			},
 			getCur(e) {
 				this.hidden = false
-				this.letter = e.target.id
 			},
 			setCur(e) {
 				this.hidden = true;
 				this.letter = e.target.id
-				this.scrollViewId = 'id' + (this.letter === '#' ? 'xxx' : this.letter)
 			},
 			tStart() {
 				this.hidden = false
