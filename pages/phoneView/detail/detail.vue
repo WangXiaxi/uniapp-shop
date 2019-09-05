@@ -29,7 +29,6 @@
 		},
 		methods: {
 			dial(item) { // 拨号操作
-				console.log(item)
 				uni.navigateTo({
 					url: `/pages/phoneView/ring/ring?name=${this.params.name}&phone=${item}`
 				})
