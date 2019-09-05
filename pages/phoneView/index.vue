@@ -26,6 +26,7 @@
 		mapActions,
 		mapMutations
 	} from 'vuex'
+	const platform = uni.getSystemInfoSync().platform
 	export default {
 		components: {
 			contentOne,
@@ -112,14 +113,10 @@
 				});
 			},
 			onAddressBookSetting: function() {
-				if (this.isShow) {
-					return
-				}
-				this.isShow = true
 				uni.showModal({
 					title: '提示',
 					content: 'APP通讯录权限没有开启，是否开启？',
-					success(res) {
+					success: (res) => {
 						if (res.confirm) {
 							if (platform == 'ios') {
 								var UIApplication = plus.ios.import("UIApplication");
@@ -147,7 +144,9 @@
 									intent.putExtra('android.content.Intent.setFlags', Intent.FLAG_ACTIVITY_NEW_TASK);
 								}
 								main.startActivity(intent);
-								this.isShow = false
+								uni.navigateBack({
+									delta: 1
+								})
 							}
 						} else {
 							uni.navigateBack({
