@@ -93,6 +93,7 @@
 
 <style lang="scss">
 	.content-one {
+		padding-bottom: 200upx;
 		// 通话记录
 		padding-top: 32upx;
 		margin: 0 24upx;

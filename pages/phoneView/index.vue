@@ -177,7 +177,6 @@
 
 	.content {
 		height: 100%;
-		padding-bottom: 200upx;
 	}
 
 	.key-panel {
