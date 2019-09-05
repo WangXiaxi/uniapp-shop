@@ -20,26 +20,26 @@
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<navigator url="/pages/product/list?id=102&title=中外美酒" class="cate-item">
+			<view @click="navTo('/pages/product/list?id=102&title=中外美酒')" class="cate-item">
 				<image src="/static/icon/zwmj.png"></image>
 				<text>中外美酒</text>
-			</navigator>
-			<navigator url="/pages/product/list?id=219&title=名优特产" class="cate-item">
+			</view>
+			<view @click="navTo('/pages/product/list?id=219&title=名优特产')" class="cate-item">
 				<image src="/static/icon/mytc.png"></image>
 				<text>名优特产</text>
-			</navigator>
-			<navigator url="/pages/product/list?id=246&title=精品茗茶" class="cate-item">
+			</view>
+			<view @click="navTo('/pages/product/list?id=246&title=精品茗茶')" class="cate-item">
 				<image src="/static/icon/jpmc.png"></image>
 				<text>精品茗茶</text>
-			</navigator>
+			</view>
 			<view @click="goPhoneNav" class="cate-item">
 				<image src="/static/icon/yhtx.png"></image>
 				<text>忆杭通讯</text>
 			</view>
-			<navigator url="/pages/aboutus/aboutus" class="cate-item">
+			<view @click="navTo('/pages/aboutus/aboutus')" class="cate-item">
 				<image src="/static/icon/gywm.png"></image>
 				<text>关于我们</text>
-			</navigator>
+			</view>
 
 		</view>
 
@@ -221,6 +221,11 @@
 			...mapGetters(['hasLogin'])
 		},
 		methods: {
+			navTo(url) {
+				uni.navigateTo({
+					url
+				})
+			},
 			goPhoneNav() {
 				if (!this.hasLogin) {
 					uni.navigateTo({

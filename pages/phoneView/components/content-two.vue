@@ -7,7 +7,7 @@
 		<view class="mobile-list">
 			<scroll-view class="contact-scroll" scroll-y :scroll-into-view="scrollViewId">
 				<view class="box" v-for="(item,key) in contacts" :key="key">
-					<view class="divider" :id="item.letter"> <text class="divider-text">{{item.letter}}</text> </view>
+					<view class="divider" :id="`id${item.letter === '#' ? 'xxx' : item.letter}`"> <text class="divider-text">{{item.letter}}</text> </view>
 					<view class="item" hover-class="hover" :hover-start-time="20" v-for="(contact,index) in item.contacts" :key="index"
 					 @click='onSelectClick(contact)'>
 						<image class="portrait" src="../../static/icon/gywm.png"></image>
@@ -65,8 +65,20 @@
 			const res = uni.getSystemInfoSync();
 			this.barHeight = res.windowHeight / 27;
 		},
+		onReady() {
+
+		},
 		methods: {
 			...mapMutations(['setParams']),
+			actTop() {
+				var that = this
+				const query = uni.createSelectorQuery().in(this);
+				query.select('.indexBar-box').boundingClientRect(function(e) {
+					if (e != null) {
+						that.boxTop = e.top
+					}
+				}).exec()
+			},
 			navTo(url) {
 				uni.navigateTo({
 					url
@@ -82,13 +94,13 @@
 			setCur(e) {
 				this.hidden = true;
 				this.letter = e.target.id
-				this.scrollViewId = this.letter
+				this.scrollViewId = 'id' + (this.letter === '#' ? 'xxx' : this.letter)
 			},
 			tStart() {
 				this.hidden = false
 			},
 			tEnd() {
-				this.hidden = true;
+				this.hidden = true
 			},
 			tMove(e) {
 				let y = e.touches[0].clientY
@@ -98,11 +110,11 @@
 					var num = Math.floor((y - offsettop) / this.barHeight);
 					if (num < this.contacts.length) {
 						this.letter = this.contacts[num].letter
-						this.scrollViewId = this.letter
+						this.scrollViewId = 'id' + (this.letter === '#' ? 'xxx' : this.letter)
 					}
 				}
 			},
-			
+
 			onSelectClick: function(contact) {
 				this.setParams(contact)
 				this.navTo('/pages/phoneView/detail/detail')
@@ -132,6 +144,7 @@
 		background: #f7f7f7;
 		padding: 10upx 24upx;
 		position: relative;
+
 		.bg {
 			position: absolute;
 			left: 0;
@@ -140,6 +153,7 @@
 			bottom: 0;
 			z-index: 2;
 		}
+
 		.search {
 			color: #666666;
 			margin: 0;
@@ -150,6 +164,7 @@
 			font-size: 32upx;
 			line-height: 68upx;
 		}
+
 		.ic {
 			position: absolute;
 			width: 28upx;

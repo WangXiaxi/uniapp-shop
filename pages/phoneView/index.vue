@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<content-one class="cont" :class="{ act: page === 1 }" :contacts="contacts"></content-one>
-		<content-two class="cont" :class="{ act: page === 2 }" :contactsCopy="contacts"></content-two>
+		<content-two ref="pageTwo" class="cont" :class="{ act: page === 2 }" :page="page" :contactsCopy="contacts"></content-two>
 		<content-three ref="pageThree" class="cont" :class="{ act: page === 3 }" :contacts="contacts"></content-three>
 		<!-- 键盘页面 -->
 		<view class="key-panel">
@@ -65,6 +65,10 @@
 						break
 					case 2:
 						title = '通讯录'
+						setTimeout(() => {
+							console.log(245666)
+							this.$refs.pageTwo.actTop()
+						}, 500)
 						break
 					case 3:
 						title = '拨号'
@@ -173,6 +177,7 @@
 
 	.content {
 		height: 100%;
+		padding-bottom: 200upx;
 	}
 
 	.key-panel {
