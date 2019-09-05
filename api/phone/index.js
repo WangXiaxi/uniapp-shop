@@ -1,4 +1,5 @@
 import Request from '../../utils/request'
+import WxValidate from '../../utils/validate'
 /**
  * @name    PhoneModel封装
  * @authors wangxiaoxing (995107408@qq.com)
@@ -15,7 +16,6 @@ class PhoneModel extends Request {
 	}
 	// 注册
 	register(params) {
-		console.log(params)
 		return this.post('/service/registerCall', params, {
 			noMessage: true
 		})
@@ -26,9 +26,24 @@ class PhoneModel extends Request {
 			noMessage: true
 		})
 	}
-	// 获取token
+	// 打电话
 	callUser(params) {
 		return this.post('/service/callUser', params)
+	}
+	// 充值
+	rechangeCall(params) {
+		return this.post('/service/rechangeCall', params)
+	}
+	// getCallBalance
+	getCallBalance(params) {
+		return this.post('/service/getCallBalance', params)
+	}
+	/**
+	 * 验证表单
+	 */
+	initValidate(rules, messages) {
+		// 创建实例对象
+		this.WxValidate = new WxValidate(rules, messages)
 	}
 }
 

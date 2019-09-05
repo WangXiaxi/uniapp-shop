@@ -66,7 +66,6 @@
 					case 2:
 						title = '通讯录'
 						setTimeout(() => {
-							console.log(245666)
 							this.$refs.pageTwo.actTop()
 						}, 500)
 						break
