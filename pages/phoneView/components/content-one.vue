@@ -47,7 +47,7 @@
 		},
 		methods: {
 			dial(number) { // 拨号操作
-				const cur = null
+				let cur = null
 				this.contacts.forEach(c => {
 					c.contacts.forEach(j => {
 						j.children.forEach(k => {
