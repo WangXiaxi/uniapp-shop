@@ -132,9 +132,16 @@
                     "target" : "http://test.hzyh.ehanone.com",
                     "changeOrigin" : true,
                     "secure" : false
+                },
+                "/public" : {
+                    // "target" : "http://localhost:12306",
+                    "target" : "http://test.hzyh.ehanone.com",
+                    "changeOrigin" : true,
+                    "secure" : false
                 }
             }
-        }
+        },
+        "title" : "忆杭网"
     }
 }
 /* ios打包配置 */

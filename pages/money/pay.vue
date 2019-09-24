@@ -7,7 +7,7 @@
 
 		<view class="pay-type-list">
 
-			<view class="type-item b-b" @click="changePayType(18)">
+			<view class="type-item b-b" @click="changePayType(18)" v-if="!isWeixin">
 				<text class="icon yticon icon-alipay"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
@@ -50,6 +50,11 @@
 		mapMutations
 	} from 'vuex'
 	import orderModel from '../../api/order/index.js'
+	import requestModel from '../../utils/request.js'
+	// #ifdef H5
+	const request = new requestModel()
+	// #endif
+
 	export default {
 		data() {
 			return {
@@ -60,7 +65,7 @@
 			};
 		},
 		computed: {
-			...mapGetters(['params', 'userInfo']),
+			...mapGetters(['params', 'userInfo', 'isWeixin']),
 		},
 		onLoad(options) {
 			if (options.type && options.type === 'pay') {
@@ -76,7 +81,42 @@
 			changePayType(type) {
 				this.payType = type;
 			},
+			// #ifdef H5
+			// 轮询查看订单状态 h5支付
+			getOrderStatus() {
+				setTimeout(() => {
+
+				}, 3000)
+			},
+			// #endif
 			payAction(id, payment_id) {
+				// #ifdef H5
+				const paySwitch = {
+					1: 1,
+					18: 10,
+					14: 15
+				}
+				orderModel.doPay({
+					order_id: id,
+					payment_id: paySwitch[payment_id]
+				}).then(ress => {
+					console.log(paySwitch[payment_id], ress)
+					switch (paySwitch[payment_id]) {
+						case 1: // 余额支付
+							uni.redirectTo({
+								url: '/pages/money/paySuccess?id=' + id
+							})
+							break
+						case 10: // 支付宝
+							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
+							break
+						case 15: // 微信
+							window.location.href = ress.data.mweb_url + '&redirect_url=' + window.location.origin + '/pages/money/paySuccess?id=' + id
+							break
+					}
+				})
+				// #endif
+				// #ifndef H5
 				orderModel.doPay({
 					order_id: id,
 					payment_id
@@ -107,7 +147,6 @@
 							})
 							break
 						case 14: // 微信
-							console.log(ress)
 							uni.requestPayment({
 								provider: 'wxpay',
 								timeStamp: ress.data.timestamp,
@@ -143,6 +182,7 @@
 				}).catch(() => {
 					this.btnLoading = false
 				})
+				// #endif
 			},
 			confirmPay() { // 订单支付
 				this.btnLoading = true

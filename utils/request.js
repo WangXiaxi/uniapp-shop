@@ -200,4 +200,25 @@ export default class Request {
 			}))
 		})
 	}
+	// #ifdef H5
+	/* post方式 */
+	postExcelFile(params, url) {
+		const form = document.createElement('form') // 创建form
+		form.style.display = 'none'
+		form.method = 'post'
+		form.action = url
+		document.body.appendChild(form)
+		Object.keys(params).forEach(key => {
+			const input = document.createElement('input') // 创建input
+			input.type = 'hidden'
+			input.name = key
+			input.value = params[key]
+			form.appendChild(input)
+		})
+		console.log(form)
+		form.submit()
+		form.remove()
+	}
+	// #endif
+	
 }

@@ -9,14 +9,21 @@
 const paramsStorage  = uni.getStorageSync('params')
 const systemInfoStorage  = uni.getStorageSync('systemInfo')
 
+let is_weixin = false // 默认允许显示 支付宝支付
+// #ifdef H5
+is_weixin = (function(){return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1})(); // 微信浏览器里不支持支付宝支付
+// #endif
+
 const params = {
 	state: {
+		isWeixin: is_weixin,
 		params: paramsStorage ? paramsStorage : '', // 参数
 		systemInfo: systemInfoStorage ? systemInfoStorage : '' // 系统信息
 	},
 	getters: {
 		params: state => state.params,
-		systemInfo: state => state.systemInfo // 系统信息
+		systemInfo: state => state.systemInfo, // 系统信息
+		isWeixin: state => state.isWeixin
 	},
 	mutations: {
 		setParams(state, params) {
