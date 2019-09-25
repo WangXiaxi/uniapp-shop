@@ -51,6 +51,9 @@
 	} from 'vuex'
 	import orderModel from '../../api/order/index.js'
 	import requestModel from '../../utils/request.js'
+	import {
+		url_base
+	} from '../../common/config/index.js'
 	// #ifdef H5
 	const request = new requestModel()
 	// #endif
@@ -94,7 +97,7 @@
 				const paySwitch = {
 					1: 1,
 					18: 10,
-					14: 15
+					14: this.isWeixin ? 12 : 15 // 微信浏览器用 微信浏览器方试调用
 				}
 				orderModel.doPay({
 					order_id: id,
@@ -110,8 +113,23 @@
 						case 10: // 支付宝
 							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
 							break
-						case 15: // 微信
-							window.location.href = ress.data.mweb_url + '&redirect_url=' + window.location.origin + '/pages/money/paySuccess?id=' + id
+						case 12: // 微信浏览器 微信
+							const { appid, nonce_str, sign } = ress.data
+							console.log()
+							WeixinJSBridge.invoke('getBrandWCPayRequest', {
+								'appId': appid, //公众号名称，由商户传入
+								'timeStamp': ((new Date()).getTime()).toString().slice(0, 10), //时间戳，自1970年以来的秒数
+								'nonceStr': nonce_str, //随机串     
+								'package': 'prepay_id=1',
+								'signType': 'MD5', // 微信签名方式
+								'paySign': sign // 微信签名
+							}, function(e){
+								alert(e.err_msg)
+							})
+							break
+						case 15: // 微信 H5
+							window.location.href = ress.data.mweb_url + '&redirect_url=' + url_base +
+								'/#/pages/money/paySuccess?id=' + id
 							break
 					}
 				})

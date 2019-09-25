@@ -32,7 +32,7 @@
 				<image src="/static/icon/jpmc.png"></image>
 				<text>精品茗茶</text>
 			</view>
-			<view @click="goPhoneNav" class="cate-item">
+			<view @click="goPhoneNav" class="cate-item" v-if="!isH5">
 				<image src="/static/icon/yhtx.png"></image>
 				<text>忆杭通讯</text>
 			</view>
@@ -205,6 +205,9 @@
 		},
 
 		onLoad() {
+			// #ifdef H5
+			this.isH5 = true
+			// #endif
 			this.loadDataDe();
 			this.loadData();
 		},
