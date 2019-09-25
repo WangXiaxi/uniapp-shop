@@ -1,6 +1,6 @@
 {
     "name" : "忆杭网",
-    "appid" : "__UNI__C88D11E",
+    "appid" : "__UNI__E9A4F0A",
     "description" : "浙江依杭网络科技有限公司旗下商城app",
     "versionName" : "1.3.0",
     "versionCode" : 130,
@@ -141,7 +141,10 @@
                 }
             }
         },
-        "title" : "忆杭网"
+        "title" : "忆杭网",
+        "router" : {
+            "mode" : "history"
+        }
     }
 }
 /* ios打包配置 */

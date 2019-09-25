@@ -6,17 +6,6 @@
 		</view>
 
 		<view class="pay-type-list">
-
-			<view class="type-item b-b" @click="changePayType(18)" v-if="!isWeixin">
-				<text class="icon yticon icon-alipay"></text>
-				<view class="con">
-					<text class="tit">支付宝支付</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#ea1212" :checked='payType == 18' />
-					</radio>
-				</label>
-			</view>
 			<view class="type-item b-b" @click="changePayType(14)">
 				<text class="icon yticon icon-weixinzhifu"></text>
 				<view class="con">
@@ -27,6 +16,17 @@
 					</radio>
 				</label>
 			</view>
+			<view class="type-item b-b" @click="changePayType(18)" v-if="!isWeixin">
+				<text class="icon yticon icon-alipay"></text>
+				<view class="con">
+					<text class="tit">支付宝支付</text>
+				</view>
+				<label class="radio">
+					<radio value="" color="#ea1212" :checked='payType == 18' />
+					</radio>
+				</label>
+			</view>
+			
 			<view class="type-item" @click="changePayType(1)">
 				<text class="icon yticon icon-erjiye-yucunkuan"></text>
 				<view class="con">
@@ -62,7 +62,7 @@
 		data() {
 			return {
 				btnLoading: false,
-				payType: 18,
+				payType: 14,
 				detail: {},
 				type: ''
 			};
@@ -114,13 +114,13 @@
 							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
 							break
 						case 12: // 微信浏览器 微信
-							const { appid, nonce_str, sign } = ress.data
-							console.log()
+							const { appid, nonce_str, sign, prepay_id } = ress.data
+							alert(JSON.stringify( ress.data))
 							WeixinJSBridge.invoke('getBrandWCPayRequest', {
 								'appId': appid, //公众号名称，由商户传入
 								'timeStamp': ((new Date()).getTime()).toString().slice(0, 10), //时间戳，自1970年以来的秒数
 								'nonceStr': nonce_str, //随机串     
-								'package': 'prepay_id=1',
+								'package': `prepay_id=${prepay_id}`,
 								'signType': 'MD5', // 微信签名方式
 								'paySign': sign // 微信签名
 							}, function(e){
