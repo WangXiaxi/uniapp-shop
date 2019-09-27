@@ -122,7 +122,6 @@
 					recharge: Number(this.amount),
 					payment_id: paySwitch[this.payType]
 				}).then(ress => {
-					console.log(paySwitch[this.payType])
 					switch (paySwitch[this.payType]) {
 						case 10: // 支付宝
 							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
@@ -158,7 +157,6 @@
 							})
 							break
 						case 15: // 微信 H5
-						console.log('xxxxx')
 							window.location.href = ress.data.mweb_url + '&redirect_url=' + encodeURIComponent(url_base +
 								'/pages/money/invest?winxin=true&id=' + M_OrderId)
 							break
