@@ -242,6 +242,45 @@
 </script>
 
 <style lang="scss">
+	.pay-dlalog {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 100000;
+		background: rgba(0, 0, 0, 0.3);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	
+		.cont {
+			width: 80%;
+			height: 300upx;
+			background: #FFFFFF;
+			border-radius: 10upx;
+	
+			.title {
+				font-size: 30rpx;
+				height: 100rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+	
+				&+.title {
+					border-top: 1upx solid #dedede;
+				}
+	
+				&.red {
+					color: red;
+				}
+	
+				&.grey {
+					color: #999999;
+				}
+			}
+		}
+	}
 	page {
 		background: $page-color-base;
 		padding-top: 16upx;
