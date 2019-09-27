@@ -8,16 +8,6 @@
 			</view>
 		</view>
 		<view class="pay-type-list">
-			<view class="type-item b-b" @click="changePayType(18)">
-				<text class="icon yticon icon-alipay"></text>
-				<view class="con">
-					<text class="tit">支付宝支付</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#ea1212" :checked='payType == 18' />
-					</radio>
-				</label>
-			</view>
 			<view class="type-item b-b" @click="changePayType(14)">
 				<text class="icon yticon icon-weixinzhifu"></text>
 				<view class="con">
@@ -28,28 +18,157 @@
 					</radio>
 				</label>
 			</view>
+			<view class="type-item b-b" @click="changePayType(18)" v-if="!isH5">
+				<text class="icon yticon icon-alipay"></text>
+				<view class="con">
+					<text class="tit">支付宝支付</text>
+				</view>
+				<label class="radio">
+					<radio value="" color="#ea1212" :checked='payType == 18' />
+					</radio>
+				</label>
+			</view>
 		</view>
 		<button class="mix-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
+		<view class="pay-dlalog" v-if="showPayDialog">
+			<view class="cont">
+				<view class="title">请确定支付是否已完成</view>
+				<view class="title red" @click="getOrderStatus">已完成订单支付</view>
+				<view class="title grey" @click="getOrderStatus">支付遇到问题，重新支付</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
 	import orderModel from '../../api/order/index.js'
+	import requestModel from '../../utils/request.js'
+	import {
+		url_base
+	} from '../../common/config/index.js'
+
+	// #ifdef H5
+	const request = new requestModel()
+	// #endif
 	export default {
 		components: {
 		},
 		data() {
 			return {
+				showPayDialog: false, // 微信H5支付回掉弹框
 				amount: '',
 				btnLoading: false,
-				payType: 18
+				payType: 18,
+				isH5: false
 			}
 		},
+		onLoad(options) {
+			// #ifdef H5
+			this.isH5 = true
+			this.detail = JSON.parse(JSON.stringify(options))
+			if (options.winxin) {
+				this.btnLoading = true
+				this.showPayDialog = true
+			}
+			// #endif
+		},
+		computed: {
+			...mapGetters(['isWeixin']),
+		},
 		methods: {
+			// #ifdef H5
+			// 轮询查看订单状态 h5支付
+			getOrderStatus() {
+				this.showPayDialog = false
+				uni.showLoading({
+					title: '请求中...',
+					mask: true
+				})
+				setTimeout(() => {
+					orderModel.isPayOrderPaySuccess({
+						id: this.detail.id,
+						type: 'recharge'
+					}).then(res => {
+						uni.hideLoading()
+						if (res.data == 'SUCCESS') {
+							uni.redirectTo({
+								url: '/pages/money/reSuccess'
+							})
+						} else {
+							uni.showModal({
+								title: '提示',
+								content: '支付失败！'
+							})
+							this.btnLoading = false
+						}
+					})
+				}, 3000)
+			},
+			// #endif
 			confirm() { // 确认
 				if (!Number(this.amount)) return this.$api.msg('请输入充值金额')
 				this.btnLoading = true
-
+				
+				// #ifdef H5
+				const paySwitch = {
+					18: 10,
+					14: this.isWeixin ? 12 : 15 // 微信浏览器用 微信浏览器方试调用
+				}
+				orderModel.doPay({
+					recharge: Number(this.amount),
+					payment_id: paySwitch[this.payType]
+				}).then(ress => {
+					console.log(paySwitch[this.payType])
+					switch (paySwitch[this.payType]) {
+						case 10: // 支付宝
+							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
+							break
+						case 12: // 微信浏览器 微信
+							const {
+								appid,
+								nonce_str,
+								sign,
+								prepay_id,
+								timeStamp,
+								paySign,
+								M_OrderId
+							} = ress.data
+							WeixinJSBridge.invoke('getBrandWCPayRequest', {
+								'appId': appid, //公众号名称，由商户传入
+								'timeStamp': '' + timeStamp, //时间戳，自1970年以来的秒数
+								'nonceStr': nonce_str, //随机串     
+								'package': `prepay_id=${prepay_id}`,
+								'signType': 'MD5', // 微信签名方式
+								'paySign': paySign, // 微信签名
+							}, function(e) {
+								if (res.err_msg == 'get_brand_wcpay_request:ok') {
+									uni.redirectTo({
+										url: '/pages/money/reSuccess'
+									})
+								} else {
+									uni.showModal({
+										title: '提示',
+										content: '支付失败！'
+									})
+								}
+							})
+							break
+						case 15: // 微信 H5
+						console.log('xxxxx')
+							window.location.href = ress.data.mweb_url + '&redirect_url=' + encodeURIComponent(url_base +
+								'/pages/money/invest?winxin=true&id=' + M_OrderId)
+							break
+					}
+				}).catch(() => {
+					this.btnLoading = false
+				})
+				// #endif
+				
+				// #ifndef H5
 				orderModel.doPay({
 					recharge: Number(this.amount),
 					payment_id: this.payType
@@ -110,6 +229,7 @@
 				}).catch(() => {
 					this.btnLoading = false
 				})
+				// #endif
 			},
 			close() { // 关闭支付
 				this.show = false

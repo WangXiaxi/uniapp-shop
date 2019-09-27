@@ -16,7 +16,7 @@
 					</radio>
 				</label>
 			</view>
-			<view class="type-item b-b" @click="changePayType(18)" v-if="!isWeixin">
+			<view class="type-item b-b" @click="changePayType(18)" v-if="!isH5">
 				<text class="icon yticon icon-alipay"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
@@ -26,7 +26,7 @@
 					</radio>
 				</label>
 			</view>
-			
+
 			<view class="type-item" @click="changePayType(1)">
 				<text class="icon yticon icon-erjiye-yucunkuan"></text>
 				<view class="con">
@@ -41,6 +41,13 @@
 		</view>
 		<button class="mix-btn" v-if="type === 'pay'" @click="confirmPay" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
 		<button class="mix-btn" v-else @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
+		<view class="pay-dlalog" v-if="showPayDialog">
+			<view class="cont">
+				<view class="title">请确定支付是否已完成</view>
+				<view class="title red" @click="getOrderStatus">已完成订单支付</view>
+				<view class="title grey" @click="getOrderStatus">支付遇到问题，重新支付</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -61,10 +68,12 @@
 	export default {
 		data() {
 			return {
+				showPayDialog: false, // 微信H5支付回掉弹框
 				btnLoading: false,
 				payType: 14,
 				detail: {},
-				type: ''
+				type: '',
+				isH5: false
 			};
 		},
 		computed: {
@@ -77,6 +86,13 @@
 			} else {
 				this.detail = JSON.parse(JSON.stringify(this.params))
 			}
+			// #ifdef H5
+			this.isH5 = true
+			if (options.winxin) {
+				this.btnLoading = true
+				this.showPayDialog = true
+			}
+			// #endif
 		},
 
 		methods: {
@@ -87,8 +103,29 @@
 			// #ifdef H5
 			// 轮询查看订单状态 h5支付
 			getOrderStatus() {
+				this.showPayDialog = false
+				uni.showLoading({
+					title: '请求中...',
+					mask: true
+				})
 				setTimeout(() => {
-
+					orderModel.isPayOrderPaySuccess({
+						id: this.detail.id,
+						type: 'order'
+					}).then(res => {
+						uni.hideLoading()
+						if (res.data == 'SUCCESS') {
+							uni.redirectTo({
+								url: '/pages/money/paySuccess?id=' + id
+							})
+						} else {
+							uni.showModal({
+								title: '提示',
+								content: '支付失败！'
+							})
+							this.btnLoading = false
+						}
+					})
 				}, 3000)
 			},
 			// #endif
@@ -103,7 +140,6 @@
 					order_id: id,
 					payment_id: paySwitch[payment_id]
 				}).then(ress => {
-					console.log(paySwitch[payment_id], ress)
 					switch (paySwitch[payment_id]) {
 						case 1: // 余额支付
 							uni.redirectTo({
@@ -114,24 +150,41 @@
 							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
 							break
 						case 12: // 微信浏览器 微信
-							const { appid, nonce_str, sign, prepay_id } = ress.data
-							alert(JSON.stringify( ress.data))
+							const {
+								appid,
+								nonce_str,
+								sign,
+								prepay_id,
+								timeStamp,
+								paySign
+							} = ress.data
 							WeixinJSBridge.invoke('getBrandWCPayRequest', {
 								'appId': appid, //公众号名称，由商户传入
-								'timeStamp': ((new Date()).getTime()).toString().slice(0, 10), //时间戳，自1970年以来的秒数
+								'timeStamp': '' + timeStamp, //时间戳，自1970年以来的秒数
 								'nonceStr': nonce_str, //随机串     
 								'package': `prepay_id=${prepay_id}`,
 								'signType': 'MD5', // 微信签名方式
-								'paySign': sign // 微信签名
-							}, function(e){
-								alert(e.err_msg)
+								'paySign': paySign, // 微信签名
+							}, function(e) {
+								if (res.err_msg == 'get_brand_wcpay_request:ok') {
+									uni.redirectTo({
+										url: '/pages/money/paySuccess?id=' + id
+									})
+								} else {
+									uni.showModal({
+										title: '提示',
+										content: '支付失败！'
+									})
+								}
 							})
 							break
 						case 15: // 微信 H5
-							window.location.href = ress.data.mweb_url + '&redirect_url=' + url_base +
-								'/#/pages/money/paySuccess?id=' + id
+							window.location.href = ress.data.mweb_url + '&redirect_url=' + encodeURIComponent(url_base +
+								'/pages/money/pay?type=pay&winxin=true&id=' + id)
 							break
 					}
+				}).catch(() => {
+					this.btnLoading = false
 				})
 				// #endif
 				// #ifndef H5
@@ -266,6 +319,46 @@
 </script>
 
 <style lang='scss'>
+	.pay-dlalog {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 100000;
+		background: rgba(0, 0, 0, 0.3);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.cont {
+			width: 80%;
+			height: 300upx;
+			background: #FFFFFF;
+			border-radius: 10upx;
+
+			.title {
+				font-size: 30rpx;
+				height: 100rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				&+.title {
+					border-top: 1upx solid #dedede;
+				}
+
+				&.red {
+					color: red;
+				}
+
+				&.grey {
+					color: #999999;
+				}
+			}
+		}
+	}
+
 	.app {
 		width: 100%;
 	}

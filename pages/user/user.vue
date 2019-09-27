@@ -7,8 +7,8 @@
 				<view class="portrait-box">
 					<image class="portrait" :src="userInfo.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
 				</view>
-				<view class="info-box">
-					<view class="username">{{userInfo.username || '游客'}}</view>
+				<view class="info-box" @click="navTo('/pages/set/set')">
+					<view class="username">{{userInfo.username || '游客，请点击登录'}}</view>
 					<view class="tips" v-if="hasLogin">
 						<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
 						<view class="pick-tip" v-if="userInfo.is_agent">

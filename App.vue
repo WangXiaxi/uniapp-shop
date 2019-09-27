@@ -3,21 +3,37 @@
 	 * vuex管理登陆状态，具体可以参考官方登陆模板示例
 	 */
 	import {
-		mapMutations
+		mapMutations,
+		mapGetters
 	} from 'vuex';
 	import mineModel from './api/mine/index.js'
 	import {
 		url_base_image,
 		versionIos,
-		versionAnd
+		versionAnd,
+		wxAppid
 	} from './common/config/index.js'
 	
 	export default {
 		data() {
 			return {}
 		},
+		computed: {
+			...mapGetters(['isWeixin'])
+		},
 		methods: {
-			AndroidCheckUpdate() {
+			weixinAuthAciton(query) { // 微信授权一系列操作
+				const openid = uni.getStorageSync('openid')
+				if (openid) return
+				if (query.code) {
+					mineModel.getWxOpenId({ code: query.code, state: query.state }).then(res => {
+						uni.setStorageSync('openid', res.data)
+					})
+				} else {
+					window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxAppid}&redirect_uri=${encodeURIComponent(window.location.href)}&response_type=code&scope=snsapi_base&state=123#wechat_redirect`
+				}
+			},
+			AndroidCheckUpdate() { // 安卓跟新
 				var _this = this;
 				mineModel.version({ type: 1 }).then(res => {
 					if (res.data !== versionAnd && Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, ''))) {
@@ -58,7 +74,7 @@
 					}
 				})
 			},
-			IosCheckUpdate() {
+			IosCheckUpdate() { // ios 跟新
 				var _this = this;
 				mineModel.version({ type: 2 }).then(res => {
 					if (Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, ''))) {
@@ -77,7 +93,7 @@
 				})
 			}
 		},
-		onLaunch() {
+		onLaunch(option) {
 			uni.getSystemInfo({
 				success: (res) => {
 					//检测当前平台，如果是安卓则启动安卓更新  
@@ -89,6 +105,12 @@
 					}
 				}
 			})
+			// #ifdef H5
+			// 微信浏览器授权
+			if (this.isWeixin) {
+				this.weixinAuthAciton(option.query)
+			}
+			// #endif
 		},
 		onShow: function() {},
 		onHide: function() {},

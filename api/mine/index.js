@@ -87,6 +87,10 @@ class MineModel extends Request {
 	getPhoneWhitelist(params = {}) {
 		return this.get('/service/getPhoneWhitelist', { ...params })
 	}
+	// getWxOpenId 微信授权登陆需要
+	getWxOpenId(params) {
+		return this.get('/service/getWxOpenId', params)
+	}
 	/**
 	 * 验证表单
 	 */

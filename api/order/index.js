@@ -72,6 +72,10 @@ class OrderModel extends Request {
 	doPay(params = {}) {
 		return this.post('/service/doPay', params)
 	}
+	// isPayOrderPaySuccess
+	isPayOrderPaySuccess(params = {}) {
+		return this.post('/service/isPayOrderPaySuccess', params)
+	}
 	/**
 	 * 验证表单
 	 */

@@ -193,6 +193,11 @@
 			"style": {
 				"navigationBarTitleText": "支付成功"
 			}
+		},{
+			"path": "pages/money/payError",
+			"style": {
+				"navigationBarTitleText": "支付失败"
+			}
 		}, {
 			"path": "pages/notice/notice",
 			"style": {
