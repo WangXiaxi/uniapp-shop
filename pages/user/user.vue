@@ -3,11 +3,11 @@
 
 		<view class="user-section">
 			<image class="bg" src="/static/bj.png"></image>
-			<view class="user-info-box">
+			<view class="user-info-box" @click="navTo('/pages/set/set')">
 				<view class="portrait-box">
 					<image class="portrait" :src="userInfo.head_ico ? `${url_base_image}/${userInfo.head_ico}` : '/static/missing-face.png'"></image>
 				</view>
-				<view class="info-box" @click="navTo('/pages/set/set')">
+				<view class="info-box">
 					<view class="username">{{userInfo.username || '游客，请点击登录'}}</view>
 					<view class="tips" v-if="hasLogin">
 						<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
