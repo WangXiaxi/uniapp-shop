@@ -62,7 +62,7 @@
 				showPayDialog: false, // 微信H5支付回掉弹框
 				amount: '',
 				btnLoading: false,
-				payType: 18,
+				payType: 14,
 				isH5: false
 			}
 		},
@@ -153,6 +153,7 @@
 										title: '提示',
 										content: '支付失败！'
 									})
+									this.btnLoading = false
 								}
 							})
 							break

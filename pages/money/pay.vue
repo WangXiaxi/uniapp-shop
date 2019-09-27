@@ -175,6 +175,7 @@
 										title: '提示',
 										content: '支付失败！'
 									})
+									this.btnLoading = false
 								}
 							})
 							break
