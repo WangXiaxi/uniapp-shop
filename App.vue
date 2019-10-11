@@ -40,6 +40,7 @@
 						uni.showModal({
 							title: '提示',
 							content: '检测到有新版本，是否更新？',
+							showCancel: false,
 							success: (e) => {
 								if (e.confirm) {
 									uni.showLoading({
@@ -81,6 +82,7 @@
 						uni.showModal({
 							title: '提示',
 							content: '检测到有新版本，请前往 App Store 更新',
+							showCancel: false,
 							success: (e) => {
 								if (e.confirm) {
 									var url = 'itms-apps://itunes.apple.com/cn/app/id1474572172';
