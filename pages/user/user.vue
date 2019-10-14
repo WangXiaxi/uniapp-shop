@@ -82,7 +82,7 @@
 				<list-cell image="home-1" title="关于我们" @eventClick="navTo('/pages/aboutus/aboutus', false)"></list-cell>
 			</view>
 			
-			<view class="descript">Power by 忆杭网 Copyright © 2019</view>
+			<view class="descript">Power by 忆杭网 Copyright © 2019 v{{version}}</view>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 750px; height: 1334px;" canvas-id="codeCanvas"></canvas>
@@ -93,7 +93,9 @@
 	import listCell from '@/components/mix-list-cell'
 	import mineModel from '../../api/mine/index.js'
 	import {
-		url_base_image
+		url_base_image,
+		versionIos,
+		versionAnd
 	} from '../../common/config/index.js'
 	import {
 		mapGetters,
@@ -111,10 +113,16 @@
 				url_base_image,
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
-				moving: false
+				moving: false,
+				version: '1.0',
 			}
 		},
 		onLoad(option) {
+			uni.getSystemInfo({
+				success: (res) => {
+					this.version = res.platform == 'android' ? versionAnd : versionIos
+				}
+			})
 		},
 		onShow() {
 			if (this.hasLogin) this.getUserInfo()
