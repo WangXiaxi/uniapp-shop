@@ -20,6 +20,10 @@ class RecommendModel extends Request {
 	activateMember(params) {
 		return this.post('/service/activateMember', { ...params })
 	}
+	// 获取套餐列表
+	getPackageList(params) {
+		return this.post('/service/getPackageList', { ...params })
+	}
 	/**
 	 * 验证表单
 	 */

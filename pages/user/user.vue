@@ -158,13 +158,14 @@
 					return false
 				}
 				if (!this.userInfo.is_vip) {
+					const userID = this.userInfo.user_id
 					uni.showModal({
 						title: '提示',
 						content: '您还不是会员，前去激活？',
 						success: function(res) {
 							if (res.confirm) {
 								uni.navigateTo({
-									url: '/pages/recommend/register'
+									url: `/pages/recommend/goods?active_id=${userID}`
 								})
 							}
 						}

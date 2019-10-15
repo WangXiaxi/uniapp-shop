@@ -276,7 +276,8 @@
 					},
 					logisticsId: delivery_id,
 					remark: message,
-					goodsList
+					goodsList,
+					active_id
 				} = this.detail
 				const sendData = {
 					radio_address,
@@ -284,7 +285,8 @@
 					delivery_id,
 					message: message ? message : ' ',
 					revisit: revisit ? revisit : 0,
-					payment: this.payType
+					payment: this.payType,
+					active_id
 				}
 				if (goodsList.length === 1) {
 					const {

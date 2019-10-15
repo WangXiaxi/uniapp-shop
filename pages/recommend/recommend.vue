@@ -11,7 +11,7 @@
 					<view class="username">
 						<view class="name">{{userInfo.username}}</view>
 						<image class="vip-tip" src="/static/icon/vip.png" v-if="userInfo.is_vip"></image>
-						<view class="pick-tip" v-if="!userInfo.is_agent">
+						<view class="pick-tip" v-if="userInfo.is_agent">
 							<image src="/static/icon/shop.png" class="shop"></image>{{userInfo.agent_text}}
 						</view>
 					</view>
@@ -140,7 +140,7 @@
 			},
 			navToMore(item) {
 				uni.navigateTo({
-					url: `/pages/recommend/register?data=${JSON.stringify(item)}`
+					url: `/pages/recommend/goods?active_id=${item.id}`
 				})
 			},
 			navToAdd(item) {

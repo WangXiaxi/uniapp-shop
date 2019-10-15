@@ -491,6 +491,12 @@
 
 			}
 		}
+        ,{
+            "path" : "pages/recommend/goods",
+            "style" : {
+				"navigationBarTitleText": "忆杭套餐"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
