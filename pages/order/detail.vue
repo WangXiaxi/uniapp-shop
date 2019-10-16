@@ -23,7 +23,7 @@
 		<view class="goods-section">
 			<!-- 商品列表 -->
 			<view class="big-good" v-for="(goods, index) in detail.mapGood" :key="index">
-				<view @click="navTo(`/pages/product/product?id=${goodsItem.goods_id}`)" class="goods-box-single" v-for="(goodsItem, goodsIndex) in goods"
+				<view @click="navTo(`/pages/product/product?id=${goodsItem.goods_id}`, !!detail.active_uid)" class="goods-box-single" v-for="(goodsItem, goodsIndex) in goods"
 				 :key="goodsIndex">
 					<image class="goods-img" :src="goodsItem.img" mode="aspectFill"></image>
 					<view class="right">
@@ -158,8 +158,8 @@
 					url: `/pages/order/evaluate?data=${JSON.stringify(item)}`
 				})
 			},
-			navTo(url) {
-				uni.navigateTo({
+			navTo(url, isVipOrder) {
+				!isVipOrder && uni.navigateTo({
 					url
 				})
 			},

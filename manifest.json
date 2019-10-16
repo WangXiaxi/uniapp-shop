@@ -144,7 +144,8 @@
         "title" : "忆杭网",
         "router" : {
             "mode" : "history"
-        }
+        },
+        "domain" : "http://h5.hzyh.ehanone.com/"
     }
 }
 /* ios打包配置 */

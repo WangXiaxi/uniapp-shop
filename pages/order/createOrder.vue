@@ -70,7 +70,7 @@
 			</view>
 		</view>
 
-		<view class="yt-list">
+		<view class="yt-list" v-if="showRevisit">
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">可用vip积分</text>
 				<text class="cell-tip">￥{{Number(detail.revisit)}}</text>
@@ -124,7 +124,8 @@
 				logisticsIndex: 0, // 物流选中第几个
 				logistics: [], // 物流
 				logisticsInitial: [], // 初始对象
-				payType: 1 //1微信 2支付宝
+				payType: 1, //1微信 2支付宝
+				showRevisit: true // 默认显示vip消费
 			}
 		},
 		onLoad(option) {
@@ -204,6 +205,7 @@
 			},
 			getDetail() { // 获取新订单信息
 				Object.assign(this.detail, JSON.parse(JSON.stringify(this.params)))
+				this.showRevisit = !this.detail.active_id
 				this.detail.defaultAddress = JSON.stringify(this.detail.defaultAddress) !== '[]' ? this.detail.defaultAddress :
 					null
 				this.detail.remark = '' // 备注字段
