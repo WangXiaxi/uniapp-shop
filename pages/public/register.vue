@@ -29,7 +29,7 @@
 			<button class="code-btn" :disabled="sending" @click="sendCode">{{sendMessage}}</button>
 		</view>
 
-		<view class="row b-b">
+		<view class="row b-b" v-if="!registerId">
 			<text class="tit">邀请人</text>
 			<input class="input" type="text" v-model="formData.parent_name" placeholder="请输入邀请人用户名" placeholder-class="placeholder" />
 		</view>
@@ -111,7 +111,10 @@
 			}
 		},
 		onLoad(option) {
-			if (option.id) this.registerId = option.id
+			if (option.id) {
+				 this.registerId = option.id
+				 this.rules.parent_name = false
+			}
 			uni.showLoading({
 				title: '请稍后',
 				mask: true
