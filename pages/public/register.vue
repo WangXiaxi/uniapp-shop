@@ -53,6 +53,7 @@
 	export default {
 		data() {
 			return {
+				registerId: '', // H5页面携带参数
 				isRead: 'true',
 				sendMessage: '发送验证码',
 				sending: false,
@@ -110,6 +111,7 @@
 			}
 		},
 		onLoad(option) {
+			if (option.id) this.registerId = option.id
 			uni.showLoading({
 				title: '请稍后',
 				mask: true
@@ -196,6 +198,7 @@
 			// 提交
 			confirm() {
 				const {
+					registerId,
 					formData,
 					rules,
 					messages
@@ -205,6 +208,7 @@
 				if (!loginModel.WxValidate.checkForm(formData)) return
 				this.loading = true
 				const sendData = Object.assign({}, formData)
+				if (registerId) sendData.from_id = registerId
 				Object.keys(sendData).map(c => {
 					if (!sendData[c]) delete sendData[c]
 				})
