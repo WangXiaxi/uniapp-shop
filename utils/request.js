@@ -113,7 +113,7 @@ export default class Request {
 							store.commit('logout')
 							store.commit('clearOut')
 							if (!options.noredirect) uni.redirectTo({
-								url: '/pages/public/login'
+								url: '/pages/user/user.vue'
 							})
 							reject(response)
 							break
