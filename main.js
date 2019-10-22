@@ -29,7 +29,8 @@ const prePage = (num = 2) => {
 	// #ifdef H5
 	return prePage;
 	// #endif
-	return prePage.$vm;
+	if (prePage) return prePage.$vm;
+	return null
 }
 
 Vue.config.productionTip = false
