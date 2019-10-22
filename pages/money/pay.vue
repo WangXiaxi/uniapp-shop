@@ -13,7 +13,6 @@
 				</view>
 				<label class="radio">
 					<radio value="" color="#ea1212" :checked='payType == 14' />
-					</radio>
 				</label>
 			</view>
 			<view class="type-item b-b" @click="changePayType(18)" v-if="!isH5">
@@ -23,7 +22,6 @@
 				</view>
 				<label class="radio">
 					<radio value="" color="#ea1212" :checked='payType == 18' />
-					</radio>
 				</label>
 			</view>
 
@@ -277,7 +275,9 @@
 					logisticsId: delivery_id,
 					remark: message,
 					goodsList,
-					active_id
+					active_id,
+					gift_id,
+					id
 				} = this.detail
 				const sendData = {
 					radio_address,
@@ -285,9 +285,15 @@
 					delivery_id,
 					message: message ? message : ' ',
 					revisit: revisit ? revisit : 0,
-					payment: this.payType,
-					active_id
+					payment: this.payType
 				}
+				
+				if (active_id) Object.assign(sendData, {
+					active_id,
+					gift_id,
+					id
+				})
+				
 				if (goodsList.length === 1) {
 					const {
 						count,
