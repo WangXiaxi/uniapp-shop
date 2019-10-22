@@ -187,6 +187,17 @@
 					title: '请稍后',
 					mask: true
 				})
+
+				// #ifndef APP-PLUS
+				return uni.previewImage({
+					urls: [`${url_base_image}/upload/qrcode/${share_qrcode}`],
+					indicator: 'none',
+					success: () => {
+						uni.hideLoading()
+					}
+				})
+				// #endif
+				
 				const context = uni.createCanvasContext('codeCanvas', this)
 				uni.downloadFile({
 					url: `${url_base_image}/public/img/qrbg.png`,
