@@ -20,7 +20,7 @@
 			<view class="vip-card-box">
 				<image class="card-bg" v-if="!userInfo.is_vip" src="/static/bg-pt.jpg" mode=""></image>
 				<image class="card-bg" v-if="userInfo.is_vip" src="/static/bg-hy.jpg" mode=""></image>
-				<view class="b-btn" v-if="!userInfo.is_vip" @click="navTo('/pages/recommend/recommend')">
+				<view class="b-btn" v-if="!userInfo.is_vip" @click="judIsVip()">
 					立即开通
 				</view>
 				<view class="tit" v-if="userInfo.is_vip">

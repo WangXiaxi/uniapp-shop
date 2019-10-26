@@ -3,8 +3,8 @@
  */
 let url_config = ''
 let url_base_img = ''
-export const versionAnd = '1.6.2'
-export const versionIos = '1.6.2'
+export const versionAnd = '1.6.3'
+export const versionIos = '1.6.3'
 
 // #ifdef H5
 let origin = window.location.origin
