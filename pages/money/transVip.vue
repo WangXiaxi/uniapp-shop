@@ -75,7 +75,8 @@
 				})
 			},
 			confirm() { // 转账提交操作
-				if (!Number(this.amount) || Number(this.amount) > Number(this.userInfo.remain_balance)) return this.$api.msg('转账vip积分必填并且必须小于账户vip积分！')
+			console.log(this.userInfo)
+				if (!Number(this.amount) || Number(this.amount) > Number(this.userInfo.revisit)) return this.$api.msg('转账vip积分必填并且必须小于账户vip积分！')
 				this.show = true
 			},
 			success(password) { // 支付密码输入后提交
