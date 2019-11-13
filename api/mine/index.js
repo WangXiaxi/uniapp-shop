@@ -91,6 +91,10 @@ class MineModel extends Request {
 	getWxOpenId(params) {
 		return this.get('/service/getWxOpenId', params)
 	}
+	// setWxOpenId 微信存储openid
+	setWxOpenId(params) {
+		return this.get('/service/setWxOpenId', params)
+	}
 	/**
 	 * 验证表单
 	 */

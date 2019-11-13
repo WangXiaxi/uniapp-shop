@@ -24,7 +24,7 @@
 		methods: {
 			weixinAuthAciton(query) { // 微信授权一系列操作
 				const openid = uni.getStorageSync('openid')
-				if (openid) return
+				if (openid) return mineModel.setWxOpenId({ openid })
 				if (query.code) {
 					mineModel.getWxOpenId({ code: query.code, state: query.state }).then(res => {
 						uni.setStorageSync('openid', res.data)
