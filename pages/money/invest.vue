@@ -122,6 +122,7 @@
 					recharge: Number(this.amount),
 					payment_id: paySwitch[this.payType]
 				}).then(ress => {
+					alert(paySwitch[this.payType])
 					switch (paySwitch[this.payType]) {
 						case 10: // 支付宝
 							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
@@ -136,6 +137,7 @@
 								paySign,
 								M_OrderId
 							} = ress.data
+							alert(JSON.stringify(ress.data))
 							WeixinJSBridge.invoke('getBrandWCPayRequest', {
 								'appId': appid, //公众号名称，由商户传入
 								'timeStamp': '' + timeStamp, //时间戳，自1970年以来的秒数
@@ -144,6 +146,7 @@
 								'signType': 'MD5', // 微信签名方式
 								'paySign': paySign, // 微信签名
 							}, function(e) {
+								alert(JSON.stringify(e))
 								if (e.err_msg == 'get_brand_wcpay_request:ok') {
 									uni.redirectTo({
 										url: '/pages/money/reSuccess'
