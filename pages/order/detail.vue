@@ -68,6 +68,10 @@
 				<view>自提码</view>
 				<view>{{detail.checkcode}}</view>
 			</view>
+			<view class="item" v-if="detail.active_user">
+				<view>开通会员</view>
+				<view>{{detail.active_user.username}}</view>
+			</view>
 		</view>
 		<view style="height: 100upx;"></view>
 		<view class="action-box" v-if="!(!detail.isCancel && !detail.isGoPay && !detail.isRefund && !detail.isConfirm)">

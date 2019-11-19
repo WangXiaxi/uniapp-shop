@@ -8,8 +8,9 @@
 		<view class="center-part">
 			<view class="type-list">
 				<view class="type" :class="{ act: type === 0 }" @click="changeType(0)">市场</view>
-				<view class="type" :class="{ act: type === 1 }" @click="changeType(1)">商城</view>
+				<!--<view class="type" :class="{ act: type === 1 }" @click="changeType(1)">商城</view>
 				<view class="type" :class="{ act: type === 2 }" @click="changeType(2)" v-if="userInfo.is_agent">店铺</view>
+				-->
 			</view>
 			<view class="money-box" v-if="type === 0">
 				<view class="item">
@@ -24,7 +25,7 @@
 				<view class="item">
 					<view class="num">{{userInfo.total_reward && userInfo.total_reward.divi | fill('0.00')}}</view>
 
-					<view class="name">分红</view>
+					<view class="name">忠诚奖</view>
 				</view>
 			</view>
 			<view class="money-box" v-if="type === 1">
@@ -66,6 +67,10 @@
 			<list-cell image="money-1" title="充值" @eventClick="navTo('/pages/money/invest')"></list-cell>
 			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
 			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
+		</view>
+		
+		<view class="ic-box">
+			<list-cell image="point-r" title="杭旅通" @eventClick="navTo('/pages/money/hlt')"></list-cell>
 		</view>
 		<view class="descript">Power by 忆杭网 Copyright © 2019</view> <!--将遵循 <text class="text">《冰酒协议》</text> -->
 		<mix-loading v-if="pageLoading"></mix-loading>

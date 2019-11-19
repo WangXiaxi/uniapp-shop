@@ -497,6 +497,12 @@
 				"navigationBarTitleText": "忆杭套餐"
 			}
         }
+        ,{
+            "path" : "pages/money/hlt",
+            "style" : {
+				"navigationBarTitleText": "杭旅通"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

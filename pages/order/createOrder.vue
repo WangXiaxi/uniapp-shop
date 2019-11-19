@@ -175,10 +175,13 @@
 				const productId = []
 				const goodsId = []
 				const num = []
+				// 默认自提 如果有商品不允许自提 那么订单都不能选择自提id为2
+				let isPick = true
 				goodsList.forEach(c => {
 					goodsId.push(c.goods_id)
 					productId.push(c.product_id)
 					num.push(c.count)
+					if (c.is_pick === '1') isPick = false
 				})
 				orderModel.getOrderDelivery({
 					productId,
@@ -191,8 +194,10 @@
 					const logistics = []
 					const logisticsInitial = []
 					const list = Object.keys(data).forEach(c => {
-						logistics.push(data[c].name)
-						logisticsInitial.push(data[c])
+						if (isPick || c != 2) {
+							logistics.push(data[c].name)
+							logisticsInitial.push(data[c])
+						}
 					})
 					this.logistics = logistics
 					this.logisticsInitial = logisticsInitial

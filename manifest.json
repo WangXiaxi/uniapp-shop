@@ -2,8 +2,8 @@
     "name" : "忆杭网",
     "appid" : "__UNI__C88D11E",
     "description" : "浙江依杭网络科技有限公司旗下商城app",
-    "versionName" : "1.6.3",
-    "versionCode" : 163,
+    "versionName" : "1.7.0",
+    "versionCode" : 170,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -66,7 +66,8 @@
             "sdkConfigs" : {
                 "payment" : {
                     "weixin" : {
-                        "appid" : "wx8fb88710a894aa32"
+                        "appid" : "wx8fb88710a894aa32",
+                        "UniversalLinks" : "https://h5.hzyh.ehanone.com/ulink/"
                     },
                     "alipay" : {}
                 },
@@ -122,8 +123,8 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/service" : {
-                    // "target" : "http://localhost:12306",
-                    "target" : "http://test.hzyh.ehanone.com",
+                    "target" : "http://localhost:12306",
+                    // "target" : "http://test.hzyh.ehanone.com",
                     "changeOrigin" : true,
                     "secure" : false
                 },

@@ -58,6 +58,12 @@ class MoneyModel extends Request {
 		// 创建实例对象
 		this.WxValidate = new WxValidate(rules, messages)
 	}
+	
+	// 获取btlog
+	getUcenterBTLog(params) {
+		return this.post('/service/getUcenterBTLog', { ...params
+		})
+	}
 }
 
 const moneyModel = new MoneyModel()
