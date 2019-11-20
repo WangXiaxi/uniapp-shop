@@ -4,7 +4,7 @@
 let url_config = ''
 let url_base_img = ''
 export const versionAnd = '1.7.0'
-export const versionIos = '1.7.0'
+export const versionIos = '1.7.2'
 
 // #ifdef H5
 let origin = window.location.origin
