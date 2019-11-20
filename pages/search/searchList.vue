@@ -83,6 +83,7 @@
 		methods: {
 			//加载商品 ，带下拉刷新和上滑加载
 			loadData(type = 'add', loading) {
+				if (this.loadingType === 'loading' && type !== 'refresh') return // 有数据在加载时 不进行请求
 				//没有更多直接返回
 				if (type === 'add') {
 					if (this.loadingType === 'nomore') {
