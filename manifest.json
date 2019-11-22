@@ -2,8 +2,8 @@
     "name" : "忆杭网",
     "appid" : "__UNI__C88D11E",
     "description" : "浙江依杭网络科技有限公司旗下商城app",
-    "versionName" : "1.7.2",
-    "versionCode" : 172,
+    "versionName" : "1.7.3",
+    "versionCode" : 173,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */

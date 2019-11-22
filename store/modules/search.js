@@ -18,7 +18,7 @@ const search = {
 	mutations: {
 		setSearchText(state, text) {
 			if(state.searchText.indexOf(text) === -1) {
-				state.searchText.push(text)
+				state.searchText.unshift(text)
 			}
 			uni.setStorageSync('searchTextStorage', state.searchText)
 		},
