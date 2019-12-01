@@ -12,7 +12,7 @@
 				<view class="item" v-for="(item, index) in list" :key="index">
 					<view class="tit">变更</view>
 					<view class="time">{{item.datetime | fill}}</view>
-					<view class="des">[{{item.datetime | fill}}] {{item.type ? '增加' : '减少'}} <text class="red">{{item.value}}</text></view>
+					<view class="des">[{{item.datetime | fill}}] {{item.type === '0' ? '增加' : '减少'}} <text class="red">{{item.value}}</text></view>
 				</view>
 			</view>
 			<uni-load-more :status="loadingType"></uni-load-more>
