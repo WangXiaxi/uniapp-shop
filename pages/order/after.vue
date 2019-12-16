@@ -1,14 +1,14 @@
 <template>
 	<view class="content">
 		<view class="goods-section">
-			<view class="goods-box-single" v-for="(goodsItem, goodsIndex) in detail.goods" :key="goodsIndex" @click="chooseGoodAct(goodsItem.goods_id)">
+			<view class="goods-box-single" v-for="(goodsItem, goodsIndex) in detail.goods" :key="goodsIndex" @click="chooseGoodAct(goodsItem.id)">
 				<image class="goods-img" :src="goodsItem.img" mode="aspectFill"></image>
 				<view class="right">
 					<text class="title clamp">{{goodsItem.goods_array.name}}</text>
 					<text class="attr-box">{{goodsItem.goods_array.value}} x {{goodsItem.goods_nums}}</text>
 					<text class="price">{{goodsItem.goods_price}}</text>
 				</view>
-				<view class="choose" :class="{ act: chooseGood.indexOf(goodsItem.goods_id) > -1 }"></view>
+				<view class="choose" :class="{ act: chooseGood.indexOf(goodsItem.id) > -1 }"></view>
 			</view>
 		</view>
 		<view class="info-box">

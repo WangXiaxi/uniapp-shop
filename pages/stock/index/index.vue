@@ -14,11 +14,11 @@
 			<view class="list">
 				<view class="item" v-for="(item, index) in list" :key="index">
 					<view class="top">
-						<view class="type">{{item.type ? '增加' : '减少'}}</view>
+						<view class="type">{{item.type === '0' ? '增加' : '减少'}}</view>
 						<view class="time">{{item.datetime | fill}}</view>
 					</view>
 					<view class="bot">
-						[{{item.datetime | fill}}] {{item.type ? '增加' : '减少'}}股权 <text class="red">{{item.value}}</text>
+						[{{item.datetime | fill}}] {{item.type === '0' ? '增加' : '减少'}}股权 <text class="red">{{item.value}}</text>
 					</view>
 				</view>
 			</view>
