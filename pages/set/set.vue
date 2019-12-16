@@ -18,6 +18,12 @@
 			<text class="cell-tip">{{userInfo.mobile}}</text>
 			<!-- <text class="cell-more yticon icon-you"></text> -->
 		</view>
+		
+		<!-- <view class="list-cell b-b" @click="navTo('/pages/set/setInfo')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">修改账号信息</text>
+			<text class="cell-more yticon icon-you"></text>
+		</view> -->
+		
 		<view class="list-cell b-b" @click="navTo('/pages/set/landPass')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">修改登陆密码</text>
 			<text class="cell-more yticon icon-you"></text>

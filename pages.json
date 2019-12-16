@@ -58,7 +58,7 @@
 		},
 
 		{
-			"path": "pages/userinfo/userinfo",
+			"path": "pages/set/setInfo",
 			"style": {
 				"navigationBarTitleText": "修改资料"
 			}
