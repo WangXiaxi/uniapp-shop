@@ -43,7 +43,7 @@
 	export default {
 		data() {
 			return {
-				isRead: 'true',
+				isRead: 'false',
 				loading: false,
 				loginInfo: '',
 				password: '',
@@ -73,7 +73,12 @@
 			...mapMutations(['login']),
 			...mapActions(['getGoodsFavoriteIds', 'getUserInfo', 'loginPhone']),
 			changeRead() {
-				this.isRead = this.isRead === 'false' ? 'true' : 'false'
+				if (this.isRead === 'false') {
+					this.isRead = 'true'
+					this.toRegist('/pages/xieyi/xieyi')
+				} else {
+					this.isRead = 'false'
+				}
 			},
 			navBack() {
 				uni.navigateBack()
