@@ -1,38 +1,19 @@
 <template>
 	<view class="container">
 		<view class="swiper-wrap">
-			<view class="page-section swiper">
-				<view class="page-section-spacing">
-					<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular">
-						<swiper-item>
-							<view class="swiper-item">
-								<image src="../../static/arc.png"></image>
-							</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item">B</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item">C</view>
-						</swiper-item>
-					</swiper>
-				</view>
-			</view>
+			<page-first></page-first>
 		</view>
 	</view>
 </template>
 
 <script>
+	import pages from './components/child-pages'
 	export default {
+		components: {
+			...pages
+		},
 		data() {
-			return {
-				background: ['color1', 'color2', 'color3'],
-				indicatorDots: true,
-				autoplay: true,
-				interval: 2000,
-				duration: 500,
-				circular: true
-			}
+			return {}
 		}
 	}
 </script>
