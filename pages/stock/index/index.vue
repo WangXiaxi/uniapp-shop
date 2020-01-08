@@ -25,6 +25,8 @@
 		</view>
 		<view class="ic-box" v-if="list.length">
 			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="createdCanvas()"></list-cell>
+			
+			<list-cell image="qbdd" iconColor="#e07472" title="我要兑换" border="" @eventClick="handleDui()"></list-cell>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
@@ -68,6 +70,9 @@
 			...mapGetters(['userInfo'])
 		},
 		methods: {
+			handleDui() {
+				
+			},
 			loadData() {
 				this.pageLoading = true
 				stockModel.getUcenterStocksLog({
