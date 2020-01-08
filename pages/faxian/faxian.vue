@@ -1,19 +1,28 @@
 <template>
 	<view class="container">
 		<view class="swiper-wrap">
-			<page-first></page-first>
+			<page-first ref="page"></page-first>
 		</view>
 	</view>
 </template>
 
 <script>
-	import pages from './components/child-pages'
+	import PageFirst from './components/child-pages/page-first'
 	export default {
 		components: {
-			...pages
+			PageFirst
 		},
 		data() {
 			return {}
+		},
+		onShow() {
+			this.$nextTick(() => {
+				this.$refs.page.getLocation() // 获取经纬度
+			})
+		},
+		//加载更多
+		onReachBottom() {
+			this.$refs.page.loadData() // 获取经纬度
 		}
 	}
 </script>

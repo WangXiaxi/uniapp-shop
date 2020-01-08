@@ -1,5 +1,5 @@
 <template>
-	<view class="empty-content" :style="styles">
+	<view class="empty-content" :class="{ relative: relative }" :style="styles">
 		<image class="empty-content-image" :src="setSrc" mode="aspectFit"></image>
 		<view class="text">{{text}}</view>
 	</view>
@@ -21,6 +21,10 @@
 				default: () => {
 					return {}
 				}
+			},
+			relative: {
+				type: Boolean,
+				default: false
 			}
 		},
 
@@ -57,7 +61,11 @@
 		bottom: 0;
 		background: $page-color-base;
 		padding-bottom: 120upx;
-
+		&.relative {
+			position: relative;
+			padding-top: 200upx;
+			background: transparent;
+		}
 		&-image {
 			width: 200upx;
 			height: 200upx;
