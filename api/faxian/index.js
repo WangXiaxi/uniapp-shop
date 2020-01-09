@@ -17,6 +17,10 @@ class FaxianModel extends Request {
 	getOilType(params) {
 		return this.get('/service/getOilType', { ...params, noToken: true })
 	}
+	// 获取加油订单
+	getOrderMoney(params) {
+		return this.get('/service/getOrderMoney', { ...params })
+	}
 	
 }
 

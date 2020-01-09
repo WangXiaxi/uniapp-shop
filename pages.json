@@ -513,6 +513,11 @@
             "style" : {
 				"navigationBarTitleText": "加油优惠"
 			}
+        },{
+            "path" : "pages/faxian/search-money",
+            "style" : {
+				"navigationBarTitleText": "加油支付"
+			}
         }
     ],
 	"globalStyle": {

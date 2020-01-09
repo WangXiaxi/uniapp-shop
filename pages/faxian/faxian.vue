@@ -15,7 +15,7 @@
 		data() {
 			return {}
 		},
-		onShow() {
+		onLoad() {
 			this.$nextTick(() => {
 				this.$refs.page.getLocation() // 获取经纬度
 			})

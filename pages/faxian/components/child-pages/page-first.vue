@@ -24,7 +24,7 @@
 		<!-- 空白页 -->
 		<empty :relative="true" v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
 		<view class="main-info" v-else>
-			<view class="item-main" v-for="(item, index) in list" :key="index" @click="navTo(`/pages/faxian/pay-choose?data=${JSON.stringify(item)}`)">
+			<view class="item-main" v-for="(item, index) in list" :key="index" @click="navTo(`/pages/faxian/pay-choose`, true, item)">
 				<image class="img-shop" :src="item.gaslogosmall"></image>
 				<view class="info">
 					<view class="title">{{item.gasName}}</view>
@@ -36,7 +36,7 @@
 					<view class="location">
 						<image class="loc-img" src="../../static/icon/location.png"></image>
 						<view class="text">{{item.address}}</view>
-						<view class="lo-ico">
+						<view class="lo-ico" @click.stop="goLocation(item)">
 							<image class="ico" src="../../static/icon/ships.png"></image>
 							<view class="m">{{item.distanceStr}}km</view>
 						</view>
@@ -51,9 +51,6 @@
 </template>
 
 <script>
-	import {
-		datas
-	} from './sss.js'
 	import faxianModel from '@/api/faxian/index.js'
 	import empty from '@/components/empty'
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
@@ -70,8 +67,8 @@
 		},
 		data() {
 			return {
-				longitude: 120.190505,
-				latitude: 30.247461,
+				longitude: 120.190487,
+				latitude: 30.184686,
 				loadingType: 'loading', //加载更多状态
 				list: [],
 				page: 0,
@@ -107,9 +104,20 @@
 			this.getOilType() // 获取油品
 		},
 		methods: {
-			navTo(url, type = true) {
+			...mapMutations(['setParams']),
+			goLocation(item) { // 地图
+				uni.openLocation({
+					latitude: Number(item.latitude),
+					longitude: Number(item.longitude),
+					success: function() {
+					}
+				})
+			},
+			navTo(url, type = true, item) {
 				if (!this.hasLogin && type) {
 					url = '/pages/public/login';
+				} else {
+					this.setParams(item)
 				}
 				uni.navigateTo({
 					url
@@ -122,28 +130,28 @@
 				this.index3 = this.array3.findIndex(c => c === '92#')
 			},
 			getLocation() {
-				// uni.showLoading({
-				// 	title: '请求中...',
-				// 	mask: true
-				// })
-				// uni.getLocation({
-				// 	type: 'gcj02',
-				// 	success: (res) => {
-				// 		uni.hideLoading()
-				// 		this.latitude = res.latitude
-				// 		this.longitude = res.longitude
-						this.loadData('refresh')
-					// },
-					// fail: (res) => {
-					// 	uni.hideLoading()
-					// 	this.loadData('refresh')
-					// 	uni.showModal({
-					// 		title: '错误',
-					// 		content: '缺少定位权限，请前往设置检查是否允许使用位置信息！',
-					// 		success: (e) => {}
-					// 	})
-					// }
-				// })
+				uni.showLoading({
+					title: '请求中...',
+					mask: true
+				})
+				uni.getLocation({
+					type: 'gcj02',
+					success: (res) => {
+						uni.hideLoading()
+						this.latitude = res.latitude
+						this.longitude = res.longitude
+				this.loadData('refresh')
+				},
+				fail: (res) => {
+					uni.hideLoading()
+					this.loadData('refresh')
+					uni.showModal({
+						title: '错误',
+						content: '缺少定位权限，请前往设置检查是否允许使用位置信息！',
+						success: (e) => {}
+					})
+				}
+				})
 			},
 			bindPickerChange1(e) {
 				this.index1 = e.detail.value
@@ -195,15 +203,13 @@
 					pageNo: this.page
 				}
 				faxianModel.searchAllOilByRedis(sendData).then(res => {
-					console.log(this.res)
-					this.list.push(...datas.json.map(c => {
-						c.distanceStr = Number((Number(c.distance) / 1000).toFixed(2))
-						c.yhMoney = (Number(c.priceOfficialSearch) - Number(c.priceYfqSearch)).toFixed(2)
-						c.curOil = array3[index3]
-						return c
-					}))
-					return
-					if (!(index1 === this.index1 && index2 === this.index2 && array3[index3] === array3[this.index3])) return // 选择不同过滤掉
+					if (!(index1 === this.index1 && index2 === this.index2 && array3[index3] === this.array3[this.index3])) return // 选择不同过滤掉
+					const datas = res.data
+					if (!datas.json) { // 报错
+						this.loadingType = 'nomore'
+						// this.$api.msg(datas.data)
+						return
+					}
 					this.list.push(...datas.json.map(c => {
 						c.distanceStr = Number((Number(c.distance) / 1000).toFixed(2))
 						c.yhMoney = (Number(c.priceOfficialSearch) - Number(c.priceYfqSearch)).toFixed(2)
@@ -212,7 +218,7 @@
 					}))
 					this.pages = datas.otherJson
 					//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
-					this.loadingType = datas.otherJson <= 0 ? 'nomore' : 'more';
+					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
 				}).catch(() => {
 					this.loadingType = 'loading'
 					this.page = 1;

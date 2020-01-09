@@ -4,10 +4,22 @@
 			<text class="tit">加油金额</text>
 			<view class="inp">
 				<view class="red">￥</view>
-				<input class="input" type="number" v-model="amount" placeholder="0.00" placeholder-class="placeholder" />
+				<input class="input" type="number" v-model="amount" placeholder="0.00" placeholder-class="placeholder" @blur="getOrderMoney()" />
+				<view class="right-tip">约{{ others.litre | nf }}L</view>
 			</view>
+			
 		</view>
-		<view class="pay-type-list">
+		
+		<view class="tips-info">
+			<view class="tip-dk">可直接余额抵扣：<text class="red">￥{{ others.freeMoney | nf }}</text></view>
+			
+			<view class="tips-red">
+				请务必先到达油站与工作人员确认后再付款，切勿先买单在加油，避免异常订单的产生，最终优惠抵扣价格以此页面实际付款为准。
+			</view>
+			<view class="tips-red">温馨提示：此价格为当前油价，油价根据国际市场变化实时调整。</view>
+		</view>
+		
+		<!-- <view class="pay-type-list">
 			<view class="type-item b-b" @click="changePayType(14)">
 				<text class="icon yticon icon-weixinzhifu"></text>
 				<view class="con">
@@ -28,7 +40,10 @@
 					</radio>
 				</label>
 			</view>
-		</view>
+		</view> -->
+		
+		<!-- 最终应付 -->
+		<view class="tip-last"><view class="le">合计待支付：</view><view class="red">￥{{ others.czbPayAmount | nf }}</view></view>
 		<button class="mix-btn" @click="confirm" :loading="btnLoading" :disabled="btnLoading">确认支付</button>
 		<view class="pay-dlalog" v-if="showPayDialog">
 			<view class="cont">
@@ -45,20 +60,19 @@
 		mapGetters,
 		mapMutations
 	} from 'vuex'
-	import orderModel from '../../api/order/index.js'
-	import requestModel from '../../utils/request.js'
+	import faxianModel from '@/api/faxian/index.js'
 	import {
 		url_base
 	} from '../../common/config/index.js'
 
-	// #ifdef H5
-	const request = new requestModel()
-	// #endif
+
 	export default {
 		components: {
 		},
 		data() {
 			return {
+				others: {}, // 查询
+				details: {},
 				showPayDialog: false, // 微信H5支付回掉弹框
 				amount: '',
 				btnLoading: false,
@@ -67,181 +81,68 @@
 			}
 		},
 		onLoad(options) {
-			// #ifdef H5
-			this.isH5 = true
-			this.detail = JSON.parse(JSON.stringify(options))
-			if (options.winxin) {
-				this.btnLoading = true
-				this.showPayDialog = true
-			}
-			// #endif
+			this.details = JSON.parse(options.data)
 		},
 		computed: {
 			...mapGetters(['isWeixin']),
 		},
 		methods: {
-			// #ifdef H5
-			// 轮询查看订单状态 h5支付
-			getOrderStatus() {
-				this.showPayDialog = false
-				uni.showLoading({
-					title: '请求中...',
-					mask: true
-				})
+			getOrderMoney() { // 获取订单金额
 				setTimeout(() => {
-					orderModel.isPayOrderPaySuccess({
-						id: this.detail.id,
-						type: 'recharge'
-					}).then(res => {
-						uni.hideLoading()
-						if (res.data == 'SUCCESS') {
-							uni.redirectTo({
-								url: '/pages/money/reSuccess'
-							})
-						} else {
-							uni.showModal({
-								title: '提示',
-								content: '支付失败！'
-							})
-							this.btnLoading = false
-						}
+					const { amount, details: { gasId, mobile, oilNo }} = this
+					const sendData = {
+						realmoney: amount,
+						mobile,
+						gasId,
+						oilNo
+					}
+					faxianModel.getOrderMoney(sendData).then(res => {
+						this.others = res.data.json
 					})
-				}, 3000)
+				}, 100)
 			},
-			// #endif
 			confirm() { // 确认
-				if (!Number(this.amount)) return this.$api.msg('请输入充值金额')
-				this.btnLoading = true
-				
-				// #ifdef H5
-				const paySwitch = {
-					18: 10,
-					14: this.isWeixin ? 12 : 15 // 微信浏览器用 微信浏览器方试调用
-				}
-				orderModel.doPay({
-					recharge: Number(this.amount),
-					payment_id: paySwitch[this.payType]
-				}).then(ress => {
-					switch (paySwitch[this.payType]) {
-						case 10: // 支付宝
-							request.postExcelFile(ress.data, 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8')
-							break
-						case 12: // 微信浏览器 微信
-							const {
-								appid,
-								nonce_str,
-								sign,
-								prepay_id,
-								timeStamp,
-								paySign,
-								M_OrderId
-							} = ress.data
-							WeixinJSBridge.invoke('getBrandWCPayRequest', {
-								'appId': appid, //公众号名称，由商户传入
-								'timeStamp': '' + timeStamp, //时间戳，自1970年以来的秒数
-								'nonceStr': nonce_str, //随机串     
-								'package': `prepay_id=${prepay_id}`,
-								'signType': 'MD5', // 微信签名方式
-								'paySign': paySign, // 微信签名
-							}, function(e) {
-								if (e.err_msg == 'get_brand_wcpay_request:ok') {
-									uni.redirectTo({
-										url: '/pages/money/reSuccess'
-									})
-								} else {
-									uni.showModal({
-										title: '提示',
-										content: '支付失败！'
-									})
-									this.btnLoading = false
-								}
-							})
-							break
-						case 15: // 微信 H5
-							window.location.href = ress.data.mweb_url + '&redirect_url=' + encodeURIComponent(url_base +
-								'/pages/money/invest?winxin=true&id=' + M_OrderId)
-							break
-					}
-				}).catch(() => {
-					this.btnLoading = false
-				})
-				// #endif
-				
-				// #ifndef H5
-				orderModel.doPay({
-					recharge: Number(this.amount),
-					payment_id: this.payType
-				}).then(ress => {
-					switch (this.payType) {
-						case 18: // 支付宝
-							uni.requestPayment({
-								provider: 'alipay',
-								orderInfo: ress.data.url,
-								success: () => {
-									this.btnLoading = false
-									uni.redirectTo({
-										url: '/pages/money/reSuccess'
-									})
-								},
-								fail: (error) => {
-									uni.showModal({
-										title: '提示',
-										content: error.errMsg
-									})
-									this.btnLoading = false
-								}
-							})
-							break
-						case 14: // 微信
-							uni.requestPayment({
-								provider:"wxpay",
-								timeStamp:ress.data.timestamp,
-								nonceStr:ress.data.noncestr,
-								package:ress.data.package,
-								signType:"MD5",
-								paySign:ress.data.sign,
-								orderInfo:{
-									appid:ress.data.appid,
-									noncestr:ress.data.noncestr,
-									package:ress.data.package,
-									partnerid:ress.data.partnerid,
-									prepayid:ress.data.prepayid,
-									timestamp:ress.data.timestamp,
-									sign:ress.data.sign,
-								},
-								success: () => {
-									this.btnLoading = false
-									uni.redirectTo({
-										url: '/pages/money/reSuccess'
-									})
-								},
-								fail: (error) => {
-									uni.showModal({
-										title: '提示',
-										content: error.errMsg
-									})
-									this.btnLoading = false
-								}
-							})
-							break
-					}
-				}).catch(() => {
-					this.btnLoading = false
-				})
-				// #endif
+			
 			},
-			close() { // 关闭支付
-				this.show = false
-			},
-			//选择支付方式
-			changePayType(type) {
-				this.payType = type;
-			},
+
 		}
 	}
 </script>
 
 <style lang="scss">
+	.tips-info {
+		margin-top: 20rpx;
+		background: #FFFFFF;
+		padding: 20upx 30upx;
+		.tip-dk {
+			font-size: 40rpx;
+			.red {
+				color: $base-color;
+			}
+		}
+		.tips-red {
+			font-size: 26rpx;
+			margin-top: 10rpx;
+			color: $base-color;
+			text-indent: 2em;
+		}
+	}
+	.tip-last {
+		margin-top: 20rpx;
+		background: #FFFFFF;
+		padding: 20upx 30upx;
+		display: flex;
+		justify-content: center;
+		.le {
+			font-size: 40rpx;
+		}
+		.red {
+			color: $base-color;
+			font-size: 40rpx;
+			text-align: right;
+			flex: 1;
+		}
+	}
 	.pay-dlalog {
 		position: fixed;
 		top: 0;
@@ -301,6 +202,10 @@
 			.input {
 				font-size: 50upx;
 				flex: 1;
+			}
+			.right-tip {
+				font-size: 50upx;
+				color: #E6A23C;
 			}
 		}
 	}

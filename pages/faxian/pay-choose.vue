@@ -12,7 +12,7 @@
 				<view class="location">
 					<image class="loc-img" src="../../static/icon/location.png"></image>
 					<view class="text">{{item.address}}</view>
-					<view class="lo-ico">
+					<view class="lo-ico" @click.stop="goLocation(item)">
 						<image class="ico" src="../../static/icon/ships.png"></image>
 						<view class="m">{{item.distanceStr}}km</view>
 					</view>
@@ -50,7 +50,7 @@
 			</view>
 		</view>
 
-		<button class="add-btn" @click="confirm">确认</button>
+		<button class="add-btn"  :loading="loading" :disabled="loading" @click="confirm">确认</button>
 
 		<view class="tips-2">若无您选择的油枪号，请联系油站工作人员 支付前请确认加油站是否正确</view>
 
@@ -60,8 +60,11 @@
 <script>
 	import {
 		mapGetters,
-		mapActions
+		mapActions,
+		mapMutations
 	} from 'vuex';
+	import phoneModel from '../../api/phone/index.js'
+
 	const fields = {
 		param1: '', // 油耗
 		param2: '' // 油枪
@@ -69,6 +72,7 @@
 	export default {
 		data() {
 			return {
+				loading: false,
 				item: {},
 				formData: JSON.parse(JSON.stringify(fields)),
 				options1: [ // 油号
@@ -85,8 +89,12 @@
 				],
 			}
 		},
+		computed: {
+			...mapGetters(['tokenPhone', 'userInfo', 'params'])
+		},
 		onLoad(options) {
-			this.item = JSON.parse(options.data)
+			this.getTokenPhone()
+			this.item = JSON.parse(JSON.stringify(this.params))
 			const {
 				oilPriceList,
 				curOil
@@ -96,6 +104,15 @@
 			this.choose1(cur, 'param1')
 		},
 		methods: {
+			...mapActions(['getTokenPhone']),
+			goLocation(item) { // 地图
+				uni.openLocation({
+					latitude: Number(item.latitude),
+					longitude: Number(item.longitude),
+					success: function() {
+					}
+				})
+			},
 			choose1(item, param) {
 				const {
 					oilNo,
@@ -121,8 +138,20 @@
 			choose(item, param) {
 				this.formData[param] = item.key
 			},
-			confirm() {
-
+			navTo(url, type = true) {
+				uni.navigateTo({
+					url
+				})
+			},
+			async confirm() {
+				this.loading = true
+				const res = await phoneModel.getCallBalance({ token: this.tokenPhone })
+				this.loading = false
+				const userId = res.data.json.Info.users.id
+				const mobile = this.userInfo.mobile
+				const { item: { gasId }, formData: { param1: oilNo, param2: gunNo }} = this
+				const sendData = JSON.stringify({ gasId, oilNo, gunNo, userId, mobile })
+				this.navTo(`/pages/faxian/search-money?data=${sendData}`)
 			}
 		}
 	}
