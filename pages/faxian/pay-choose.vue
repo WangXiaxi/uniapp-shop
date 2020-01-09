@@ -356,5 +356,6 @@
 		color: #999999;
 		margin: 30upx 32upx 0;
 		text-align: center;
+		padding-bottom: 40upx;
 	}
 </style>
