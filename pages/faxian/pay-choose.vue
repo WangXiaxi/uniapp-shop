@@ -50,7 +50,7 @@
 			</view>
 		</view>
 
-		<button class="add-btn"  :loading="loading" :disabled="loading" @click="confirm">确认</button>
+		<button class="add-btn" :loading="loading" :disabled="loading" @click="confirm">确认</button>
 
 		<view class="tips-2">若无您选择的油枪号，请联系油站工作人员 支付前请确认加油站是否正确</view>
 
@@ -109,8 +109,7 @@
 				uni.openLocation({
 					latitude: Number(item.latitude),
 					longitude: Number(item.longitude),
-					success: function() {
-					}
+					success: function() {}
 				})
 			},
 			choose1(item, param) {
@@ -127,7 +126,9 @@
 					yhMoney: (Number(priceOfficial) - Number(priceYfq)).toFixed(2)
 				})
 				this.options2 = gunNos.map(c => {
-					const { gunNo } = c
+					const {
+						gunNo
+					} = c
 					return {
 						key: gunNo,
 						label: gunNo + '号'
@@ -145,12 +146,28 @@
 			},
 			async confirm() {
 				this.loading = true
-				const res = await phoneModel.getCallBalance({ token: this.tokenPhone })
+				const res = await phoneModel.getCallBalance({
+					token: this.tokenPhone
+				})
 				this.loading = false
 				const userId = res.data.json.Info.users.id
 				const mobile = this.userInfo.mobile
-				const { item: { gasId }, formData: { param1: oilNo, param2: gunNo }} = this
-				const sendData = JSON.stringify({ gasId, oilNo, gunNo, userId, mobile })
+				const {
+					item: {
+						gasId
+					},
+					formData: {
+						param1: oilNo,
+						param2: gunNo
+					}
+				} = this
+				const sendData = JSON.stringify({
+					gasId,
+					oilNo,
+					gunNo,
+					userId,
+					mobile
+				})
 				this.navTo(`/pages/faxian/search-money?data=${sendData}`)
 			}
 		}
@@ -213,6 +230,7 @@
 					color: #FFFFFF;
 					border-radius: 28rpx;
 					transform-origin: 0 54%;
+					opacity: 0.5;
 				}
 
 				.ri {
@@ -304,7 +322,7 @@
 				justify-content: center;
 				font-size: 28upx;
 				color: #666;
-				border: 1upx solid #ccc;
+				border: 1upx solid #ddd;
 
 				&:nth-of-type(3n + 1) {
 					margin-left: 0;

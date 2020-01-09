@@ -11,7 +11,6 @@ class FaxianModel extends Request {
 	// 获取周边油站接口
 	searchAllOilByRedis(params) {
 		return this.get('/service/searchAllOilByRedis', { ...params, noToken: true, page_size: 10, mobile: '18055603791' })
-		// return this.get('/SbdVoip/czbsearch/searchAllOilByRedis', { ...params, noToken: true, page_size: 10, mobile: '18055603791', parentId: '58162318-deca-4442-8e38-743b7729aa5b' })
 	}
 	// 获取油品列表接口
 	getOilType(params) {
@@ -21,7 +20,10 @@ class FaxianModel extends Request {
 	getOrderMoney(params) {
 		return this.get('/service/getOrderMoney', { ...params })
 	}
-	
+	// 生成订单
+	generateOrder(params) {
+		return this.post('/service/generateOrder', { ...params })
+	}
 }
 
 const faxianModel = new FaxianModel()

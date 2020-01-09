@@ -93,7 +93,7 @@
 					'92#': 'OIL_2'
 				},
 				index1: 0,
-				index2: 0,
+				index2: 2,
 				index3: 0
 			}
 		},
@@ -109,8 +109,7 @@
 				uni.openLocation({
 					latitude: Number(item.latitude),
 					longitude: Number(item.longitude),
-					success: function() {
-					}
+					success: function() {}
 				})
 			},
 			navTo(url, type = true, item) {
@@ -140,17 +139,17 @@
 						uni.hideLoading()
 						this.latitude = res.latitude
 						this.longitude = res.longitude
-				this.loadData('refresh')
-				},
-				fail: (res) => {
-					uni.hideLoading()
-					this.loadData('refresh')
-					uni.showModal({
-						title: '错误',
-						content: '缺少定位权限，请前往设置检查是否允许使用位置信息！',
-						success: (e) => {}
-					})
-				}
+						this.loadData('refresh')
+					},
+					fail: (res) => {
+						uni.hideLoading()
+						this.loadData('refresh')
+						uni.showModal({
+							title: '错误',
+							content: '缺少定位权限，请前往设置检查是否允许使用位置信息！',
+							success: (e) => {}
+						})
+					}
 				})
 			},
 			bindPickerChange1(e) {
@@ -324,6 +323,7 @@
 					color: #FFFFFF;
 					border-radius: 28rpx;
 					transform-origin: 0 54%;
+					opacity: 0.5;
 				}
 
 				.ri {
