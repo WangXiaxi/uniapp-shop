@@ -1,38 +1,28 @@
 <template>
 	<view class="container">
 		<view class="swiper-wrap">
-			<view class="page-section swiper">
-				<view class="page-section-spacing">
-					<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular">
-						<swiper-item>
-							<view class="swiper-item">
-								<image src="../../static/arc.png"></image>
-							</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item">B</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item">C</view>
-						</swiper-item>
-					</swiper>
-				</view>
-			</view>
+			<page-first ref="page"></page-first>
 		</view>
 	</view>
 </template>
 
 <script>
+	import PageFirst from './components/child-pages/page-first'
 	export default {
+		components: {
+			PageFirst
+		},
 		data() {
-			return {
-				background: ['color1', 'color2', 'color3'],
-				indicatorDots: true,
-				autoplay: true,
-				interval: 2000,
-				duration: 500,
-				circular: true
-			}
+			return {}
+		},
+		onLoad() {
+			this.$nextTick(() => {
+				this.$refs.page.getLocation() // 获取经纬度
+			})
+		},
+		//加载更多
+		onReachBottom() {
+			this.$refs.page.loadData() // 获取经纬度
 		}
 	}
 </script>

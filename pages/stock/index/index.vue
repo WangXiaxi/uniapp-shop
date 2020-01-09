@@ -25,12 +25,15 @@
 		</view>
 		<view class="ic-box" v-if="list.length">
 			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="createdCanvas()"></list-cell>
+			
+			<list-cell image="qbdd" iconColor="#e07472" title="我要兑换" border="" @eventClick="handleDui()"></list-cell>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
 		</view>
 		<empty v-if="pageLoading === false && list.length === 0" text="暂无相关记录" :styles="{ position: 'relative', paddingTop: '80upx', background: '#f5f5f5' }"></empty>
 		<mix-loading v-if="pageLoading"></mix-loading>
+		<pay-password :show="show" @close="close" @success="success"></pay-password>
 	</view>
 </template>
 
@@ -39,6 +42,7 @@
 	import stockModel from '../../../api/stock/index.js'
 	import empty from '@/components/empty'
 	import mixLoading from '../../../components/mix-loading/mix-loading.vue'
+	import payPassword from '../../../components/pay_Password.vue'
 	import {
 		fill
 	} from '../../../utils/filter.js'
@@ -53,11 +57,13 @@
 		components: {
 			listCell,
 			empty,
-			mixLoading
+			mixLoading,
+			payPassword
 		},
 		data() {
 			return {
 				pageLoading: false,
+				show: false,
 				list: []
 			};
 		},
@@ -68,6 +74,41 @@
 			...mapGetters(['userInfo'])
 		},
 		methods: {
+			...mapActions(['getUserInfo']),
+			close() { // 关闭支付
+				this.show = false
+			},
+			handleDui() {
+				this.show = true
+			},
+			success(password) { // 支付密码输入后提交
+				this.close()
+				uni.showLoading({
+					title: '请稍后',
+					mask: true
+				})
+				stockModel.calcEquityToBT({ txpass: password }).then(res => {
+					uni.showModal({
+						content: `确认兑换成${res.data}杭旅通？确认后将无法修改，请谨慎操作！`,
+						success: (e) => {
+							if (e.confirm) {
+								uni.showLoading({
+									title: '请稍后',
+									mask: true
+								})
+								stockModel.equityToBT({ txpass: password }).then(res => {
+									uni.hideLoading()
+									this.$api.msg(`兑换成功！`);
+									this.loadData()
+									this.getUserInfo()
+								})
+							} else {
+								uni.hideLoading()
+							}
+						}
+					})
+				})
+			},
 			loadData() {
 				this.pageLoading = true
 				stockModel.getUcenterStocksLog({

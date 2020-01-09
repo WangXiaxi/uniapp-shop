@@ -508,6 +508,16 @@
             "style" : {
 				"navigationBarTitleText": "发现"
 			}
+        },{
+            "path" : "pages/faxian/pay-choose",
+            "style" : {
+				"navigationBarTitleText": "加油优惠"
+			}
+        },{
+            "path" : "pages/faxian/search-money",
+            "style" : {
+				"navigationBarTitleText": "加油支付"
+			}
         }
     ],
 	"globalStyle": {

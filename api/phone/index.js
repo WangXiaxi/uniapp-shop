@@ -14,6 +14,12 @@ class PhoneModel extends Request {
 			noMessage: true
 		})
 	}
+	
+	// 登录
+	loginCall(params) {
+		return this.post('/service/loginCall', params)
+	}
+		
 	// 注册
 	register(params) {
 		return this.post('/service/registerCall', params, {

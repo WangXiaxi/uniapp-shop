@@ -112,8 +112,8 @@ export default class Request {
 							// 清空数据并跳转至登陆页
 							store.commit('logout')
 							store.commit('clearOut')
-							if (!options.noredirect) uni.redirectTo({
-								url: '/pages/user/user.vue'
+							if (!options.noredirect) uni.switchTab({
+								url: '/pages/user/user'
 							})
 							reject(response)
 							break
