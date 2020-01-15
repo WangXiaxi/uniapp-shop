@@ -12,7 +12,7 @@
 					<view class="des-wrapper">
 						<view class="tit">{{ goods.name }}</view>
 						<text class="des">{{ goods.des }}</text>
-						<button class="btn" type="warn" plain @click="chooseGift(goods.id)">我要下单</button>
+						<view class="btn" @click="chooseGift(goods.id)">我要下单</view>
 					</view>
 				</view>
 			</view>
@@ -218,6 +218,15 @@ export default {
 					bottom: 0;
 					right: 0;
 					font-size: 26upx;
+					width: 170upx;
+					height: 66upx;
+					color: $base-color;
+					background: #fbebee;
+					border: 1upx solid #fbebee;
+					border-radius: 8upx;
+					display: flex;
+					justify-content: center;
+					align-items: center;
 				}
 			}
 		}
