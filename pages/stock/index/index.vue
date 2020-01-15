@@ -25,8 +25,10 @@
 		</view>
 		<view class="ic-box" v-if="list.length">
 			<list-cell image="qbdd" iconColor="#e07472" title="股权证书" border="" @eventClick="createdCanvas()"></list-cell>
-			
 			<list-cell image="qbdd" iconColor="#e07472" title="我要兑换" border="" @eventClick="handleDui()"></list-cell>
+		</view>
+		<view class="ic-box" v-if="list.length">
+			<list-cell image="qbdd" iconColor="#e07472" title="邮寄地址" border="" @eventClick="showAddress()"></list-cell>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 978px; height: 686px;" canvas-id="firstCanvas"></canvas>
@@ -64,7 +66,7 @@
 			return {
 				pageLoading: false,
 				show: false,
-				list: []
+				list: [],
 			};
 		},
 		onLoad() {
@@ -80,6 +82,16 @@
 			},
 			handleDui() {
 				this.show = true
+			},
+			showAddress() {
+				stockModel.getEquiteAddress().then(res => {
+					const {name, mobile, address} = res.data
+					uni.showModal({
+						title: '邮寄地址',
+						content: `收件人：${name}, ${mobile}, ${address}`,
+						showCancel: false
+					})
+				})
 			},
 			success(password) { // 支付密码输入后提交
 				this.close()
@@ -98,7 +110,7 @@
 								})
 								stockModel.equityToBT({ txpass: password }).then(res => {
 									uni.hideLoading()
-									this.$api.msg(`兑换成功！`);
+									this.$api.msg(`操作成功！`);
 									this.loadData()
 									this.getUserInfo()
 								})

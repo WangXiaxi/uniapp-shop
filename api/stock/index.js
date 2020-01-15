@@ -25,6 +25,10 @@ class StockModel extends Request {
 	equityToBT(params) {
 		return this.post('/service/equityToBT', { exc_type: 1, ...params })
 	}
+	// 兑换邮寄地址
+	getEquiteAddress(params) {
+		return this.get('/service/getEquiteAddress', { ...params })
+	}
 }
 
 const stockModel = new StockModel()
