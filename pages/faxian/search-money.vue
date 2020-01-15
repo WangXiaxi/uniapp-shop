@@ -129,6 +129,7 @@
 						gunNo
 					}
 				} = this
+				this.btnLoading = true
 				faxianModel.generateOrder({
 					amountGun: amount,
 					userId,
@@ -136,7 +137,15 @@
 					oilNo,
 					gunNo
 				}).then(res => {
+					this.btnLoading = false
 					console.log(res)
+					
+					plus.runtime.openURL("alipays://platformapi/startapp?appId=20000067&url="+res.json, function(res) {
+					console.log(res);
+					},"com.eg.android.AlipayGphone");
+					
+				}).catch(() => {
+					this.btnLoading = false
 				})
 			},
 
@@ -151,10 +160,10 @@
 		padding: 20upx 30upx;
 
 		.tip-dk {
-			font-size: 40rpx;
-
+			font-size: 36rpx;
 			.red {
 				color: $base-color;
+				font-size: 40rpx;
 			}
 		}
 
@@ -174,7 +183,7 @@
 		justify-content: center;
 
 		.le {
-			font-size: 40rpx;
+			font-size: 36rpx;
 		}
 
 		.red {
