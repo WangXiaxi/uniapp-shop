@@ -73,20 +73,23 @@ export default {
 			postData: {
 				goods_num: 1,
 				type: 'goods',
-				origin: 'Ydui'
-			}
+				origin: 'Ydui',
+				vgoods_type: '2', // 要获取的商品类型，默认2是报单商品，5是买商品送航旅通的商品
+			},
 		};
 	},
 	onLoad(options) {
+		if (options.vgoods_type) this.postData.vgoods_type = options.vgoods_type;
+		if (options.active_id) this.postData.active_id = options.active_id;
+		if (options.tips) this.title = options.tips;
 		this.getData();
-		this.postData.active_id = options.active_id;
 	},
 	methods: {
 		...mapMutations(['setParams']),
 		getData() {
 			Promise.all([
 				recommendModel.getPackageList({
-					type: '2',
+					type: this.postData.vgoods_type,
 					ydui: true
 				}),
 				recommendModel.getPackageList({

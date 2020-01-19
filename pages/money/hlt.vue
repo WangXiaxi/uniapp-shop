@@ -4,6 +4,7 @@
 			<image class="bg" src="/static/qbbj.png"></image>
 			<view class="tit">杭旅通</view>
 			<view class="num">{{userInfo.bt | 0 }}</view>
+			<view class="more" @click="getMore()">获取更多</view>
 		</view>
 		<!-- 空白页 -->
 		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
@@ -89,6 +90,13 @@
 					this.loadingType = this.page >= this.pages ? 'nomore' : 'more';
 				}).catch(() => {})
 
+			},
+			
+			getMore() {
+				const gourl = encodeURI('/pages/recommend/goods?vgoods_type=5&tips=购商品得好礼，仅限一次')
+				uni.navigateTo({
+					url: gourl
+				});
 			}
 		}
 	}
@@ -144,10 +152,6 @@
 			padding-top: 50upx;
 			z-index: 1;
 			font-size: 28upx;
-
-			text {
-				font-size: 20upx;
-			}
 		}
 
 		.num {
@@ -156,6 +160,16 @@
 			margin-top: 30upx;
 			color: #fff;
 			font-size: 66upx;
+		}
+			
+		.more {
+			position: absolute;
+			top: 0upx;
+			right: 0upx;
+			color: #ddd;
+			font-size: 24upx;
+			padding: 20upx;
+			z-index: 9;
 		}
 
 		.bg {

@@ -210,7 +210,7 @@
 			},
 			getDetail() { // 获取新订单信息
 				Object.assign(this.detail, JSON.parse(JSON.stringify(this.params)))
-				this.showRevisit = !this.detail.active_id
+				this.showRevisit = !(this.detail.active_id || this.detail.vgoods_type)
 				this.detail.defaultAddress = JSON.stringify(this.detail.defaultAddress) !== '[]' ? this.detail.defaultAddress :
 					null
 				this.detail.remark = '' // 备注字段

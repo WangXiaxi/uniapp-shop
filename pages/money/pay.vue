@@ -277,6 +277,7 @@
 					goodsList,
 					active_id,
 					gift_id,
+					vgoods_type,
 					id
 				} = this.detail
 				const sendData = {
@@ -285,7 +286,8 @@
 					delivery_id,
 					message: message ? message : ' ',
 					revisit: revisit ? revisit : 0,
-					payment: this.payType
+					payment: this.payType,
+					vgoods_type
 				}
 				
 				if (active_id) Object.assign(sendData, {
