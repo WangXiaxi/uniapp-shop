@@ -24,6 +24,11 @@ class FaxianModel extends Request {
 	generateOrder(params) {
 		return this.post('/service/generateOrder', { ...params })
 	}
+	// 支付获取
+	recordUserBuy(params) {
+		console.log(params)
+		return this.get('/service/recordUserBuy', { ...params })
+	}
 }
 
 const faxianModel = new FaxianModel()

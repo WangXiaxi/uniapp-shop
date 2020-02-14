@@ -64,6 +64,7 @@
 		mapMutations
 	} from 'vuex';
 	import phoneModel from '../../api/phone/index.js'
+	import faxianModel from '@/api/faxian/index.js'
 
 	const fields = {
 		param1: '', // 油耗
@@ -146,11 +147,11 @@
 			},
 			async confirm() {
 				this.loading = true
-				const res = await phoneModel.getCallBalance({
-					token: this.tokenPhone
-				})
-				this.loading = false
-				const userId = res.data.json.Info.users.id
+				// const res = await phoneModel.getCallBalance({
+				// 	token: this.tokenPhone
+				// })
+				// this.loading = false
+				// const userId = res.data.json.Info.users.id
 				const mobile = this.userInfo.mobile
 				const {
 					item: {
@@ -161,14 +162,21 @@
 						param2: gunNo
 					}
 				} = this
-				const sendData = JSON.stringify({
+		
+				const sendData = {
+					parentid: '58162318-deca-4442-8e38-743b7729aa5b',
+					mobile,
 					gasId,
-					oilNo,
-					gunNo,
-					userId,
-					mobile
+					oilNum: oilNo,
+					oilGun: gunNo
+				}
+				faxianModel.recordUserBuy(sendData).then(res => {
+					this.loading = false
+					this.navTo(`/pages/faxian/pay?res=${encodeURIComponent(res.data.json)}`)
+				}).catch(() => {
+					this.loading = false
 				})
-				this.navTo(`/pages/faxian/search-money?data=${sendData}`)
+				// this.navTo(`/pages/faxian/search-money?data=${sendData}`)
 			}
 		}
 	}

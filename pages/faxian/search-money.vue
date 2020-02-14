@@ -118,6 +118,11 @@
 					})
 				}, 100)
 			},
+			navTo(url, type = true) {
+				uni.navigateTo({
+					url
+				})
+			},
 			confirm() { // 确认
 				if (!this.amount) return this.$api.msg('请输入充值金额！')
 				const {
@@ -126,7 +131,8 @@
 						gasId,
 						oilNo,
 						userId,
-						gunNo
+						gunNo,
+						mobile
 					}
 				} = this
 				this.btnLoading = true
@@ -137,13 +143,19 @@
 					oilNo,
 					gunNo
 				}).then(res => {
-					this.btnLoading = false
-					console.log(res)
-					
-					plus.runtime.openURL("alipays://platformapi/startapp?appId=20000067&url="+res.json, function(res) {
-					console.log(res);
-					},"com.eg.android.AlipayGphone");
-					
+					const sendData = {
+						parentid: '58162318-deca-4442-8e38-743b7729aa5b',
+						mobile,
+						gasId,
+						oilNum: oilNo,
+						oilGun: gunNo
+					}
+					faxianModel.recordUserBuy(sendData).then(res => {
+						this.btnLoading = false
+						this.navTo(`/pages/faxian/pay?res=${encodeURIComponent(res.data.json)}`)
+					}).catch(() => {
+						this.btnLoading = false
+					})
 				}).catch(() => {
 					this.btnLoading = false
 				})

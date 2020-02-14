@@ -114,11 +114,11 @@
 			},
 			navTo(url, type = true, item) {
 				
-				return uni.showToast({
-					icon: 'none',
-					title: '即将上线',
-					duration: 2000
-				})
+				// return uni.showToast({
+				// 	icon: 'none',
+				// 	title: '即将上线',
+				// 	duration: 2000
+				// })
 				
 				if (!this.hasLogin && type) {
 					url = '/pages/public/login';

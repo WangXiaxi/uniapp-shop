@@ -518,6 +518,11 @@
             "style" : {
 				"navigationBarTitleText": "加油支付"
 			}
+        },{
+            "path" : "pages/faxian/pay",
+            "style" : {
+				"navigationBarTitleText": "加油支付"
+			}
         }
     ],
 	"globalStyle": {
