@@ -2,8 +2,8 @@
     "name" : "忆杭网",
     "appid" : "__UNI__C88D11E",
     "description" : "浙江依杭网络科技有限公司旗下商城app",
-    "versionName" : "2.0.2",
-    "versionCode" : 202,
+    "versionName" : "2.1.5",
+    "versionCode" : 215,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -16,7 +16,8 @@
         },
         "modules" : {
             "Payment" : {},
-            "Contacts" : {}
+            "Contacts" : {},
+            "Maps" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -72,7 +73,13 @@
                     },
                     "alipay" : {}
                 },
-                "push" : {}
+                "push" : {},
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "bdd2cf43ab816c659bc155cfdbf75547",
+                        "appkey_android" : "0285bc62237082c0241c4f2cc2b95819"
+                    }
+                }
             },
             "icons" : {
                 "android" : {

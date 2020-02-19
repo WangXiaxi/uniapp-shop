@@ -508,7 +508,8 @@
             "style" : {
 				"navigationBarTitleText": "发现"
 			}
-        },{
+        }
+		,{
             "path" : "pages/faxian/pay-choose",
             "style" : {
 				"navigationBarTitleText": "加油优惠"
@@ -548,12 +549,14 @@
 				"selectedIconPath": "static/tab-cate-current.png",
 				"text": "分类"
 			},
+			// #ifndef H5
 			{
 				"pagePath": "pages/faxian/faxian",
 				"iconPath": "static/faxian.png",
 				"selectedIconPath": "static/faxian-current.png",
 				"text": "发现"
 			},
+			// #endif
 			{
 				"pagePath": "pages/cart/cart",
 				"iconPath": "static/tab-cart.png",
