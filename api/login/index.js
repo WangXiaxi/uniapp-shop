@@ -38,6 +38,10 @@ class LoginModel extends Request {
 	changePassword(params) {
 		return this.post('/service/changePassword', params)
 	}
+	// 获取协议
+	getUserAgreement(params) {
+		return this.get('/service/getUserAgreement', params)
+	}
 	// 获取系统注册配置接口
 	getRegOption(params) {
 		return this.get('/service/getRegOption', params)

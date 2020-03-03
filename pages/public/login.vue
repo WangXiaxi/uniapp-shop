@@ -19,7 +19,7 @@
 					<input type="password" v-model="password" placeholder="6位以上不含特殊字符的数字、字母组合" placeholder-class="input-empty"
 					 password @confirm="toLogin" />
 				</view>
-				<label class="xieyi-section"><checkbox :checked="isRead === 'true'" @click="changeRead" />我已阅读<text @click.stop="toRegist('/pages/xieyi/xieyi')">《用户协议》</text></label>
+				<view class="xieyi-section" @click="changeRead"><checkbox :checked="isRead === 'true'" />我已阅读<text>《用户协议》</text></view>
 			</view>
 			<button class="confirm-btn" :loading="loading" :disabled="loading || isRead === 'false'" @click="toLogin">登录</button>
 			<view class="forget-section" @click="toRegist('/pages/public/forword')">
@@ -30,10 +30,12 @@
 			还没有账号?
 			<text @click="toRegist('/pages/public/register')">马上注册</text>
 		</view>
+		<xiyi-dialog ref="xiyi" @update="update"></xiyi-dialog>
 	</view>
 </template>
 
 <script>
+	import xiyiDialog from './components/xiyi-dialog.vue'
 	import loginModel from '../../api/login/index.js'
 	import {
 		mapMutations,
@@ -41,6 +43,9 @@
 	} from 'vuex';
 
 	export default {
+		components: {
+			xiyiDialog
+		},
 		data() {
 			return {
 				isRead: 'false',
@@ -72,13 +77,11 @@
 		methods: {
 			...mapMutations(['login']),
 			...mapActions(['getGoodsFavoriteIds', 'getUserInfo', 'loginPhone']),
+			update(type) {
+				this.isRead = type
+			},
 			changeRead() {
-				if (this.isRead === 'false') {
-					this.isRead = 'true'
-					this.toRegist('/pages/xieyi/xieyi')
-				} else {
-					this.isRead = 'false'
-				}
+				this.$refs.xiyi.show()
 			},
 			navBack() {
 				uni.navigateBack()
@@ -287,6 +290,7 @@
 		}
 	}
 	.xieyi-section {
+		position: relative;
 		width: 100%;
 		margin-top: 20upx;
 		font-size: $font-sm+2upx;
@@ -296,6 +300,16 @@
 		text {
 			color: $font-color-spec;
 			margin-left: 10upx;
+		}
+		&::before {
+			content: ' ';
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
 		}
 	}
 </style>
