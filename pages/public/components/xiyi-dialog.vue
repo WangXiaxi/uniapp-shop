@@ -2,7 +2,7 @@
 	<view>
 		<dialog-modal :info="info" ref="dialog" width="710rpx">
 			<view class="content">
-				<scroll-view :scroll-y="true" :style="{ height: height }">
+				<scroll-view class="view" scroll-y>
 					<rich-text :nodes="htmls"></rich-text>
 				</scroll-view>
 			</view>
@@ -61,6 +61,9 @@
 </script>
 
 <style lang="scss">
+	.view {
+		height: 80vh;
+	}
 	.content {
 		background: #FFFFFF;
 		text-align: center;

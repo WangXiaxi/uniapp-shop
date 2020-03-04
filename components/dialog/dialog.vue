@@ -1,9 +1,9 @@
 <template>
 	<!-- 规格-模态层弹窗 -->
-	<view class="popup" :style="styles" :class="specClass">
+	<view class="popup" :style="styles" :class="specClass" @touchmove.stop.prevent="stopPrevent">
 		<!-- 遮罩层 -->
 		<view class="mask"></view>
-		<view class="layer attr-content" :style="{ width: width }">
+		<view class="layer attr-content" @click.stop="stopPrevent" :style="{ width: width }">
 			<slot></slot>
 		</view>
 	</view>
