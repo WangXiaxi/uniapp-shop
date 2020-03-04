@@ -96,6 +96,7 @@
 			}
 		},
 		onLaunch(option) {
+			// #ifndef H5
 			uni.getSystemInfo({
 				success: (res) => {
 					//检测当前平台，如果是安卓则启动安卓更新  
@@ -107,6 +108,8 @@
 					}
 				}
 			})
+			// #endif
+			
 			// #ifdef H5
 			// 微信浏览器授权
 			if (this.isWeixin) {
