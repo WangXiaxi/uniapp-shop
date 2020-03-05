@@ -2,7 +2,7 @@
 	<view>
 		<dialog-modal :info="info" ref="dialog" width="710rpx">
 			<view class="content">
-				<scroll-view class="view" scroll-y>
+				<scroll-view class="view" scroll-y :scroll-top="scrollTop">
 					<rich-text :nodes="htmls"></rich-text>
 				</scroll-view>
 			</view>
@@ -34,7 +34,8 @@
 			return {
 				height: '80vh',
 				title: '',
-				htmls: ''
+				htmls: '',
+				scrollTop: 0
 			}
 		},
 		mounted() {
@@ -52,6 +53,10 @@
 			},
 			show() {
 				this.$refs.dialog.toggleSpec(true)
+				this.scrollTop = 10
+				setTimeout(() => {
+					this.scrollTop = 0
+				}, 300)
 			},
 			cancel() {
 				this.$refs.dialog.toggleSpec(false)
