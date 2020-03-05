@@ -35,7 +35,7 @@
 				height: '80vh',
 				title: '',
 				htmls: '',
-				scrollTop: 30
+				scrollTop: 0
 			}
 		},
 		mounted() {
@@ -53,13 +53,14 @@
 			},
 			show() {
 				this.$refs.dialog.toggleSpec(true)
+				this.scrollTop = 10
 				setTimeout(() => {
 					this.scrollTop = 0
 				}, 300)
 			},
 			cancel() {
 				this.$refs.dialog.toggleSpec(false)
-				this.scrollTop = 30
+				this.scrollTop = 10
 			}
 		}
 	}
