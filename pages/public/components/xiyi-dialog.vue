@@ -2,9 +2,9 @@
 	<view>
 		<dialog-modal :info="info" ref="dialog" width="710rpx">
 			<view class="content">
-				<scroll-view class="view" scroll-y :scroll-top="scrollTop">
+				<view class="view">
 					<rich-text :nodes="htmls"></rich-text>
-				</scroll-view>
+				</view>
 			</view>
 			<view class="footer">
 				<view class="btn plain" @click="audit('true')">同意</view>
@@ -69,6 +69,7 @@
 <style lang="scss">
 	.view {
 		height: 80vh;
+		overflow-y: auto;
 	}
 	.content {
 		background: #FFFFFF;
