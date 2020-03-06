@@ -96,8 +96,17 @@
 					loginInfo,
 					password,
 					rules,
-					messages
+					messages,
+					loading,
+					isRead
 				} = this
+				
+				if (loading) return
+				 
+				if(isRead === 'false') { // 请先同意协议
+					this.$api.msg(' 请先阅读并《用户协议》！')
+					return
+				}
 				const sendData = {
 					loginInfo,
 					password
