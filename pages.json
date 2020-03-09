@@ -549,7 +549,7 @@
 				"selectedIconPath": "static/tab-cate-current.png",
 				"text": "分类"
 			},
-			// #ifndef H5
+			// #ifdef APP-PLUS
 			{
 				"pagePath": "pages/faxian/faxian",
 				"iconPath": "static/faxian.png",

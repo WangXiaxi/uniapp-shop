@@ -12,7 +12,7 @@ url_config = origin
 url_base_img = origin
 // #endif
 
-// #ifndef H5
+// #ifdef APP-PLUS
 if (process.env.NODE_ENV === 'development') {
 	// 开发环境
 	url_config = 'http://test.hzyh.ehanone.com'

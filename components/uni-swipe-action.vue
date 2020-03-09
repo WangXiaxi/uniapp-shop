@@ -58,7 +58,7 @@
 			this.getSize()
 		},
 		// #endif
-		// #ifndef H5
+		// #ifdef APP-PLUS
 		onReady() {
 			this.getSize()
 		},

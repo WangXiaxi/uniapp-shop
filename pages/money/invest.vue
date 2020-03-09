@@ -167,7 +167,7 @@
 				})
 				// #endif
 				
-				// #ifndef H5
+				// #ifdef APP-PLUS
 				orderModel.doPay({
 					recharge: Number(this.amount),
 					payment_id: this.payType

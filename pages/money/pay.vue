@@ -186,7 +186,7 @@
 					this.btnLoading = false
 				})
 				// #endif
-				// #ifndef H5
+				// #ifdef APP-PLUS
 				orderModel.doPay({
 					order_id: id,
 					payment_id
