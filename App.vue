@@ -96,7 +96,7 @@
 			}
 		},
 		onLaunch(option) {
-			// #ifndef H5
+			// #ifdef APP-PLUS
 			uni.getSystemInfo({
 				success: (res) => {
 					//检测当前平台，如果是安卓则启动安卓更新  
