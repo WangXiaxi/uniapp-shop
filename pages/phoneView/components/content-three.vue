@@ -13,7 +13,7 @@
 			<view class="key-item"></view>
 			<view @touchend="addClass('')" @touchstart="addClass('0')" :class="{active: isAddClass === '0'}" class="key-item" @click="addNum(0)">{{0}}</view>
 			<view @touchend="addClass('')" @touchstart="addClass('dele')" :class="{active: isAddClass === 'dele'}" class="key-item" @click="dele()" @longtap="dele('all')">
-				<image class="img" src="../../static/icon/ipone-close.png"></image>
+				<image class="img" src="/static/icon/ipone-close.png"></image>
 			</view>
 		</view>
 	</view>

@@ -4,7 +4,7 @@
 		<empty v-if="list.length === 0" text="暂无通话记录"></empty>
 		<view v-else class="mobile-list">
 			<view @click="dial(item.answer)" class="item" :class="{ act: item.status === '未接通' }" v-for="(item, index) in list" :key="index">
-				<image class="header" src="../../static/icon/gywm.png"></image>
+				<image class="header" src="/static/icon/gywm.png"></image>
 				<view class="info">
 					<view class="name">{{item.answer_name}}</view>
 					<view class="mobile">

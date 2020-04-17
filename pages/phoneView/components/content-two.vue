@@ -1,7 +1,7 @@
 <template>
 	<view class="content-two">
 		<view class="input-search">
-			<image class="ic" src="../../static/icon/ipone_searh.png"></image>
+			<image class="ic" src="/static/icon/ipone_searh.png"></image>
 			<view class="search" @click="onSearchInput()">搜索</view>
 		</view>
 		<view class="mobile-list">
