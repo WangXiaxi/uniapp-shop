@@ -10,7 +10,7 @@
 					<view class="divider" :id="`id${item.letter === '#' ? 'xxx' : item.letter}`"> <text class="divider-text">{{item.letter}}</text> </view>
 					<view class="item" hover-class="hover" :hover-start-time="20" v-for="(contact,index) in item.contacts" :key="index"
 					 @click='onSelectClick(contact)'>
-						<image class="portrait" src="../../static/icon/gywm.png"></image>
+						<image class="portrait" src="/static/icon/gywm.png"></image>
 						<view class="name">{{contact.name}}</view>
 					</view>
 				</view>

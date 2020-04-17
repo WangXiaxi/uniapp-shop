@@ -10,7 +10,7 @@
 					<view class="mobile">
 						<view class="tell">{{item.answer}}</view>
 						<view class="date">{{item.time}} 呼出</view>
-						<image class="trans" src="../../static/icon/phone_4.png"></image>
+						<image class="trans" src="/static/icon/phone_4.png"></image>
 					</view>
 				</view>
 			</view>
