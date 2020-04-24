@@ -78,7 +78,7 @@
 			IosCheckUpdate() { // ios 跟新
 				var _this = this;
 				mineModel.version({ type: 2 }).then(res => {
-					if (Number(res.data.replace(/\./g, '')) > Number(versionAnd.replace(/\./g, ''))) {
+					if (Number(res.data.replace(/\./g, '')) > Number(versionIos.replace(/\./g, ''))) {
 						uni.showModal({
 							title: '提示',
 							content: '检测到有新版本，请前往 App Store 更新',
