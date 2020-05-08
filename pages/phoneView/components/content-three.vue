@@ -9,9 +9,9 @@
 			</view>
 		</scroll-view>
 		<view class="key-main">
-			<view @touchend="addClass('')" @touchstart="addClass(item)" :class="{active: isAddClass === item}" class="key-item" v-for="(item, index) in numberList" :key="index" @click="addNum(item)">{{item}}</view>
+			<view @touchend="addClass('')" @touchstart="addClass(item)" :class="{active: isAddClass === item}" class="key-item" v-for="(item, index) in numberList" :key="index" @tap="addNum(item)">{{item}}</view>
 			<view class="key-item"></view>
-			<view @touchend="addClass('')" @touchstart="addClass('0')" :class="{active: isAddClass === '0'}" class="key-item" @click="addNum(0)">{{0}}</view>
+			<view @touchend="addClass('')" @touchstart="addClass('0')" :class="{active: isAddClass === '0'}" class="key-item" @tap="addNum(0)">{{0}}</view>
 			<view @touchend="addClass('')" @touchstart="addClass('dele')" :class="{active: isAddClass === 'dele'}" class="key-item" @click="dele()" @longtap="dele('all')">
 				<image class="img" src="/static/icon/ipone-close.png"></image>
 			</view>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+	import { debounce } from '@/utils/index.js'
 	export default {
 		props: {
 			contacts: {
@@ -34,8 +35,12 @@
 				number: '',
 				numberList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
 				list: [],
-				isAddClass: ''
+				isAddClass: '',
+				searchs: null
 			}
+		},
+		created() {
+			this.searchs = debounce(this.search)
 		},
 		methods: {
 			addClass(e) {
@@ -66,28 +71,26 @@
 			},
 			search() { // 搜索操作
 				const number = this.number
-				setTimeout(() => {
-					const list = []
-					this.contacts.forEach(c => {
-						c.contacts.forEach(j => {
-							j.children.forEach(k => {
-								if (k.indexOf(number) > -1) {
-									list.push({
-										name: j.name,
-										phone: k
-									})
-								}
-							})
-
+				const list = []
+				this.contacts.forEach(c => {
+					c.contacts.forEach(j => {
+						j.children.forEach(k => {
+							if (k.indexOf(number) > -1) {
+								list.push({
+									name: j.name,
+									phone: k
+								})
+							}
 						})
+
 					})
-					this.list = list
-				}, 50)
+				})
+				this.list = list
 			},
 
 			addNum(val) {
 				this.number = `${this.number}${val}`
-				this.search()
+				this.searchs()
 			},
 			dele(type = null) {
 				if (type === 'all') {
@@ -96,7 +99,7 @@
 				}
 				if (this.number.length > 1) {
 					this.number = this.number.slice(0, this.number.length - 1)
-					this.search()
+					this.searchs()
 				} else {
 					this.number = ''
 				}

@@ -191,6 +191,7 @@
 		},
 		data() {
 			return {
+				isH5: false,
 				url_image,
 				loadingType: 'more', //加载更多状态
 				titleNViewBackground: '',

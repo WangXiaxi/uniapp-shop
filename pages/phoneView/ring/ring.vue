@@ -30,7 +30,7 @@
 			this.detail = options
 			const { name, phone } = options
 			const { mobile } = this.userInfo
-			phoneModel.callUser({ answer_name: name, answerer: phone, caller: mobile, token: this.tokenPhone }).then(res => {
+			phoneModel.callUser({ answer_name: name, answerer: phone.replace(/-/g, ''), caller: mobile, token: this.tokenPhone }).then(res => {
 			}).catch((e) => {
 				setTimeout(() => {
 					this.goback()
