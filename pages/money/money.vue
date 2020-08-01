@@ -5,12 +5,11 @@
 			<view class="tit">余额<text>(￥)</text></view>
 			<view class="num">{{userInfo.remain_balance | nf }}</view>
 		</view>
-		<view class="center-part">
+		<!-- <view class="center-part">
 			<view class="type-list">
 				<view class="type" :class="{ act: type === 0 }" @click="changeType(0)">市场</view>
-				<!--<view class="type" :class="{ act: type === 1 }" @click="changeType(1)">商城</view>
+				<view class="type" :class="{ act: type === 1 }" @click="changeType(1)">商城</view>
 				<view class="type" :class="{ act: type === 2 }" @click="changeType(2)" v-if="userInfo.is_agent">店铺</view>
-				-->
 			</view>
 			<view class="money-box" v-if="type === 0">
 				<view class="item">
@@ -52,7 +51,7 @@
 					<view class="name">店铺分红</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<view class="card-box">
 			<image class="card-img" mode="aspectFit" src="../../static/card.png"></image>
 			<view class="info">
@@ -63,16 +62,16 @@
 			<view v-else @click="navTo('/pages/money/bindBank')" class="bd-btn">绑定银行卡</view>
 		</view>
 		<view class="ic-box">
-			<list-cell image="money-3" title="提现" @eventClick="navTo('/pages/money/withdraw')"></list-cell>
-			<list-cell image="money-1" title="充值" @eventClick="navTo('/pages/money/invest')"></list-cell>
+			<!-- <list-cell image="money-3" title="提现" @eventClick="navTo('/pages/money/withdraw')"></list-cell> -->
+			<list-cell image="money-1" title="消费" @eventClick="navTo('/pages/money/invest')"></list-cell>
 			<list-cell image="money-4" title="转账" @eventClick="navTo('/pages/money/trans')"></list-cell>
-			<list-cell image="money-2" title="余额明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
+			<list-cell image="money-2" title="明细" @eventClick="navTo('/pages/money/balanceDetails')"></list-cell>
 		</view>
 		
 		<view class="ic-box">
-			<list-cell image="point-r" title="杭旅通" @eventClick="navTo('/pages/money/hlt')"></list-cell>
+			<list-cell v-if="userInfo.bt>0" image="point-r" title="杭旅通" @eventClick="navTo('/pages/money/hlt')"></list-cell>
 		</view>
-		<view class="descript">Power by 忆杭网 Copyright © 2019</view> <!--将遵循 <text class="text">《冰酒协议》</text> -->
+		<!-- <view class="descript">Power by 忆杭网 Copyright © 2019</view> 将遵循 <text class="text">《冰酒协议》</text> -->
 		<mix-loading v-if="pageLoading"></mix-loading>
 	</view>
 </template>

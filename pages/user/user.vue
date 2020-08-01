@@ -21,7 +21,7 @@
 				<image class="card-bg" v-if="!userInfo.is_vip" src="/static/bg-pt.jpg" mode=""></image>
 				<image class="card-bg" v-if="userInfo.is_vip" src="/static/bg-hy.jpg" mode=""></image>
 				<view class="b-btn" v-if="!userInfo.is_vip" @click="judIsVip()">
-					立即开通
+					
 				</view>
 				<view class="tit" v-if="userInfo.is_vip">
 					{{userInfo.is_agent ? userInfo.agent_text : userInfo.vip_text }}
@@ -70,19 +70,21 @@
 				</view>
 			</view>
 			<view class="history-section icon">
-				<list-cell image="home-5" iconColor="#e07472" title="我的钱包" @eventClick="navTo('/pages/money/money')"></list-cell>
-				<list-cell image="home-4" iconColor="#e07472" title="我的股权" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
-				<list-cell image="home-3" iconColor="#ee883b" title="我的推荐" @eventClick="specTo()"></list-cell>
-				<list-cell image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="shwoCode()"></list-cell>
+				<list-cell image="home-5" iconColor="#e07472" title="个人中心" @eventClick="navTo('/pages/money/money')"></list-cell>
+				
+				<list-cell v-if="userInfo.is_vip" image="home-4" iconColor="#e07472" title="我的股权" @eventClick="navTo('/pages/stock/index/index')"></list-cell>
+				<list-cell v-if="userInfo.is_vip" image="home-3" iconColor="#ee883b" title="我的分享" @eventClick="specTo()"></list-cell>
+				<list-cell v-if="userInfo.is_vip" image="home-8" iconColor="#54b4ef" title="我的二维码" @eventClick="shwoCode()"></list-cell>
+				
 				<list-cell image="home-2" iconColor="#e07472" title="我的评价" @eventClick="navTo('/pages/eval/eval')">></list-cell>
 			</view>
 			<view class="history-section icon">
-				<list-cell image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
+				<list-cell v-if="userInfo.is_vip" image="home-7" title="实名认证" @eventClick="navTo('/pages/set/realname')"></list-cell>
 				<list-cell image="home-6" title="会员通知" @eventClick="navTo('/pages/message/message')"></list-cell>
 				<list-cell image="home-1" title="关于我们" @eventClick="navTo('/pages/aboutus/aboutus', false)"></list-cell>
 			</view>
 			
-			<view class="descript">Power by 忆杭网 Copyright © 2019 v{{version}}</view>
+			<view class="descript">v{{version}}</view>
 		</view>
 		<view style="width: 100%; height: 0; overflow: hidden;">
 			<canvas style="width: 750px; height: 1334px;" canvas-id="codeCanvas"></canvas>
@@ -158,6 +160,7 @@
 					return false
 				}
 				if (!this.userInfo.is_vip) {
+					return false
 					const userID = this.userInfo.user_id
 					uni.showModal({
 						title: '提示',

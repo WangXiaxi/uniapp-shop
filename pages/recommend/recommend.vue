@@ -18,11 +18,11 @@
 					<view class="tips">
 						<image class="ico" src="/static/icon/mobile.png"></image>
 						<view class="mobile text">{{userInfo.mobile}}({{userInfo.true_name | fill}})</view>
-						<image class="ico" src="/static/icon/num.png"></image>
-						<view class="num text">{{userInfo.team_sum | fill(0)}}</view>
+						<!-- <image class="ico" src="/static/icon/num.png"></image> -->
+						<!-- <view class="num text">{{userInfo.team_sum | fill(0)}}</view> -->
 					</view>
 				</view>
-				<image class="ico-add" src="/static/icon/add.png" @click="navTo('/pages/recommend/add')"></image>
+				<!-- <image class="ico-add" src="/static/icon/add.png" @click="navTo('/pages/recommend/add')"></image> -->
 			</view>
 		</view>
 		<view class="search-box">
@@ -48,12 +48,12 @@
 							<view class="tips">
 								<image class="ico" src="/static/icon/mobile.png"></image>
 								<view class="mobile text">{{item.mobile}}({{item.true_name | fill}})</view>
-								<image class="ico" src="/static/icon/num.png"></image>
-								<view class="num text">{{item.team_sum | fill(0)}}</view>
+								<!-- <image class="ico" src="/static/icon/num.png"></image> -->
+								<!-- <view class="num text">{{item.team_sum | fill(0)}}</view> -->
 							</view>
 						</view>
-						<image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navToMore(item)"></image>
-						<image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navToAdd(item)"></image>
+						<!-- <image class="ico-more" v-if="!item.is_vip" src="/static/icon/more.png" @click="navToMore(item)"></image> -->
+						<!-- <image class="ico-add" v-if="item.is_vip" src="/static/icon/add_b.png" @click="navToAdd(item)"></image> -->
 					</view>
 				</view>
 			</view>

@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="spec">
-			<text class="tit">充值金额</text>
+			<text class="tit">金额</text>
 			<view class="inp">
 				<view class="red">￥</view>
 				<input class="input" type="number" v-model="amount" placeholder="0.00" placeholder-class="placeholder" />

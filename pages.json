@@ -129,7 +129,7 @@
 		}, {
 			"path": "pages/money/money",
 			"style": {
-				"navigationBarTitleText": "我的钱包",
+				"navigationBarTitleText": "个人中心",
 				"navigationBarBackgroundColor": "#EA1212",
 				"navigationBarTextStyle": "white",
 				"app-plus": {
@@ -312,12 +312,12 @@
 		}, {
 			"path": "pages/money/invest",
 			"style": {
-				"navigationBarTitleText": "充值"
+				"navigationBarTitleText": "消费"
 			}
 		}, {
 			"path": "pages/money/balanceDetails",
 			"style": {
-				"navigationBarTitleText": "余额明细",
+				"navigationBarTitleText": "明细",
 				"enablePullDownRefresh": true
 			}
 		}, {
@@ -374,7 +374,7 @@
 		, {
 			"path": "pages/recommend/recommend",
 			"style": {
-				"navigationBarTitleText": "我的推荐",
+				"navigationBarTitleText": "我的分享",
 				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#EA1212",
 				"navigationBarTextStyle": "white",

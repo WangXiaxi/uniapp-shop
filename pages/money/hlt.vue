@@ -4,7 +4,7 @@
 			<image class="bg" src="/static/qbbj.png"></image>
 			<view class="tit">杭旅通</view>
 			<view class="num">{{userInfo.bt | 0 }}</view>
-			<view class="more" @click="getMore()">获取更多</view>
+			<!-- <view class="more" @click="getMore()">获取更多</view> -->
 		</view>
 		<!-- 空白页 -->
 		<empty v-if="loadingType === 'nomore' && list.length === 0" text="暂无相关记录"></empty>
